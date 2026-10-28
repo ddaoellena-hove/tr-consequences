@@ -1,0 +1,122 @@
+/* ── TextArea root ────────────────────────────────────────────────────────── */
+.text-area {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ── Label ───────────────────────────────────────────────────────────────── */
+.text-area__label {
+  color: var(--cadence-color-label, #1a3e45);
+  font-family: var(--cadence-font-sans, "Inter", Helvetica);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: normal;
+  padding: 0 0 10px 8px;
+}
+
+/* ── Field wrapper ───────────────────────────────────────────────────────── */
+.text-area__field {
+  background-color: var(--cadence-color-white, #ffffff);
+  border: 1px solid;
+  border-radius: var(--cadence-radius-lg, 10px);
+  display: flex;
+  position: relative;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
+}
+
+/* enabled */
+.text-area__field--enabled {
+  border-color: var(--cadence-color-border, #e5e5e5);
+  box-shadow: var(--cadence-shadow-sm, 0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04));
+}
+
+/* hover */
+.text-area__field--hover {
+  border-color: var(--cadence-color-border, #e5e5e5);
+  box-shadow: var(--cadence-shadow-md, 0px 0px 12px rgba(0, 0, 0, 0.08), 0px 0px 2px rgba(0, 0, 0, 0.25));
+}
+
+/* focus */
+.text-area__field--focus {
+  border: 1.5px solid var(--cadence-color-field-focus, #2d5f6b);
+  box-shadow: var(--cadence-field-focus-ring, 0 0 0 4px rgba(45, 95, 107, 0.12));
+}
+
+/* disabled */
+.text-area__field--disabled {
+  background-color: var(--cadence-color-border, #e5e5e5);
+  border-color: var(--cadence-color-border-strong, #bfc9cb);
+  cursor: not-allowed;
+}
+
+/* error */
+.text-area__field--error {
+  border: 2px solid var(--cadence-color-danger, #da1e28);
+  box-shadow: var(--cadence-shadow-sm, 0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04));
+}
+
+/* success */
+.text-area__field--success {
+  border: 2px solid var(--cadence-color-success, #24a148);
+  box-shadow: var(--cadence-shadow-sm, 0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04));
+}
+
+/* ── Native <textarea> ───────────────────────────────────────────────────── */
+.text-area__textarea {
+  background: transparent;
+  border: none;
+  border-radius: var(--cadence-radius-lg, 10px);
+  color: var(--cadence-color-primary, #002830);
+  flex: 1;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.5;
+  min-width: 0;
+  outline: none;
+  padding: 10px 20px;
+  resize: vertical;
+}
+
+.text-area__textarea::placeholder {
+  color: var(--cadence-color-border-strong, #bfc9cb);
+  font-weight: 400;
+}
+
+.text-area__textarea:disabled {
+  color: var(--cadence-color-text-disabled, #808080);
+  cursor: not-allowed;
+  resize: none;
+}
+
+/* ── Helper / error text ─────────────────────────────────────────────────── */
+.text-area__helper {
+  font-family: var(--cadence-font-sans, "Inter", Helvetica);
+  font-size: var(--cadence-font-size-caption, 11px);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  margin: 6px 0 0 8px;
+  padding: 0;
+}
+
+.text-area__helper--enabled,
+.text-area__helper--hover,
+.text-area__helper--focus,
+.text-area__helper--disabled {
+  color: var(--cadence-color-label, #1a3e45);
+}
+
+.text-area__helper--error {
+  color: var(--cadence-color-danger, #da1e28);
+}
+
+.text-area__helper--success {
+  color: var(--cadence-status-completed-fg, #15803d);
+}

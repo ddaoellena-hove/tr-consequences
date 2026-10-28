@@ -1,0 +1,217 @@
+/* ── BaseButton (interne) : gabarit commun de PrimaryButton et GhostButton ── */
+/* Les deux composants ont exactement les mêmes dimensions : le Ghost garde
+   une bordure transparente de 1px pour s'aligner au pixel dans un groupe. */
+.base-button {
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  align-items: center;
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: var(--cadence-radius-pill, 999px);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+  font-weight: 500;
+  justify-content: center;
+  margin: 0;
+  outline: none;
+  position: relative;
+  text-decoration: none;
+  transition: background-color 120ms ease, border-color 120ms ease, box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1), color 120ms ease;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.base-button:disabled {
+  cursor: not-allowed;
+}
+
+.base-button--loading {
+  cursor: progress;
+}
+
+.base-button--full-width {
+  width: 100%;
+}
+
+.base-button__label {
+  position: relative;
+}
+
+.base-button__icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ── Tailles sm / md (gabarits repris des boutons 0.2, textes 11 / 13px) ─── */
+/* sm : en-tête de dashboard, tableau, barre d'outils */
+.base-button--sm {
+  font-size: 11px;
+  gap: 5px;
+  height: var(--cadence-control-height-compact, 29px);
+  letter-spacing: -0.22px;
+  line-height: 13.2px;
+  padding: 0 11px;
+}
+
+.base-button--sm.base-button--icon-start {
+  padding-left: 9px;
+  padding-right: 10px;
+}
+
+.base-button--sm.base-button--icon-end {
+  padding-right: 9px;
+}
+
+.base-button--sm.base-button--icon-end:not(.base-button--icon-start) {
+  padding-left: 10px;
+}
+
+/* md = ancien PrimaryButton medium (défaut) */
+.base-button--md {
+  font-size: 13px;
+  gap: 8px;
+  height: 34px;
+  letter-spacing: -0.13px;
+  line-height: 15.6px;
+  padding: 0 24px;
+}
+
+.base-button--md.base-button--icon-start {
+  padding-left: 18px;
+  padding-right: 20px;
+}
+
+.base-button--md.base-button--icon-end {
+  padding-right: 18px;
+}
+
+.base-button--md.base-button--icon-end:not(.base-button--icon-start) {
+  padding-left: 20px;
+}
+
+/* Icône seule : bouton carré */
+.base-button--icon-only {
+  padding: 0;
+}
+
+.base-button--sm.base-button--icon-only {
+  width: 29px;
+}
+
+.base-button--md.base-button--icon-only {
+  width: 34px;
+}
+
+/* ── Infobulle des boutons icône seule ──────────────────────────────────── */
+/* Le nom accessible s'affiche sous le bouton au survol (après un court délai)
+   et au focus clavier. */
+.base-button-tip {
+  display: inline-flex;
+  flex-shrink: 0;
+  position: relative;
+  vertical-align: middle;
+}
+
+/* Masquée en display:none (et non visibility:hidden) : une bulle absolue,
+   même invisible, élargit la zone défilable d'un conteneur près de son bord.
+   Fondu conservé par transition discrète de display (@starting-style). */
+.base-button-tip__bubble {
+  display: none;
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  /* --base-button-tip-shift : recalage dans la zone visible (BaseButton) */
+  transform: translateX(calc(-50% + var(--base-button-tip-shift, 0px)));
+  transition: opacity 120ms ease, display 120ms allow-discrete;
+  white-space: nowrap;
+  z-index: var(--cadence-z-popover, 100);
+}
+
+/* La flèche reste sous le bouton quand la bulle est recalée */
+.base-button-tip__bubble .tooltip--arrow-top::after {
+  left: calc(50% - var(--base-button-tip-shift, 0px));
+}
+
+/* :where() : spécificité d'une seule classe, pour que les composants qui
+   retirent l'infobulle (.counter-input .base-button-tip__bubble { display: none })
+   gardent la main pendant le survol et le focus. */
+:where(.base-button-tip:hover, .base-button-tip:has(.base-button:focus-visible)) .base-button-tip__bubble {
+  display: block;
+  opacity: 1;
+  transition: opacity 120ms ease 300ms, display 0s allow-discrete 300ms;
+}
+
+@starting-style {
+  :where(.base-button-tip:hover, .base-button-tip:has(.base-button:focus-visible)) .base-button-tip__bubble {
+    opacity: 0;
+  }
+}
+
+/* Focus clavier : affichage immédiat */
+.base-button-tip:has(.base-button:focus-visible) .base-button-tip__bubble {
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .base-button-tip__bubble,
+  .base-button-tip:hover .base-button-tip__bubble {
+    transition: none;
+  }
+}
+
+/* ── Chargement ──────────────────────────────────────────────────────────── */
+.base-button__spinner {
+  animation: base-button-spin 0.7s linear infinite;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-right-color: transparent;
+  box-sizing: border-box;
+  display: block;
+  flex-shrink: 0;
+}
+
+.base-button--sm .base-button__spinner {
+  border-width: 1.5px;
+  height: 12px;
+  width: 12px;
+}
+
+.base-button--md .base-button__spinner {
+  height: 16px;
+  width: 16px;
+}
+
+/* Sans icône de début : libellé masqué (largeur conservée), spinner centré.
+   opacity et non visibility : le libellé reste le nom accessible du bouton. */
+.base-button--loading:not(.base-button--icon-start) .base-button__label,
+.base-button--loading:not(.base-button--icon-start) .base-button__icon {
+  opacity: 0;
+}
+
+.base-button__spinner-overlay {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: absolute;
+}
+
+@keyframes base-button-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes base-button-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .base-button__spinner {
+    animation: base-button-pulse 1.2s ease-in-out infinite;
+  }
+}

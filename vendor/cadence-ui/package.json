@@ -1,0 +1,16 @@
+{
+  "name": "@ddaoellena/cadence-ui",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "dependencies": {
+    "@untitledui/icons": "0.0.23"
+  }
+}
