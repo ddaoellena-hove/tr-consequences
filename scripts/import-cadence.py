@@ -2,7 +2,7 @@ from pathlib import Path
 import re, shutil, json, hashlib, subprocess, sys
 source=Path(sys.argv[1]).resolve()
 target=Path(__file__).resolve().parents[1]/'vendor/cadence-ui'
-entries=['PrimaryButton','GhostButton','Dropdown','TextInput','TextArea','Stepper','InlineAlert','Indicator','LineBadge','Icons']
+entries=['PrimaryButton','GhostButton','Dropdown','TextInput','TextArea','Stepper','InlineAlert','Indicator','LineBadge','Icons','Sidebar','AppLayout','Avatar']
 seen=set()
 def copy(p):
  p=p.resolve()

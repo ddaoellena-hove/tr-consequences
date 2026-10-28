@@ -1,0 +1,433 @@
+/* ── Root ── */
+/* Sans arrondi ni ombre : la Sidebar se fond dans le fond de l'app
+   (AppLayout), dont elle partage la couleur produit. */
+.sidebar {
+  width: 220px;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: width 0.25s ease;
+}
+
+/* ── Collapsed state ── */
+.sidebar--collapsed {
+  width: 80px;
+}
+
+.sidebar--collapsed .sidebar__header {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 20px 0 10px;
+}
+
+.sidebar--collapsed .sidebar__collapse-btn {
+  margin-left: 0;
+}
+
+.sidebar--collapsed .sidebar__section-btn {
+  justify-content: center;
+  padding: 7px 0;
+  gap: 0;
+}
+
+.sidebar--collapsed .sidebar__logout {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+/* ── Product themes ── */
+.sidebar--datahub        { background: var(--cadence-product-datahub, #004650); }
+.sidebar--traffic-report { background: var(--cadence-product-traffic-report, #2f2f3b); }
+.sidebar--insights       { background: var(--cadence-product-insights, #3b2f2f); }
+
+/* ── Header ── */
+.sidebar__header {
+  display: flex;
+  align-items: center;
+  padding: 22px 14px 10px 22px;
+  flex-shrink: 0;
+}
+
+.sidebar__logo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar__product-name {
+  color: var(--cadence-color-white, #ffffff);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar__collapse-btn {
+  flex-shrink: 0;
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--cadence-color-on-dark-muted, rgba(255, 255, 255, 0.6));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--cadence-radius-sm, 6px);
+  transition: color 0.15s, background 0.15s;
+}
+.sidebar__collapse-btn:hover {
+  color: var(--cadence-color-white, #ffffff);
+  background: var(--cadence-color-on-dark-divider, rgba(255, 255, 255, 0.1));
+}
+
+/* ── Client name ── */
+.sidebar__client {
+  margin: 0;
+  padding: 2px 22px 32px;
+  color: var(--cadence-color-on-dark-muted, rgba(255, 255, 255, 0.6));
+  font-size: 13px;
+  font-weight: 400;
+  flex-shrink: 0;
+  overflow: hidden;
+  max-height: 80px;
+  opacity: 1;
+  white-space: nowrap;
+  /* Fade in with delay when expanding */
+  transition: opacity 0.2s ease 0.12s, max-height 0.25s ease 0.05s, padding-bottom 0.25s ease;
+}
+
+.sidebar--collapsed .sidebar__client {
+  max-height: 0;
+  opacity: 0;
+  padding-bottom: 0;
+  /* Fade out fast when collapsing */
+  transition: opacity 0.1s ease, max-height 0.25s ease, padding-bottom 0.25s ease;
+}
+
+/* ── Navigation ── */
+.sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cadence-color-on-dark-active, rgba(255, 255, 255, 0.15)) transparent;
+}
+.sidebar__nav::-webkit-scrollbar { width: 4px; }
+.sidebar__nav::-webkit-scrollbar-track { background: transparent; }
+.sidebar__nav::-webkit-scrollbar-thumb {
+  background: var(--cadence-color-on-dark-active, rgba(255, 255, 255, 0.15));
+  border-radius: 2px;
+}
+
+/* ── Section ── */
+.sidebar__section {
+  /* no gap — items flow naturally */
+}
+
+/* ── Section header button ── */
+/* Ligne de 36px en casse normale, en retrait de 10px, 4px entre deux lignes :
+   survol et état actif prennent la forme d'une pastille arrondie. */
+.sidebar__section-btn {
+  position: relative;
+  width: calc(100% - 20px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 10px;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--cadence-radius-md, 8px);
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s;
+}
+.sidebar__section-btn:hover {
+  background: var(--cadence-color-on-dark-hover, rgba(255, 255, 255, 0.07));
+}
+.sidebar__section-btn:focus-visible {
+  outline: 2px solid var(--cadence-color-on-dark-subtle, rgba(255, 255, 255, 0.4));
+  outline-offset: -2px;
+}
+
+/* Élément actif : pastille claire en relief sur le fond produit (reflet en
+   haut, liseré, ombre portée), texte et icône en blanc. Relief en rgba,
+   propre au composant. */
+.sidebar__section-btn--active,
+.sidebar__section-btn--active:hover {
+  background-color: var(--cadence-color-on-dark-active, rgba(255, 255, 255, 0.15));
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+  border-color: var(--cadence-color-on-dark-divider, rgba(255, 255, 255, 0.1));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.sidebar__section-btn--active .sidebar__section-label,
+.sidebar__section-btn--active .sidebar__section-icon {
+  color: var(--cadence-color-white, #ffffff);
+  opacity: 1;
+}
+
+/* ── Section icon ── */
+.sidebar__section-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cadence-color-on-dark-muted, rgba(255, 255, 255, 0.6));
+  transition: color 0.15s;
+}
+/* Les icônes fournies (souvent 20px) sont ramenées à 18px */
+.sidebar__section-icon svg {
+  height: 18px;
+  width: 18px;
+}
+.sidebar__section-btn:hover .sidebar__section-icon {
+  color: var(--cadence-color-on-dark, rgba(255, 255, 255, 0.9));
+}
+
+/* ── Section text wrapper (label + dot + chevron) ── */
+.sidebar__section-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  opacity: 1;
+  /* Fade in with delay when expanding */
+  transition: opacity 0.2s ease 0.12s, max-width 0.25s ease;
+  max-width: 200px;
+}
+
+.sidebar--collapsed .sidebar__section-text {
+  flex: none;
+  width: 0;
+  max-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  /* Fade out fast when collapsing */
+  transition: opacity 0.1s ease, max-width 0.25s ease;
+}
+
+/* ── Section label ── */
+/* Casse normale (plus de capitales) : libellé de navigation à 13px */
+.sidebar__section-label {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cadence-color-on-dark, rgba(255, 255, 255, 0.9));
+  line-height: 18px;
+  transition: color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sidebar__section-btn:hover .sidebar__section-label {
+  color: var(--cadence-color-white, #ffffff);
+}
+
+/* ── Notification dot ── */
+.sidebar__dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cadence-color-accent-on-dark, #3b8eff);
+}
+
+/* ── Chevron ── */
+.sidebar__chevron {
+  flex-shrink: 0;
+  color: var(--cadence-color-on-dark-subtle, rgba(255, 255, 255, 0.4));
+  /* Fade in with delay when expanding */
+  transition: color 0.15s, transform 0.2s ease, opacity 0.2s ease 0.12s;
+}
+.sidebar__section-btn:hover .sidebar__chevron {
+  color: var(--cadence-color-on-dark, rgba(255, 255, 255, 0.9));
+}
+.sidebar--collapsed .sidebar__chevron {
+  flex: none;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Fade out fast when collapsing */
+  transition: color 0.15s, transform 0.2s ease, opacity 0.1s ease;
+}
+
+/* ── Sub-item list ── */
+/* Sans trait d'arborescence : le retrait aligne les sous-éléments sur le
+   libellé de la section (icône 18px + espace 10px). */
+.sidebar__items {
+  list-style: none;
+  margin: 0;
+  padding: 2px 0 8px;
+}
+
+/* ── Sub-item button ── */
+.sidebar__item {
+  position: relative;
+  width: calc(100% - 20px);
+  display: block;
+  margin: 2px 10px;
+  padding: 7px 10px 7px 38px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--cadence-radius-md, 8px);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--cadence-color-on-dark-muted, rgba(255, 255, 255, 0.6));
+  line-height: 18px;
+  transition: background 0.15s, color 0.15s;
+  white-space: normal;
+  box-sizing: border-box;
+}
+.sidebar__item:hover {
+  background: var(--cadence-color-on-dark-hover, rgba(255, 255, 255, 0.07));
+  color: var(--cadence-color-on-dark, rgba(255, 255, 255, 0.9));
+}
+.sidebar__item:focus-visible {
+  outline: 2px solid var(--cadence-color-on-dark-subtle, rgba(255, 255, 255, 0.4));
+  outline-offset: -2px;
+}
+
+/* ── Active sub-item ── */
+/* Même pastille en relief que la section active, texte blanc */
+.sidebar__item--active,
+.sidebar__item--active:hover {
+  background-color: var(--cadence-color-on-dark-active, rgba(255, 255, 255, 0.15));
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+  border-color: var(--cadence-color-on-dark-divider, rgba(255, 255, 255, 0.1));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.24);
+  color: var(--cadence-color-white, #ffffff);
+  font-weight: 500;
+}
+
+/* ── Footer ── */
+.sidebar__footer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--cadence-color-on-dark-divider, rgba(255, 255, 255, 0.1));
+  padding: 14px 0 16px;
+}
+
+.sidebar__logout {
+  width: calc(100% - 20px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 10px;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--cadence-radius-md, 8px);
+  box-sizing: border-box;
+  cursor: pointer;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cadence-color-on-dark-muted, rgba(255, 255, 255, 0.6));
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+.sidebar__logout:hover {
+  background: var(--cadence-color-on-dark-hover, rgba(255, 255, 255, 0.07));
+  color: var(--cadence-color-on-dark, rgba(255, 255, 255, 0.9));
+}
+
+.sidebar__logout-label {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 200px;
+  opacity: 1;
+  /* Fade in with delay when expanding */
+  transition: opacity 0.2s ease 0.12s, max-width 0.25s ease;
+}
+
+.sidebar--collapsed .sidebar__logout-label {
+  opacity: 0;
+  max-width: 0;
+  /* Fade out fast when collapsing */
+  transition: opacity 0.1s ease, max-width 0.25s ease;
+}
+
+/* ── Pied : périmètre et utilisateur ── */
+.sidebar__scope {
+  padding: 0 10px 12px;
+}
+
+.sidebar__scope .dropdown {
+  display: block;
+  width: 100%;
+}
+
+/* En pied de Sidebar, le menu s'ouvre vers le haut (sinon coupé en bas d'écran) */
+.sidebar__scope .dropdown__menu {
+  bottom: calc(100% + 6px);
+  top: auto;
+}
+
+.sidebar__user {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  padding: 6px 20px 10px;
+}
+
+.sidebar--collapsed .sidebar__user {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.sidebar__user-text {
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  min-width: 0;
+  opacity: 1;
+  overflow: hidden;
+  /* Apparition retardée au dépliage */
+  transition: opacity 0.2s ease 0.12s, max-width 0.25s ease;
+}
+
+.sidebar--collapsed .sidebar__user-text {
+  max-width: 0;
+  opacity: 0;
+  /* Disparition rapide au repli */
+  transition: opacity 0.1s ease, max-width 0.25s ease;
+}
+
+.sidebar__user-name {
+  color: var(--cadence-color-white, #ffffff);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

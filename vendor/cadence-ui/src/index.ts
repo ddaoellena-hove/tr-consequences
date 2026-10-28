@@ -8,4 +8,7 @@ export { InlineAlert } from "./InlineAlert";
 export { Indicator } from "./Indicator";
 export { LineBadge } from "./LineBadge";
 export { Icons } from "./Icons";
+export { Sidebar } from "./Sidebar";
+export { AppLayout } from "./AppLayout";
+export { Avatar } from "./Avatar";
 import "./tokens.css";

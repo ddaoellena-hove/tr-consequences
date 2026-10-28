@@ -1,10 +1,17 @@
 # Traffic Report — Déclaration de perturbation
 
-Prototype React basé sur la capture fournie, intégré au Hove Cadence Design System local 1.0.0.
+Prototype React + Vite basé sur la capture fournie, intégré au Hove Cadence Design System local 1.0.0.
 
 ## Installation et compilation
 
-`npm ci` puis `npm run build`. Servir `dist/` avec un serveur HTTP statique.
+Prérequis : Node.js 22.12 ou supérieur.
+
+- `npm ci` : installer les dépendances.
+- `npm run dev` : démarrer Vite sur http://localhost:4173 avec React Fast Refresh.
+- `npm run build` : générer la version de production dans `dist/`.
+- `npm run preview` : contrôler le build de production sur http://localhost:4174.
+
+`index.html` est le point d’entrée Vite, `src/main.jsx` initialise React et `src/app.jsx` contient le parcours. Les polices Cadence sont copiées automatiquement dans `public/fonts/` avant le développement et la compilation. Les fichiers générés dans `dist/` sont conservés pour le déploiement Sites.
 
 Le paquet `@ddaoellena/cadence-ui` est une dépendance locale versionnée dans `vendor/cadence-ui`. Les sources des composants utilisés et leurs dépendances locales y sont copiées sans modification, avec leur empreinte SHA-256 et le commit source dans `provenance.json`. Le prototype ne dépend pas d’un chemin absolu pour compiler.
 
@@ -12,7 +19,7 @@ Pour synchroniser une nouvelle version locale : `python3 scripts/import-cadence.
 
 ## Composants Cadence intégrés
 
-PrimaryButton, GhostButton, Dropdown, TextInput, TextArea, Stepper, InlineAlert, Indicator, LineBadge et Icons. Tokens officiels, ABC Diatype et Uxum Grotesque servis localement. La composition de la page et le schéma métier restent spécifiques au prototype ; le logo texte reste provisoire.
+PrimaryButton, GhostButton, Dropdown, TextInput, TextArea, Stepper, InlineAlert, Indicator, LineBadge, Icons, Sidebar, AppLayout et Avatar. Tokens officiels, ABC Diatype et Uxum Grotesque servis localement. La composition de la page et le schéma métier restent spécifiques au prototype ; le logo texte reste provisoire.
 
 ## Périmètre
 
