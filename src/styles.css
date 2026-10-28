@@ -108,3 +108,6 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .diagram-annotation { letter-spacing:var(--tr-tracking-annotation); }
 .severity-dot { background:var(--tr-impact-color); }
 .severity-summary { color:var(--tr-impact-text); font-weight:var(--tr-font-weight-semibold); }
+
+/* Menus in the impact form must extend beyond the card's rounded surface. */
+.impact.page-section--card { overflow: visible; }
