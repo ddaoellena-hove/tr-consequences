@@ -14,6 +14,8 @@ import {
   Icons,
   Sidebar,
   AppLayout,
+  PageHeader,
+  Breadcrumbs,
 } from '@ddaoellena/cadence-ui';
 
 export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
@@ -401,25 +403,27 @@ export default function App() {
 
   return (
     <AppLayout sidebar={sidebarElement} contentLabel="Déclaration de perturbation">
-      <div className="page-wrapper">
-        <div className="content-top-bar">
-          <div className="breadcrumb">
-            Perturbations <span>/</span> Nouvelle déclaration
-          </div>
-          <div className="top-bar-meta">
+      <PageHeader
+        breadcrumbs={
+          <Breadcrumbs
+            items={[
+              { id: 'disruptions', label: 'Perturbations' },
+              { id: 'new', label: 'Nouvelle déclaration' },
+            ]}
+          />
+        }
+        title="Nouvelle perturbation prévue"
+        subtitle="Déclaration de perturbation"
+        actions={
+          <>
             <span className="environment-badge">Espace de démonstration</span>
             <span className="locale-badge">FR</span>
-          </div>
-        </div>
+            <Indicator variant={verified ? 'nominal' : 'draft'} label={verified ? 'Vérifiée' : 'Brouillon'} />
+          </>
+        }
+      />
 
-        <div className="page-title">
-          <div>
-            <div className="eyebrow">Déclaration de perturbation</div>
-            <h1>Nouvelle perturbation prévue</h1>
-          </div>
-          <Indicator variant={verified ? 'nominal' : 'draft'} label={verified ? 'Vérifiée' : 'Brouillon'} />
-        </div>
-
+      <div className="page-wrapper">
         {/* Informations générales */}
         <details className="general panel" ref={general}>
           <summary>
@@ -583,8 +587,8 @@ export default function App() {
           <div className="form-actions">
             <span>Étape {step + 1} sur 5</span>
             <div>
-              <GhostButton label="Précédent" disabled={step === 0} onClick={() => go(step - 1)} />
-              {step < 4 && <PrimaryButton label="Suivant" iconEnd="arrow-right" onClick={() => go(step + 1)} />}
+              <GhostButton size="sm" label="Précédent" disabled={step === 0} onClick={() => go(step - 1)} />
+              {step < 4 && <PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={() => go(step + 1)} />}
             </div>
           </div>
         </section>
@@ -659,8 +663,8 @@ export default function App() {
         <footer>
           <span>{saveState}</span>
           <div>
-            <PrimaryButton outline label="Enregistrer le brouillon" onClick={save} />
-            {step === 4 && <PrimaryButton label="Valider la déclaration" iconEnd="check" onClick={validate} />}
+            <PrimaryButton outline size="sm" label="Enregistrer le brouillon" onClick={save} />
+            {step === 4 && <PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate} />}
           </div>
         </footer>
 

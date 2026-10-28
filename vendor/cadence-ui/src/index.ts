@@ -11,4 +11,6 @@ export { Icons } from "./Icons";
 export { Sidebar } from "./Sidebar";
 export { AppLayout } from "./AppLayout";
 export { Avatar } from "./Avatar";
+export { PageHeader } from "./PageHeader";
+export { Breadcrumbs } from "./Breadcrumbs";
 import "./tokens.css";
