@@ -189,6 +189,7 @@ export default function App() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [generalVersion, setGeneralVersion] = useState(0);
 
+  const generalComplete = Boolean(data.title.trim() && ['Travaux', 'Incident technique', 'Événement'].includes(data.cause));
   const i = data.impacts[current];
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
 
@@ -319,7 +320,10 @@ export default function App() {
         {/* Informations générales */}
         <Accordion className="general" key={generalVersion} items={[{
           id:'general', defaultOpen: generalVersion > 0,
-          title: 'Informations générales',
+          title: <span className="general-heading">
+            <span>Informations générales</span>
+            <Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />
+          </span>,
           content: <><p className="section-description">Les informations générales sont communes à tous les impacts.</p>
           <div className="general-fields">
             <TextInput

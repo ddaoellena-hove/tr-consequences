@@ -111,3 +111,5 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 
 /* Menus in the impact form must extend beyond the card's rounded surface. */
 .impact.page-section--card { overflow: visible; }
+
+.general-heading { display:flex; align-items:center; flex-wrap:wrap; gap:var(--tr-space-12); }
