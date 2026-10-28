@@ -7,7 +7,7 @@
  --tr-dot-size:9px; --tr-border-width:1px; --tr-line-width:3px;
  --tr-space-2:2px; --tr-space-4:4px; --tr-space-8:8px; --tr-space-12:12px;
  --tr-space-16:16px; --tr-space-20:20px; --tr-space-24:24px; --tr-space-32:32px;
- --tr-font-weight-medium:500; --tr-font-weight-semibold:600; --tr-font-weight-bold:700;
+ --tr-font-weight-regular:400; --tr-font-weight-medium:500; --tr-font-weight-semibold:600; --tr-font-weight-bold:700;
  --tr-line-height-body:1.5; --tr-line-height-relaxed:1.8;
  --tr-tracking-annotation:.02em;
  --tr-diagram-width:1136px; --tr-diagram-height:120px;

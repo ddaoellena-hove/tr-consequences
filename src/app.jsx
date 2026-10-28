@@ -318,12 +318,11 @@ export default function App() {
 
       <div className="page-wrapper">
         {/* Informations générales */}
-        <Accordion className="general" key={generalVersion} items={[{
+        <PageSection title="Informations générales" surface="card" gap={0} className="general"
+          actions={<Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />}>
+        <Accordion key={generalVersion} items={[{
           id:'general', defaultOpen: generalVersion > 0,
-          title: <span className="general-heading">
-            <span>Informations générales</span>
-            <Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />
-          </span>,
+          title: 'Intitulé et cause',
           content: <><p className="section-description">Les informations générales sont communes à tous les impacts.</p>
           <div className="general-fields">
             <TextInput
@@ -340,6 +339,7 @@ export default function App() {
           </div>
 </>
         }]} />
+        </PageSection>
 
         {/* Tunnel de déclaration d'impacts */}
         <PageSection title="Impacts de la perturbation" surface="card" gap={0} className="impact">

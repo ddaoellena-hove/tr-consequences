@@ -110,6 +110,11 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .severity-summary { color:var(--tr-impact-text); font-weight:var(--tr-font-weight-semibold); }
 
 /* Menus in the impact form must extend beyond the card's rounded surface. */
-.impact.page-section--card { overflow: visible; }
+.impact.page-section--card, .general.page-section--card { overflow: visible; }
 
-.general-heading { display:flex; align-items:center; flex-wrap:wrap; gap:var(--tr-space-12); }
+/* Align the general-information disclosure with the PageSection heading. */
+.general .accordion__trigger {
+  padding: var(--tr-space-16) var(--tr-space-20);
+  font-weight: var(--tr-font-weight-regular);
+}
+.general .accordion__content { padding-inline: var(--tr-space-20); }
