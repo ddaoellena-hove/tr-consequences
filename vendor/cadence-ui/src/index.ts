@@ -23,6 +23,5 @@ export { DatePicker } from "./DatePicker";
 export { Checkbox } from "./Checkbox";
 export { SegmentedControl } from "./SegmentedControl";
 export { Badge } from "./Badge";
-export { ModeIcon } from "./ModeIcon";
 export { toast, useToast } from "./useToast";
 import "./tokens.css";

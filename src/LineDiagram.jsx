@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { LineBadge, Indicator, ModeIcon } from '@ddaoellena/cadence-ui';
+import { LineBadge, Indicator } from '@ddaoellena/cadence-ui';
 
 
 // Géométrie de référence du diagramme
@@ -84,11 +84,22 @@ function Uturn({ x, color, flip }) {
   );
 }
 
-// Official Cadence transport-mode pictogram inside the animated wrapper.
+// Bus vectoriel détaillé avec roues et vitres
 function Bus({ busRef }) {
   return (
-    <div ref={busRef} className="diagram-bus" aria-hidden="true">
-      <ModeIcon mode="bus" className="diagram-bus-icon" />
+    <div
+      ref={busRef}
+      className="diagram-bus"
+    >
+      <svg width="46" height="24" viewBox="0 0 46 24" className="diagram-bus-svg">
+        <rect x="2" y="3" width="40" height="15" rx="4" fill="var(--cadence-status-active-on-dark)" stroke="var(--cadence-color-primary)" strokeWidth="1.6" />
+        <rect x="6" y="6.5" width="6.5" height="6" rx="1.4" fill="var(--cadence-color-white)" />
+        <rect x="15" y="6.5" width="6.5" height="6" rx="1.4" fill="var(--cadence-color-white)" />
+        <rect x="24" y="6.5" width="6.5" height="6" rx="1.4" fill="var(--cadence-color-white)" />
+        <rect x="35.5" y="6.5" width="5" height="6" rx="1.4" fill="var(--cadence-status-warning-bg)" />
+        <circle cx="13" cy="19" r="3.4" fill="var(--cadence-color-primary)" />
+        <circle cx="32" cy="19" r="3.4" fill="var(--cadence-color-primary)" />
+      </svg>
     </div>
   );
 }
@@ -118,7 +129,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
     // Bus 1 navigue soit sur la ligne complète (passant), soit de Gare Centre jusqu'à l'arrêt de début (non passant)
     const endX1 = sev && !passant ? stopFrom : STOPS[5];
     const loop1 = buildLoopSeg(LEFT, endX1);
-    const tf = (p) => `translate(${p.x}px, ${p.y}px) translate(-50%, -100%) scaleX(${p.dir})`;
+    const tf = (p) => `translate(${p.x - 23}px, ${p.y - 12}px) scaleX(${p.dir})`;
 
     // Position initiale bus 1
     const position1 = bus1.animate([{transform: tf(loop1.pts[0])}], {duration: 1, fill: 'both'});
