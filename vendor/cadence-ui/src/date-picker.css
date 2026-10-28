@@ -1,0 +1,136 @@
+/* ── Time picker ─────────────────────────────────────────────────────── */
+.date-picker__time-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 0 4px;
+  border-top: 1px solid var(--cadence-color-divider, #f0f0f0);
+  margin-top: 12px;
+}
+
+/* ── Footer (confirm button) ─────────────────────────────────────────── */
+.date-picker__footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--cadence-color-divider, #f0f0f0);
+}
+
+/* ── Segmented header inside popover ────────────────────────────────── */
+.date-picker__segmented-header {
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--cadence-color-divider, #f0f0f0);
+}
+
+.date-picker__segmented-header .segmented-control { width: 100%; }
+.date-picker__segmented-header .segmented-control__tab { flex: 1; min-width: 0; padding: 8px 12px; }
+
+/* ── DatePicker wrapper ──────────────────────────────────────────────── */
+.date-picker {
+  position: relative;
+  display: inline-block;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+}
+
+/* ── Label (style + gap identiques à TextInput) ── */
+.date-picker__label {
+  display: block;
+  color: var(--cadence-color-label, #1a3e45);
+  font-family: var(--cadence-font-sans, "Inter", Helvetica);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: normal;
+  padding: 0 0 10px 8px;
+}
+
+.date-picker--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ── Champ éditable (allure TextInput, comme TimePicker) ─────────────── */
+.date-picker__field {
+  box-sizing: border-box; /* le token est la hauteur extérieure, bordure comprise */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 220px;
+  height: var(--cadence-control-height-field, 40px);
+  padding: 0 6px 0 12px;
+  background-color: var(--cadence-color-white, #ffffff);
+  border: 1px solid var(--cadence-color-border, #e5e5e5);
+  border-radius: var(--cadence-radius-lg, 10px);
+  box-shadow: var(--cadence-shadow-sm, 0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04));
+  transition:
+    box-shadow 120ms ease,
+    border-color 120ms ease;
+}
+
+/* Date + heure : un peu plus large pour « JJ/MM/AAAA HH:mm » */
+.date-picker__field--time {
+  width: 260px;
+}
+
+.date-picker__field:hover {
+  box-shadow: var(--cadence-shadow-md, 0px 0px 12px rgba(0, 0, 0, 0.08), 0px 0px 2px rgba(0, 0, 0, 0.25));
+}
+
+/* Focus ou panneau ouvert : mêmes couleurs que TextInput (liseré + halo) */
+.date-picker__field:focus-within,
+.date-picker__field--open {
+  border: 1.5px solid var(--cadence-color-field-focus, #2d5f6b);
+  box-shadow: var(--cadence-field-focus-ring, 0 0 0 4px rgba(45, 95, 107, 0.12));
+}
+
+.date-picker__field--error,
+.date-picker__field--error:focus-within {
+  border: 2px solid var(--cadence-color-danger, #da1e28);
+}
+
+/* Icône calendrier : GhostButton sans infobulle, collée à droite */
+.date-picker__field > .base-button-tip,
+.date-picker__calendar {
+  margin-left: auto;
+}
+
+.date-picker__field .base-button-tip__bubble {
+  display: none;
+}
+
+.date-picker__message {
+  margin: 6px 0 0 8px;
+  max-width: 260px;
+  color: var(--cadence-color-danger-text, #b91c1c);
+  font-size: var(--cadence-font-size-caption, 11px);
+  line-height: 1.5;
+}
+
+/* ── Popover ─────────────────────────────────────────────────────────── */
+.date-picker__popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  /* Décalage calculé par usePopoverFit pour rester dans la zone visible */
+  translate: var(--_popover-shift, 0px) 0;
+  z-index: var(--cadence-z-popover, 100);
+  background: var(--cadence-color-white, #ffffff);
+  border: 1px solid var(--cadence-color-border, #e5e5e5);
+  border-radius: var(--cadence-radius-xl, 12px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10), 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 16px;
+  width: 280px;
+  animation: dp-pop-in 0.12s ease;
+}
+
+@keyframes dp-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

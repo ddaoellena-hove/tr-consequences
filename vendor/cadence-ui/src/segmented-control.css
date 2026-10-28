@@ -1,0 +1,143 @@
+/* ── Sliding pill ────────────────────────────────────────────────────────── */
+.segmented-control__pill {
+  background-color: var(--cadence-color-white, #ffffff);
+  border: 1px solid var(--cadence-color-border-strong, #bfc9cb);
+  border-radius: var(--cadence-radius-md, 8px);
+  box-shadow:
+    inset 0px 2px 0px rgba(255, 255, 255, 0.25),
+    inset 0px -2px 6px rgba(0, 0, 0, 0.03),
+    inset 0px -2px 0px rgba(0, 0, 0, 0.06);
+  /* Bordure comprise dans la largeur mesurée du segment : sinon la pastille
+     déborde de 2px à droite (marge de 2px au lieu de 4px sur le dernier choix). */
+  box-sizing: border-box;
+  pointer-events: none;
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  transition:
+    left 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.segmented-control--disabled .segmented-control__pill {
+  background-color: var(--cadence-color-border, #e5e5e5);
+  border-color: var(--cadence-color-border-strong, #bfc9cb);
+  box-shadow: none;
+}
+
+/* ── Alternative root ────────────────────────────────────────────────────── */
+.segmented-control {
+  align-items: center;
+  background-color: var(--cadence-color-segmented-track, #e6f0fa);
+  border-radius: var(--cadence-radius-xl, 12px);
+  display: inline-flex;
+  gap: 0;
+  overflow: hidden;
+  padding: 4px;
+  position: relative;
+  /* Hauteur de champ : s'aligne avec TextInput, Dropdown… sur une rangée. */
+  box-sizing: border-box;
+  height: var(--cadence-control-height-field, 40px);
+  /* Épouse ses segments (« hug ») : une largeur explicite empêche l'étirement
+     par un parent flex en colonne ou une grille. Jamais toute la largeur. */
+  width: fit-content;
+  max-width: 100%;
+}
+
+.segmented-control--disabled {
+  background-color: var(--cadence-color-segmented-track-disabled, #dde8f0);
+  cursor: not-allowed;
+}
+
+/* ── Individual tab button ───────────────────────────────────────────────── */
+.segmented-control__tab {
+  align-items: center;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  border-radius: var(--cadence-radius-md, 8px);
+  color: var(--cadence-color-label, #1a3e45);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica);
+  font-size: 13px;
+  font-weight: 500;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: normal;
+  min-width: 100px;
+  outline: none;
+  /* Hauteur pleine de la piste (moins son padding) : texte centré verticalement. */
+  align-self: stretch;
+  padding: 0 20px;
+  position: relative;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+  white-space: nowrap;
+}
+
+.segmented-control__tab:focus-visible {
+  outline: 2px solid var(--cadence-color-accent, #1b6cff);
+  outline-offset: -2px;
+}
+
+/* Inactive hover */
+.segmented-control__tab:not(.segmented-control__tab--active):hover:not(:disabled) {
+  background-color: var(--cadence-color-segmented-hover, rgba(255, 255, 255, 0.45));
+  color: var(--cadence-color-label, #1a3e45);
+}
+
+/* Option désactivée seule (le groupe reste actif) */
+.segmented-control__tab:disabled {
+  color: var(--cadence-color-text-disabled, #808080);
+  cursor: not-allowed;
+}
+
+/* Disabled inactive */
+.segmented-control--disabled .segmented-control__tab {
+  color: var(--cadence-color-border-strong, #bfc9cb);
+  cursor: not-allowed;
+}
+
+/* ── Active tab ──────────────────────────────────────────────────────────── */
+.segmented-control__tab--active {
+  color: var(--cadence-color-primary, #002830);
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+/* Active tab in a disabled group */
+.segmented-control--disabled .segmented-control__tab--active {
+  color: var(--cadence-color-text-disabled, #808080);
+}
+
+/* ── Taille sm : hauteur compacte (dashboard, barre d'outils) ─────────────── */
+/* Même gabarit que les boutons sm, SearchInput et filtres variant="button" :
+   s'aligne sur une rangée compacte. Piste et pastille resserrées (2px). */
+.segmented-control--sm {
+  border-radius: var(--cadence-radius-md, 8px);
+  height: var(--cadence-control-height-compact, 29px);
+  padding: 2px;
+}
+
+.segmented-control--sm .segmented-control__pill {
+  border-radius: var(--cadence-radius-sm, 6px);
+  top: 2px;
+  bottom: 2px;
+}
+
+.segmented-control--sm .segmented-control__tab {
+  border-radius: var(--cadence-radius-sm, 6px);
+  font-size: 12px;
+  min-width: 56px;
+  padding: 0 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segmented-control__pill, .segmented-control__tab { transition: none; }
+}

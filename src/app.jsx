@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { issue } from './validation.mjs';
-import { LineDiagram, tint } from './LineDiagram.jsx';
+import { LineDiagram } from './LineDiagram.jsx';
 import {
   PrimaryButton,
   GhostButton,
@@ -16,6 +16,8 @@ import {
   AppLayout,
   PageHeader,
   Breadcrumbs,
+  Accordion, PageSection, FormActions, ProgressBar, Modal, Toaster, toast,
+  DatePicker, Checkbox, SegmentedControl, Badge,
 } from '@ddaoellena/cadence-ui';
 
 export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
@@ -140,130 +142,26 @@ function loadDraft() {
 
 const formatDate = (s) => new Date(s).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
 
-/* ── Sélecteur de sévérité enrichi (pastille couleur + statut passant/non passant) ── */
+// The domain model remains product-specific; presentation uses Cadence.
 function SeverityField({ value, onChange }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener('mousedown', handleOutside);
-    return () => document.removeEventListener('mousedown', handleOutside);
-  }, []);
-
-  const current = SEVERITY_MAP[value] || SEVERITIES[0];
-
-  return (
-    <div className="severity-field-container" ref={ref}>
-      <button
-        type="button"
-        className={`severity-field-btn ${open ? 'open' : ''}`}
-        onClick={() => setOpen((o) => !o)}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-      >
-        <span className="severity-field-current">
-          <span className="severity-dot" style={{ background: current.color }} />
-          <span className="severity-label">{current.label}</span>
-        </span>
-        <span className="severity-chevron" style={{ transform: open ? 'rotate(180deg)' : 'none' }}>
-          <Icons icon="chevron-down" size={18} />
-        </span>
-      </button>
-
-      {open && (
-        <div className="severity-popover" role="listbox">
-          {SEVERITIES.map((s) => {
-            const isSel = s.id === current.id;
-            return (
-              <button
-                type="button"
-                key={s.id}
-                role="option"
-                aria-selected={isSel}
-                className={`severity-option ${isSel ? 'selected' : ''}`}
-                onClick={() => {
-                  onChange(s.id);
-                  setOpen(false);
-                }}
-              >
-                <span className="severity-dot" style={{ background: s.color }} />
-                <span className="severity-option-label">{s.label}</span>
-                <span className={`severity-passant-tag ${s.passant ? 'passant' : 'non-passant'}`}>
-                  {s.passant ? 'passant' : 'non passant'}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
+  return <Dropdown label="Sévérité" value={value} onChange={onChange}
+    options={SEVERITIES.map(s => ({ id: s.id,
+      label: `${s.label} · ${s.passant ? 'passant' : 'non passant'}`,
+      icon: <span className="severity-dot" style={{ background: s.color }} aria-hidden="true" />
+    }))} />;
 }
-
-/* ── Puce de statut passant / non passant ── */
-function PassantTag({ sev, colorOn }) {
-  const c = colorOn ? sev.color : 'var(--cadence-color-primary, #002830)';
-  return (
-    <span
-      className="passant-tag"
-      style={{
-        background: colorOn ? tint(sev.color, 14) : 'var(--cadence-color-surface-alt)',
-        border: `1px solid ${colorOn ? tint(sev.color, 45) : 'var(--cadence-color-border)'}`,
-        color: c,
-      }}
-    >
-      <span className="passant-tag-dot" style={{ background: c }} />
-      {sev.tag}
-    </span>
-  );
-}
-
-/* ── Carte explicative « Conséquence sur l'objet » ── */
 function ConsequenceCard({ sev, tweaks }) {
-  const colorOn = tweaks.colorCode !== false;
-  const showTag = tweaks.showTag !== false;
-  const accent = colorOn ? sev.color : 'var(--cadence-color-primary, #002830)';
-
-  const idx = sev.conseq.indexOf(' : ');
-  const head = idx >= 0 ? sev.conseq.slice(0, idx) : sev.conseq;
-  const rest = idx >= 0 ? sev.conseq.slice(idx + 3) : '';
-
-  return (
-    <div
-      className="consequence-card bubble-in"
-      style={{
-        borderLeft: `3px solid ${accent}`,
-      }}
-    >
-      <div
-        className="consequence-icon-bubble"
-        style={{
-          background: colorOn ? tint(sev.color, 14) : 'var(--cadence-color-surface-alt)',
-        }}
-      >
-        <Icons icon="annotation-info" size={18} color={accent} />
-      </div>
-      <div className="consequence-card-body">
-        <div className="consequence-card-head">
-          <span className="consequence-title" style={{ color: colorOn ? accent : 'var(--cadence-color-text-secondary)' }}>
-            Conséquence sur l’objet
-          </span>
-          {showTag && <PassantTag sev={sev} colorOn={colorOn} />}
-        </div>
-        <p className="consequence-card-text">
-          <span className="consequence-lead">{sev.lead} </span>
-          <strong className="consequence-highlight" style={{ color: accent }}>
-            {head}
-          </strong>
-          {rest && <span>{' : ' + rest}</span>}
-        </p>
-      </div>
-    </div>
-  );
+  const tone = tweaks.colorCode === false ? 'information' : sev.variant === 'critical' ? 'error' : sev.variant === 'warning' ? 'warning' : 'information';
+  return <div className="consequence-wrap"><InlineAlert type={tone} title="Conséquence sur l’objet">
+    {tweaks.showTag && <Indicator variant={tweaks.colorCode ? sev.variant : 'draft'} label={sev.tag} />}
+    <p>{sev.lead} <strong>{sev.conseq}</strong></p>
+  </InlineAlert></div>;
 }
+const localDateValue = date => {
+  const pad = n => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+const notify = title => toast({type:'information', title});
 
 export default function App() {
   const [restored] = useState(loadDraft);
@@ -272,7 +170,6 @@ export default function App() {
   const [step, setStep] = useState(1);
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState('');
-  const [toast, setToast] = useState('');
   const [saveState, setSaveState] = useState(
     restored ? 'Brouillon restauré depuis cet appareil.' : 'Vos modifications ne sont pas encore enregistrées.'
   );
@@ -289,17 +186,12 @@ export default function App() {
     labels: true,
   });
 
-  const dialog = useRef(null);
-  const general = useRef(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [generalVersion, setGeneralVersion] = useState(0);
 
   const i = data.impacts[current];
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
 
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(''), 4000);
-    return () => clearTimeout(timer);
-  }, [toast]);
 
   function change(update) {
     setData((d) => ({ ...d, ...update }));
@@ -329,7 +221,7 @@ export default function App() {
         'Brouillon enregistré sur cet appareil · ' +
           new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
       );
-      setToast('Brouillon enregistré sur cet appareil.');
+      notify('Brouillon enregistré sur cet appareil.');
     } catch {
       setError('Le stockage local n’est pas disponible.');
     }
@@ -337,7 +229,7 @@ export default function App() {
 
   function validate() {
     if (!data.title.trim()) {
-      general.current.open = true;
+      setGeneralVersion(v => v + 1);
       setError('Renseignez un intitulé dans les informations générales.');
       return;
     }
@@ -354,14 +246,14 @@ export default function App() {
     }
     setVerified(true);
     setError('');
-    setToast('Déclaration vérifiée dans le prototype. Aucune diffusion effectuée.');
+    notify('Déclaration vérifiée dans le prototype. Aucune diffusion effectuée.');
   }
 
   function handleNavClick(id) {
     setActiveNav(id);
     if (id === 'history') {
       setRecord(loadDraft());
-      dialog.current?.showModal();
+      setHistoryOpen(true);
     } else if (id === 'new' || id === 'disruptions') {
       document.querySelector('h1')?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -397,7 +289,7 @@ export default function App() {
       user={{
         name: 'Hector Malot',
       }}
-      onLogout={() => setToast('Déconnexion simulée (espace de démonstration).')}
+      onLogout={() => notify('Déconnexion simulée (espace de démonstration).')}
     />
   );
 
@@ -416,8 +308,8 @@ export default function App() {
         subtitle="Déclaration de perturbation"
         actions={
           <>
-            <span className="environment-badge">Espace de démonstration</span>
-            <span className="locale-badge">FR</span>
+            <Badge label="Espace de démonstration"/>
+            <Badge label="FR"/>
             <Indicator variant={verified ? 'nominal' : 'draft'} label={verified ? 'Vérifiée' : 'Brouillon'} />
           </>
         }
@@ -425,17 +317,10 @@ export default function App() {
 
       <div className="page-wrapper">
         {/* Informations générales */}
-        <details className="general panel" ref={general}>
-          <summary>
-            <span className="success">
-              <Icons icon="check" size={16} />
-            </span>
-            <div>
-              <strong>Informations générales</strong>
-              <p>Les informations générales sont communes à tous les impacts.</p>
-            </div>
-            <span className="chevron">⌄</span>
-          </summary>
+        <Accordion className="general" key={generalVersion} items={[{
+          id:'general', defaultOpen: generalVersion > 0,
+          title: 'Informations générales',
+          content: <><p className="section-description">Les informations générales sont communes à tous les impacts.</p>
           <div className="general-fields">
             <TextInput
               label="Intitulé de la perturbation"
@@ -449,10 +334,11 @@ export default function App() {
               onChange={(cause) => change({ cause })}
             />
           </div>
-        </details>
+</>
+        }]} />
 
         {/* Tunnel de déclaration d'impacts */}
-        <section className="panel impact">
+        <PageSection title="Impacts de la perturbation" surface="card" gap={0} className="impact">
           <div className="impact-head">
             <div>
               <Dropdown
@@ -478,7 +364,7 @@ export default function App() {
                 change({ impacts: [...data.impacts, newImpact()] });
                 setCurrent(data.impacts.length);
                 setStep(0);
-                setToast('Un nouvel impact a été ajouté.');
+                notify('Un nouvel impact a été ajouté.');
               }}
             />
           </div>
@@ -494,9 +380,7 @@ export default function App() {
             />
           </nav>
 
-          <div className="progress" style={{ '--progress-pct': `${(step + 1) * 20}%` }}>
-            <div />
-          </div>
+          <ProgressBar value={(step + 1) * 20} aria-label="Progression de la déclaration" />
 
           <div className="form-content">
             <h2>{['Périmètre de l’impact', 'Sévérité de l’impact', 'Période d’application', 'Message voyageurs', 'Récapitulatif de l’impact'][step]}</h2>
@@ -529,27 +413,16 @@ export default function App() {
 
             {step === 1 && (
               <div className="field">
-                <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>
-                  Sévérité
-                </label>
                 <SeverityField value={i.severity} onChange={(severity) => updateImpact({ severity })} />
               </div>
             )}
 
             {step === 2 && (
               <div className="fields">
-                <TextInput
-                  label="Début"
-                  type="datetime-local"
-                  value={i.start}
-                  onChange={(e) => updateImpact({ start: e.target.value })}
-                />
-                <TextInput
-                  label="Fin"
-                  type="datetime-local"
-                  value={i.end}
-                  onChange={(e) => updateImpact({ end: e.target.value })}
-                />
+                <DatePicker label="Début" withTime variant="button" value={new Date(i.start)}
+                  onChange={date => updateImpact({start: localDateValue(date)})} />
+                <DatePicker label="Fin" withTime variant="button" value={new Date(i.end)}
+                  onChange={date => updateImpact({end: localDateValue(date)})} />
               </div>
             )}
 
@@ -584,14 +457,14 @@ export default function App() {
             )}
           </div>
 
-          <div className="form-actions">
+          <FormActions className="wizard-actions" justify="between">
             <span>Étape {step + 1} sur 5</span>
             <div>
               <GhostButton size="sm" label="Précédent" disabled={step === 0} onClick={() => go(step - 1)} />
               {step < 4 && <PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={() => go(step + 1)} />}
             </div>
-          </div>
-        </section>
+          </FormActions>
+        </PageSection>
 
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
         {issue(i, 0) ? (
@@ -605,92 +478,40 @@ export default function App() {
             <LineDiagram impact={i} sev={sev} stations={STATIONS} tweaks={tweaks} />
 
             {/* Options d'affichage interactives (Tweaks) */}
-            <div className="tweaks-bar">
-              <span className="tweaks-title">Options de rendu :</span>
+            <PageSection title="Options d’affichage" headingLevel={3} className="tweaks-bar" gap={12}>
               <div className="tweaks-controls">
-                <label className="tweak-toggle">
-                  <input
-                    type="checkbox"
-                    checked={tweaks.colorCode}
-                    onChange={(e) => setTweaks((prev) => ({ ...prev, colorCode: e.target.checked }))}
-                  />
-                  <span>Code couleur</span>
-                </label>
-                <label className="tweak-toggle">
-                  <input
-                    type="checkbox"
-                    checked={tweaks.showTag}
-                    onChange={(e) => setTweaks((prev) => ({ ...prev, showTag: e.target.checked }))}
-                  />
-                  <span>Tag passant/bloquant</span>
-                </label>
-                <label className="tweak-toggle">
-                  <input
-                    type="checkbox"
-                    checked={tweaks.animate}
-                    onChange={(e) => setTweaks((prev) => ({ ...prev, animate: e.target.checked }))}
-                  />
-                  <span>Animation bus</span>
-                </label>
-                <label className="tweak-toggle">
-                  <span>Vitesse :</span>
-                  <select
-                    className="tweak-select"
-                    value={tweaks.speed}
-                    onChange={(e) => setTweaks((prev) => ({ ...prev, speed: e.target.value }))}
-                  >
-                    <option value="lente">Lente</option>
-                    <option value="normale">Normale</option>
-                    <option value="rapide">Rapide</option>
-                  </select>
-                </label>
-                <label className="tweak-toggle">
-                  <input
-                    type="checkbox"
-                    checked={tweaks.labels}
-                    onChange={(e) => setTweaks((prev) => ({ ...prev, labels: e.target.checked }))}
-                  />
-                  <span>Arrêts</span>
-                </label>
+                {[['colorCode','Code couleur'],['showTag','Tag passant/bloquant'],['animate','Animation bus'],['labels','Arrêts']].map(([key,label]) =>
+                  <div className="display-option" key={key}><Checkbox aria-label={label} state={tweaks[key] ? 'checked' : 'unchecked'}
+                    onChange={value => setTweaks(prev => ({...prev,[key]:value}))}/><span>{label}</span></div>)}
+                <SegmentedControl aria-label="Vitesse d’animation" size="sm" value={tweaks.speed} disabled={!tweaks.animate}
+                  options={[{value:'lente',label:'Lente'},{value:'normale',label:'Normale'},{value:'rapide',label:'Rapide'}]}
+                  onChange={speed=>setTweaks(prev=>({...prev,speed}))}/>
               </div>
-            </div>
+            </PageSection>
 
             {/* Carte « Conséquence sur l'objet » */}
             <ConsequenceCard sev={sev} tweaks={tweaks} />
           </>
         )}
 
-        <footer>
+        <FormActions className="page-actions" justify="between">
           <span>{saveState}</span>
           <div>
             <PrimaryButton outline size="sm" label="Enregistrer le brouillon" onClick={save} />
             {step === 4 && <PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate} />}
           </div>
-        </footer>
+        </FormActions>
 
         <p className="prototype-note">
           Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs
         </p>
       </div>
 
-      {toast && (
-        <div className="toast" role="status">
-          {toast}
-        </div>
-      )}
+      <Toaster />
 
       {/* Modale « Mes déclarations » */}
-      <dialog ref={dialog} onClose={() => setActiveNav('new')}>
-        <div className="dialog-header">
-          <h2>Mes déclarations</h2>
-          <GhostButton
-            label="Fermer"
-            onClick={() => {
-              dialog.current?.close();
-              setActiveNav('new');
-            }}
-          />
-        </div>
+      <Modal isOpen={historyOpen} onClose={() => {setHistoryOpen(false);setActiveNav('new');}} title="Mes déclarations"
+        footer={<GhostButton label="Fermer" onClick={() => {setHistoryOpen(false);setActiveNav('new');}}/>}>
         {record ? (
           <div className="record">
             <strong>{record.title}</strong>
@@ -700,7 +521,7 @@ export default function App() {
         ) : (
           <p>Aucun brouillon enregistré sur cet appareil.</p>
         )}
-      </dialog>
+      </Modal>
     </AppLayout>
   );
 }

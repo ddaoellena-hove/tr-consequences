@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { LineBadge } from '@ddaoellena/cadence-ui';
+import { LineBadge, Indicator } from '@ddaoellena/cadence-ui';
 
 export const tint = (c, pct, base = 'white') => `color-mix(in srgb, ${c} ${pct}%, ${base})`;
 
@@ -200,33 +200,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
           <span className="line-name">Ligne 12</span>
         </div>
         {sev && (
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 7,
-              padding: '4px 11px',
-              borderRadius: 'var(--cadence-radius-pill)',
-              background: colorOn ? tint(sev.color, 14) : 'var(--cadence-color-surface-alt)',
-              border: `1px solid ${colorOn ? tint(sev.color, 45) : 'var(--cadence-color-border)'}`,
-              fontFamily: 'var(--cadence-font-mono)',
-              fontSize: 11,
-              fontWeight: 500,
-              letterSpacing: '.02em',
-              color: colorOn ? sev.color : 'var(--cadence-color-primary)',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <span
-              style={{
-                width: 7,
-                height: 7,
-                borderRadius: 'var(--cadence-radius-pill)',
-                background: colorOn ? sev.color : 'var(--cadence-color-primary)',
-              }}
-            />
-            {sev.tag}
-          </span>
+          <Indicator variant={colorOn ? sev.variant : 'draft'} label={sev.tag} />
         )}
       </div>
 

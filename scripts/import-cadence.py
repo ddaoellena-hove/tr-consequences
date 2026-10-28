@@ -2,7 +2,7 @@ from pathlib import Path
 import re, shutil, json, hashlib, subprocess, sys
 source=Path(sys.argv[1]).resolve()
 target=Path(__file__).resolve().parents[1]/'vendor/cadence-ui'
-entries=['PrimaryButton','GhostButton','Dropdown','TextInput','TextArea','Stepper','InlineAlert','Indicator','LineBadge','Icons','Sidebar','AppLayout','Avatar','PageHeader','Breadcrumbs']
+entries=['PrimaryButton','GhostButton','Dropdown','TextInput','TextArea','Stepper','InlineAlert','Indicator','LineBadge','Icons','Sidebar','AppLayout','Avatar','PageHeader','Breadcrumbs','Accordion','PageSection','FormActions','ProgressBar','Modal','Toaster','DatePicker','Checkbox','SegmentedControl','Badge']
 seen=set()
 def copy(p):
  p=p.resolve()
@@ -19,7 +19,8 @@ def copy(p):
   copy(match)
 for name in entries:copy(source/'src/components'/f'{name}.tsx')
 copy(source/'src/components/tokens.css')
-(target/'src/index.ts').write_text('\n'.join(f'export {{ {n} }} from "./{n}";' for n in entries)+'\nimport "./tokens.css";\n')
+copy(source/'src/components/useToast.ts')
+(target/'src/index.ts').write_text('\n'.join(f'export {{ {n} }} from "./{n}";' for n in entries)+'\nexport { toast, useToast } from "./useToast";\nimport "./tokens.css";\n')
 fonts=target/'fonts';fonts.mkdir(exist_ok=True)
 for font in re.findall(r'/fonts/([^\"]+)',(source/'src/components/tokens.css').read_text()):shutil.copy2(source/'public/fonts'/font,fonts/font)
 manifest={'name':'@ddaoellena/cadence-ui','version':json.loads((source/'package.json').read_text())['version'],'private':True,'type':'module','exports':{'.':'./src/index.ts'},'peerDependencies':{'react':'^18 || ^19','react-dom':'^18 || ^19'},'dependencies':{'@untitledui/icons':'0.0.23'}}

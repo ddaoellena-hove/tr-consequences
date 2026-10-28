@@ -19,7 +19,9 @@ Pour synchroniser une nouvelle version locale : `python3 scripts/import-cadence.
 
 ## Composants Cadence intégrés
 
-PrimaryButton, GhostButton, Dropdown, TextInput, TextArea, Stepper, InlineAlert, Indicator, LineBadge, Icons, Sidebar, AppLayout et Avatar. Tokens officiels, ABC Diatype et Uxum Grotesque servis localement. La composition de la page et le schéma métier restent spécifiques au prototype ; le logo texte reste provisoire.
+PrimaryButton, GhostButton, Dropdown, TextInput, TextArea, Stepper, InlineAlert, Indicator, LineBadge, Icons, Sidebar, AppLayout, Avatar, PageHeader, Breadcrumbs, Accordion, PageSection, FormActions, ProgressBar, Modal, Toaster, DatePicker, Checkbox, SegmentedControl, Badge. Tokens officiels, ABC Diatype et Uxum Grotesque servis localement.
+
+Voir [l’audit et les choix de migration](docs/component-audit.md). Le schéma animé reste spécifique au métier (ruptures et demi-tours non couverts par le LineDiagram de supervision Cadence).
 
 ## Périmètre
 

@@ -1,0 +1,110 @@
+/* Checkbox — base */
+.checkbox {
+  border: 1px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  position: relative;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.checkbox:focus-visible {
+  box-shadow: 0 0 0 3px #1a3e4566;
+}
+
+/* ── States ── */
+.checkbox.unchecked {
+  background-color: var(--cadence-color-white, #ffffff);
+  border-color: var(--cadence-color-icon-muted, #69797d);
+}
+
+.checkbox.hover {
+  background-color: var(--cadence-color-white, #ffffff);
+  border-color: var(--cadence-color-primary, #002830);
+}
+
+.checkbox.checked {
+  background-color: var(--cadence-color-primary, #002830);
+  border-color: var(--cadence-color-primary, #002830);
+}
+
+.checkbox.indeterminate {
+  background-color: var(--cadence-color-white, #ffffff);
+  border-color: var(--cadence-color-primary, #002830);
+}
+
+.checkbox.disabled {
+  background-color: var(--cadence-color-border, #e5e5e5);
+  border-color: var(--cadence-color-border-strong, #bfc9cb);
+  cursor: not-allowed;
+}
+
+.checkbox.disabled-checked {
+  background-color: var(--cadence-color-border, #e5e5e5);
+  border-color: var(--cadence-color-border-strong, #bfc9cb);
+  cursor: not-allowed;
+}
+
+/* ── Hover ripple ring ── */
+.checkbox.hover .checkbox-inner {
+  background-color: var(--cadence-color-active-overlay, rgba(0, 40, 48, 0.12));
+  border-radius: var(--cadence-radius-pill, 18px);
+  height: 30px;
+  width: 30px;
+  left: calc(50% - 15px);
+  top: calc(50% - 15px);
+  position: absolute;
+  pointer-events: none;
+}
+
+/* ── Checked tick mark ── */
+.checkbox.checked .checkbox-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 4px;
+  border-left: 1.5px solid var(--cadence-color-white, #ffffff);
+  border-bottom: 1.5px solid var(--cadence-color-white, #ffffff);
+  transform: translate(-50%, -60%) rotate(-45deg);
+  pointer-events: none;
+}
+
+/* ── Disabled-checked tick mark ── */
+.checkbox.disabled-checked .checkbox-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 4px;
+  border-left: 1.5px solid var(--cadence-color-border-strong, #bfc9cb);
+  border-bottom: 1.5px solid var(--cadence-color-border-strong, #bfc9cb);
+  transform: translate(-50%, -60%) rotate(-45deg);
+  pointer-events: none;
+}
+
+/* ── Indeterminate dash ── */
+.checkbox.indeterminate .checkbox-inner {
+  background-color: var(--cadence-color-primary, #002830);
+  border-radius: 1px;
+  height: 2px;
+  width: 8px;
+  position: absolute;
+  left: calc(50% - 4px);
+  top: calc(50% - 1px);
+  pointer-events: none;
+}
+
+/* ── Native hover on unchecked state ── */
+.checkbox.unchecked:hover {
+  border-color: var(--cadence-color-primary, #002830);
+}
