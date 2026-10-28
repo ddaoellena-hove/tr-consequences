@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { LineBadge, Indicator } from '@ddaoellena/cadence-ui';
 
-export const tint = (c, pct, base = 'white') => `color-mix(in srgb, ${c} ${pct}%, ${base})`;
 
 // Géométrie de référence du diagramme
 const W = 1136;
@@ -63,8 +62,8 @@ function buildLoopSeg(startX, endX) {
 function NoEntry({ x, color }) {
   return (
     <g>
-      <circle cx={x} cy={lineY} r="11" fill={color} stroke="#fff" strokeWidth="2" />
-      <rect x={x - 6.5} y={lineY - 2} width="13" height="4" rx="1" fill="#fff" />
+      <circle cx={x} cy={lineY} r="11" fill={color} stroke="var(--cadence-color-white)" strokeWidth="2" />
+      <rect x={x - 6.5} y={lineY - 2} width="13" height="4" rx="1" fill="var(--cadence-color-white)" />
     </g>
   );
 }
@@ -90,26 +89,16 @@ function Bus({ busRef }) {
   return (
     <div
       ref={busRef}
-      style={{
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width: 46,
-        height: 24,
-        transformOrigin: 'center center',
-        willChange: 'transform',
-        zIndex: 4,
-        filter: 'drop-shadow(0 2px 4px rgba(0, 40, 48, 0.25))',
-      }}
+      className="diagram-bus"
     >
-      <svg width="46" height="24" viewBox="0 0 46 24" style={{ display: 'block' }}>
-        <rect x="2" y="3" width="40" height="15" rx="4" fill="var(--cadence-status-active-on-dark, #00AECE)" stroke="var(--cadence-color-primary, #002830)" strokeWidth="1.6" />
-        <rect x="6" y="6.5" width="6.5" height="6" rx="1.4" fill="#EAF8FB" />
-        <rect x="15" y="6.5" width="6.5" height="6" rx="1.4" fill="#EAF8FB" />
-        <rect x="24" y="6.5" width="6.5" height="6" rx="1.4" fill="#EAF8FB" />
-        <rect x="35.5" y="6.5" width="5" height="6" rx="1.4" fill="#FFE8B0" />
-        <circle cx="13" cy="19" r="3.4" fill="var(--cadence-color-primary, #002830)" />
-        <circle cx="32" cy="19" r="3.4" fill="var(--cadence-color-primary, #002830)" />
+      <svg width="46" height="24" viewBox="0 0 46 24" className="diagram-bus-svg">
+        <rect x="2" y="3" width="40" height="15" rx="4" fill="var(--cadence-status-active-on-dark)" stroke="var(--cadence-color-primary)" strokeWidth="1.6" />
+        <rect x="6" y="6.5" width="6.5" height="6" rx="1.4" fill="var(--cadence-color-white)" />
+        <rect x="15" y="6.5" width="6.5" height="6" rx="1.4" fill="var(--cadence-color-white)" />
+        <rect x="24" y="6.5" width="6.5" height="6" rx="1.4" fill="var(--cadence-color-white)" />
+        <rect x="35.5" y="6.5" width="5" height="6" rx="1.4" fill="var(--cadence-status-warning-bg)" />
+        <circle cx="13" cy="19" r="3.4" fill="var(--cadence-color-primary)" />
+        <circle cx="32" cy="19" r="3.4" fill="var(--cadence-color-primary)" />
       </svg>
     </div>
   );
@@ -130,12 +119,12 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
   const stopFrom = STOPS[fromIndex];
   const stopTo = STOPS[toIndex];
   const midX = (stopFrom + stopTo) / 2;
-  const accent = sev ? (colorOn ? sev.color : 'var(--cadence-color-primary, #002830)') : 'var(--cadence-color-border-strong, #7C7369)';
+  const accent = sev ? (colorOn ? sev.color : 'var(--cadence-color-primary)') : 'var(--cadence-color-border-strong)';
 
   useEffect(() => {
     const bus1 = bus1Ref.current;
     const bus2 = bus2Ref.current;
-    if (!bus1) return;
+    if (!bus1 || !bus1.animate) return;
 
     // Bus 1 navigue soit sur la ligne complète (passant), soit de Gare Centre jusqu'à l'arrêt de début (non passant)
     const endX1 = sev && !passant ? stopFrom : STOPS[5];
@@ -143,16 +132,17 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
     const tf = (p) => `translate(${p.x - 23}px, ${p.y - 12}px) scaleX(${p.dir})`;
 
     // Position initiale bus 1
-    bus1.style.transform = tf(loop1.pts[0]);
+    const position1 = bus1.animate([{transform: tf(loop1.pts[0])}], {duration: 1, fill: 'both'});
+    let position2;
 
     // Position initiale bus 2 (non passant : arrêt de fin jusqu'à Zénith)
     if (bus2 && !passant) {
       const loop2 = buildLoopSeg(stopTo, STOPS[5]);
-      bus2.style.transform = tf(loop2.pts[0]);
+      position2 = bus2.animate([{transform: tf(loop2.pts[0])}], {duration: 1, fill: 'both'});
     }
 
     const reduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!sev || tweaks.animate === false || reduced || !bus1.animate) return;
+    if (!sev || tweaks.animate === false || reduced) return () => { position1.cancel(); position2?.cancel(); };
 
     const speedMap = { lente: 110, normale: 210, rapide: 340 };
     const speed = speedMap[tweaks.speed] || 210;
@@ -185,16 +175,18 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
     }
 
     return () => {
+      position1.cancel();
+      position2?.cancel();
       anim1.cancel();
       if (anim2) anim2.cancel();
     };
   }, [sev?.id, tweaks.animate, tweaks.speed, stopFrom, stopTo, passant]);
 
   return (
-    <div className="diagram-panel">
+    <div className="diagram-panel" data-severity={sev?.id} data-color-code={colorOn}>
       {/* En-tête du schéma */}
       <div className="diagram-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="diagram-identity">
           <span className="eyebrow">Schéma de conséquence</span>
           <LineBadge code="12" mode="bus" size="sm" />
           <span className="line-name">Ligne 12</span>
@@ -206,15 +198,15 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
 
       {/* Canevas SVG et Bus animés */}
       <div className="diagram-scroll" role="img" aria-label={`Schéma de ligne 12. ${sev?.label || 'État nominal'}.`}>
-        <div style={{ position: 'relative', width: W, height: H, margin: '2px auto 0' }}>
-          <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ position: 'absolute', inset: 0 }}>
+        <div className="diagram-canvas">
+          <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="diagram-svg">
             {/* Piste de base (fond) */}
             <line
               x1={STOPS[0]}
               y1={lineY}
               x2={STOPS[5]}
               y2={lineY}
-              stroke="var(--cadence-color-border, #dde3e6)"
+              stroke="var(--cadence-color-border)"
               strokeWidth="6"
               strokeLinecap="round"
             />
@@ -226,7 +218,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
                 y1={lineY}
                 x2={STOPS[5]}
                 y2={lineY}
-                stroke={sev ? 'var(--cadence-color-primary, #002830)' : 'var(--cadence-color-border-strong)'}
+                stroke={sev ? 'var(--cadence-color-primary)' : 'var(--cadence-color-border-strong)'}
                 strokeWidth="6"
                 strokeLinecap="round"
               />
@@ -240,7 +232,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
                   y1={lineY}
                   x2={stopFrom}
                   y2={lineY}
-                  stroke="var(--cadence-color-primary, #002830)"
+                  stroke="var(--cadence-color-primary)"
                   strokeWidth="6"
                   strokeLinecap="round"
                 />
@@ -250,7 +242,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
                   y1={lineY}
                   x2={STOPS[5]}
                   y2={lineY}
-                  stroke="var(--cadence-color-primary, #002830)"
+                  stroke="var(--cadence-color-primary)"
                   strokeWidth="6"
                   strokeLinecap="round"
                 />
@@ -295,18 +287,18 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
                   width="124"
                   height="22"
                   rx="6"
-                  fill={colorOn ? tint(sev.color, 14) : '#fff'}
-                  stroke={colorOn ? tint(sev.color, 45) : 'var(--cadence-color-border)'}
+                  fill={colorOn ? 'var(--tr-impact-subtle)' : 'var(--cadence-color-white)'}
+                  stroke={colorOn ? 'var(--tr-impact-border)' : 'var(--cadence-color-border)'}
                 />
                 <text
                   x={midX}
                   y={lineY - 23}
                   textAnchor="middle"
                   fontFamily="var(--cadence-font-mono, monospace)"
-                  fontSize="11"
-                  fontWeight="500"
+                  fontSize="var(--cadence-font-size-caption)"
+                  fontWeight="var(--tr-font-weight-medium)"
                   fill={colorOn ? sev.color : 'var(--cadence-color-primary)'}
-                  style={{ letterSpacing: '.02em' }}
+                  className="diagram-annotation"
                 >
                   {sev.label.toLowerCase()}
                 </text>
@@ -326,7 +318,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
             {STOPS.map((x, i) => {
               const barredSeverities = ['bloquante', 'interrompu', 'modifie', 'reduit', 'perturbe'];
               const blocked = sev && i >= fromIndex && i <= toIndex && barredSeverities.includes(sev.id);
-              const strikeColor = sev && colorOn ? sev.color : 'var(--cadence-color-danger, #DA1E28)';
+              const strikeColor = sev && colorOn ? sev.color : 'var(--cadence-color-danger)';
               const d = 6.5;
 
               return (
@@ -335,7 +327,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
                     cx={x}
                     cy={lineY}
                     r="9"
-                    fill="#fff"
+                    fill="var(--cadence-color-white)"
                     stroke={blocked ? strikeColor : 'var(--cadence-color-primary)'}
                     strokeWidth={blocked ? 2.5 : 3}
                   />
@@ -351,8 +343,8 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
                       y={lineY + 27}
                       textAnchor="middle"
                       fontFamily="var(--cadence-font-sans)"
-                      fontSize="12"
-                      fontWeight={blocked ? 700 : 500}
+                      fontSize="var(--cadence-font-size-small)"
+                      fontWeight={blocked ? 'var(--tr-font-weight-bold)' : 'var(--tr-font-weight-medium)'}
                       fill={blocked ? strikeColor : 'var(--cadence-color-primary)'}
                       textDecoration={blocked ? 'line-through' : 'none'}
                     >
@@ -368,7 +360,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
           <Bus busRef={bus1Ref} />
 
           {/* Bus 2 (affiché uniquement en cas de non passant) */}
-          <div style={{ display: sev && !passant ? 'block' : 'none' }}>
+          <div hidden={!(sev && !passant)}>
             <Bus busRef={bus2Ref} />
           </div>
         </div>
@@ -381,7 +373,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
           Service maintenu
         </span>
         {sev && (
-          <span className="legend-impact" style={{ '--impact-color': accent }}>
+          <span className="legend-impact" >
             <i />
             {sev.tag} ({sev.label})
           </span>

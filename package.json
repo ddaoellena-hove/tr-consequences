@@ -8,7 +8,8 @@
     "dev": "vite",
     "prebuild": "node scripts/prepare-assets.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:tokens": "node scripts/check-tokens.mjs"
   },
   "dependencies": {
     "@ddaoellena/cadence-ui": "file:vendor/cadence-ui",

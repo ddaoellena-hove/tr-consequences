@@ -1,0 +1,32 @@
+/* Traffic Report extensions: Cadence has no spacing/layout or domain severity tokens.
+   Do not present these as official Cadence tokens. Severity colors preserve the
+   existing product model; text uses Cadence's accessible semantic foregrounds. */
+:root {
+ --tr-page-max:1400px; --tr-fields-max:850px; --tr-field-max:620px;
+ --tr-form-min-height:175px; --tr-stepper-min-width:660px;
+ --tr-dot-size:9px; --tr-border-width:1px; --tr-line-width:3px;
+ --tr-space-2:2px; --tr-space-4:4px; --tr-space-8:8px; --tr-space-12:12px;
+ --tr-space-16:16px; --tr-space-20:20px; --tr-space-24:24px; --tr-space-32:32px;
+ --tr-font-weight-medium:500; --tr-font-weight-semibold:600; --tr-font-weight-bold:700;
+ --tr-line-height-body:1.5; --tr-line-height-relaxed:1.8;
+ --tr-tracking-annotation:.02em;
+ --tr-diagram-width:1136px; --tr-diagram-height:120px;
+ --tr-bus-width:46px; --tr-bus-height:24px; --tr-diagram-vehicle-layer:4;
+ --tr-severity-bloquante:#DA1E28;
+ --tr-severity-interrompu:#A1141B;
+ --tr-severity-modifie:#FD4703;
+ --tr-severity-reduit:#FD7542;
+ --tr-severity-perturbe:#FFA144;
+ --tr-severity-informative:#3EAAC5;
+}
+[data-severity="bloquante"] { --tr-impact-color:var(--tr-severity-bloquante); --tr-impact-text:var(--cadence-status-critical-fg); }
+[data-severity="interrompu"] { --tr-impact-color:var(--tr-severity-interrompu); --tr-impact-text:var(--cadence-status-critical-fg); }
+[data-severity="modifie"] { --tr-impact-color:var(--tr-severity-modifie); --tr-impact-text:var(--cadence-status-warning-fg); }
+[data-severity="reduit"] { --tr-impact-color:var(--tr-severity-reduit); --tr-impact-text:var(--cadence-status-warning-fg); }
+[data-severity="perturbe"] { --tr-impact-color:var(--tr-severity-perturbe); --tr-impact-text:var(--cadence-status-warning-fg); }
+[data-severity="informative"] { --tr-impact-color:var(--tr-severity-informative); --tr-impact-text:var(--cadence-status-info-fg); }
+.diagram-panel {
+ --tr-impact-subtle:color-mix(in srgb, var(--tr-impact-color) 14%, var(--cadence-color-white));
+ --tr-impact-border:color-mix(in srgb, var(--tr-impact-color) 45%, var(--cadence-color-white));
+}
+[data-color-code="false"] { --tr-impact-color:var(--cadence-color-primary); }

@@ -28,7 +28,7 @@ export const SEVERITIES = [
   {
     id: 'bloquante',
     label: 'Bloquante',
-    color: '#DA1E28',
+    color: 'var(--tr-severity-bloquante)',
     passant: false,
     tag: 'Tronçon bloquant',
     variant: 'critical',
@@ -39,7 +39,7 @@ export const SEVERITIES = [
   {
     id: 'interrompu',
     label: 'Service interrompu',
-    color: '#A1141B',
+    color: 'var(--tr-severity-interrompu)',
     passant: false,
     tag: 'Tronçon non passant',
     variant: 'critical',
@@ -50,7 +50,7 @@ export const SEVERITIES = [
   {
     id: 'modifie',
     label: 'Service modifié',
-    color: '#FD4703',
+    color: 'var(--tr-severity-modifie)',
     passant: true,
     tag: 'Tronçon passant',
     variant: 'warning',
@@ -61,7 +61,7 @@ export const SEVERITIES = [
   {
     id: 'reduit',
     label: 'Service réduit',
-    color: '#FD7542',
+    color: 'var(--tr-severity-reduit)',
     passant: true,
     tag: 'Tronçon passant',
     variant: 'warning',
@@ -72,7 +72,7 @@ export const SEVERITIES = [
   {
     id: 'perturbe',
     label: 'Perturbé / Retards',
-    color: '#FFA144',
+    color: 'var(--tr-severity-perturbe)',
     passant: true,
     tag: 'Tronçon passant',
     variant: 'warning',
@@ -83,7 +83,7 @@ export const SEVERITIES = [
   {
     id: 'informative',
     label: 'Informative',
-    color: '#3EAAC5',
+    color: 'var(--tr-severity-informative)',
     passant: true,
     tag: 'Tronçon passant',
     variant: 'info',
@@ -147,7 +147,7 @@ function SeverityField({ value, onChange }) {
   return <Dropdown label="Sévérité" value={value} onChange={onChange}
     options={SEVERITIES.map(s => ({ id: s.id,
       label: `${s.label} · ${s.passant ? 'passant' : 'non passant'}`,
-      icon: <span className="severity-dot" style={{ background: s.color }} aria-hidden="true" />
+      icon: <span className="severity-dot" data-severity={s.id} aria-hidden="true" />
     }))} />;
 }
 function ConsequenceCard({ sev, tweaks }) {
@@ -442,7 +442,7 @@ export default function App() {
                   Ligne 12 · {STATIONS[i.from]} → {STATIONS[i.to]}
                 </strong>
                 <br />
-                <span style={{ color: sev.color, fontWeight: 600 }}>{sev.label}</span> · Du {formatDate(i.start)} au{' '}
+                <span className="severity-summary" data-severity={sev.id}>{sev.label}</span> · Du {formatDate(i.start)} au{' '}
                 {formatDate(i.end)}
                 <p>{i.message}</p>
               </div>

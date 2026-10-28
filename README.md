@@ -28,3 +28,7 @@ Voir [l’audit et les choix de migration](docs/component-audit.md). Le schéma 
 Parcours en cinq étapes, plusieurs impacts indépendants, sévérité et périmètre reliés au schéma, validation des tronçons/périodes/messages, sauvegarde et restauration du brouillon dans le navigateur. La validation finale vérifie tous les impacts, sans diffusion métier.
 
 Les données, les sévérités supplémentaires et leurs conséquences sont illustratives et restent à confirmer. Aucun raccordement au produit Traffic Report. Les dates s’interprètent dans le fuseau local du navigateur.
+
+## Vérification des tokens
+
+`npm run check:tokens` contrôle les styles applicatifs. Les extensions Traffic Report sont centralisées dans `src/tokens.css`. Voir [l’audit des tokens et ses exceptions](docs/token-audit.md) pour distinguer tokens Cadence, tokens produit, géométrie SVG et styles calculés internes à la bibliothèque.
