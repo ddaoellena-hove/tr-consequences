@@ -37,7 +37,8 @@ traffic-report/
 │   ├── import-cadence.py        # Synchronisation des composants depuis la source hove-cadence-ui
 │   └── prepare-assets.mjs       # Copie vendor/cadence-ui/fonts vers public/fonts avant build/dev
 ├── src/
-│   ├── app.jsx                  # Composant principal (parcours, état, stepper, schéma SVG)
+│   ├── app.jsx                  # Composant principal (parcours, état, stepper, sélecteur sévérité)
+│   ├── LineDiagram.jsx          # Schéma animé "thermomètre de ligne" (trajectoires boucles, bus SVG, demi-tours)
 │   ├── main.jsx                 # Point d'entrée React (createRoot)
 │   ├── styles.css               # Styles spécifiques du prototype (100% alignés sur tokens Cadence)
 │   └── validation.mjs           # Règles de validation métier (chronologie, dates, messages)
@@ -104,16 +105,25 @@ L'application est encapsulée dans le composant officiel `<AppLayout>` :
   * Barre utilitaire supérieure (`.content-top-bar`) avec fil d'Ariane et badges.
   * Bloc rétractable « Informations générales » (`<details className="general panel">`).
   * Bloc de déclaration d'impacts (`<section className="panel impact">`).
-  * Schéma SVG de conséquence (`<Diagram>`).
+  * Schéma SVG de conséquence (`<LineDiagram>`) avec animation Web Animations API des bus en navette ou boucle complète.
+  * Carte explicative « Conséquence sur l'objet » avec puce `PassantTag` et texte enrichi.
+  * Barre d'options de rendu interactives (Tweaks : code couleur, tag passant/bloquant, animation, vitesse, arrêts).
   * Pied de page d'actions (Enregistrer le brouillon, Valider la déclaration).
 
-### 5.2 Modèle de Données & États
+### 5.2 Modèle de Données & Sévérités
+* **Les 6 Sévérités Officielles** (alignées sur `Sévérité de l'impact.html`) :
+  1. `bloquante` (`#DA1E28`) : Tronçon bloquant (non passant, contournement proposé)
+  2. `interrompu` (`#A1141B`) : Tronçon non passant (aucune circulation calculée)
+  3. `modifie` (`#FD4703`) : Tronçon passant (circulations maintenues, offre adaptée)
+  4. `reduit` (`#FD7542`) : Tronçon passant (circulations maintenues, fréquence réduite)
+  5. `perturbe` (`#FFA144`) : Tronçon passant (circulations maintenues, retards signalés)
+  6. `informative` (`#3EAAC5`) : Tronçon passant (aucun impact itinéraire, message d'info)
 * **Perturbation** :
   * `title` (string) : Nom de l'incident (ex. *Travaux sur la ligne 12*).
   * `cause` (string) : *Travaux*, *Incident technique*, *Événement*.
   * `impacts` (Array) : Liste des impacts configurés.
 * **Impact** :
-  * `severity` : `'interrupted'` | `'reduced'` | `'delayed'`
+  * `severity` : `'bloquante'` | `'interrompu'` | `'modifie'` | `'reduit'` | `'perturbe'` | `'informative'`
   * `from` (number) : Index station de début (0 à 5).
   * `to` (number) : Index station de fin (doit être `> from`).
   * `start` (string) : Date/heure ISO locale (`YYYY-MM-DDTHH:mm`).

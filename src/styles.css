@@ -242,34 +242,249 @@ footer > div {
   margin-top: 18px;
 }
 
-.diagram-panel {
-  margin-top: 18px;
-  border: 1px solid var(--cadence-color-border-strong);
-  border-radius: var(--cadence-radius-xl);
-  padding: 19px 22px 13px;
+/* ── Custom Severity Selector (matching reference prototype) ── */
+.severity-field-container {
+  position: relative;
+  width: 100%;
+  max-width: 545px;
 }
 
-.diagram-header,
-.diagram-header > div {
+.severity-field-btn {
+  width: 100%;
+  height: 40px;
+  border-radius: var(--cadence-radius-lg);
+  background: var(--cadence-color-white);
+  border: 1px solid var(--cadence-color-border);
   display: flex;
   align-items: center;
-  gap: 14px;
-}
-
-.diagram-header {
   justify-content: space-between;
+  padding: 0 16px 0 18px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  color: var(--cadence-color-primary);
 }
 
-.line-name {
-  font-size: var(--cadence-font-size-small);
+.severity-field-btn:hover {
+  border-color: var(--cadence-color-border-strong);
+}
+
+.severity-field-btn.open {
+  border-color: var(--cadence-status-active-on-dark, #00AECE);
+  box-shadow: 0 0 0 3px rgba(0, 174, 206, 0.15);
+}
+
+.severity-field-current {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.severity-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--cadence-radius-pill);
+  flex-shrink: 0;
+}
+
+.severity-label {
+  font-size: 13px;
   font-weight: 500;
   color: var(--cadence-color-primary);
 }
 
-.diagram-scroll svg {
-  display: block;
+.severity-chevron {
+  display: flex;
+  align-items: center;
+  color: var(--cadence-color-primary);
+  transition: transform 0.2s ease;
+}
+
+.severity-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
   width: 100%;
-  height: 145px;
+  z-index: var(--cadence-z-dropdown);
+  background: var(--cadence-color-white);
+  border-radius: var(--cadence-radius-lg);
+  border: 1px solid var(--cadence-color-border);
+  box-shadow: var(--cadence-shadow-overlay);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.severity-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
+  border-radius: var(--cadence-radius-md);
+  border: none;
+  background: transparent;
+  text-align: left;
+  transition: background 0.12s;
+  cursor: pointer;
+}
+
+.severity-option:hover {
+  background: var(--cadence-color-surface-alt);
+}
+
+.severity-option.selected {
+  background: rgba(0, 174, 206, 0.1);
+}
+
+.severity-option-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cadence-color-primary);
+  flex: 1;
+}
+
+.severity-passant-tag {
+  font-family: var(--cadence-font-mono, monospace);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  padding: 2px 7px;
+  border-radius: var(--cadence-radius-pill);
+}
+
+.severity-passant-tag.passant {
+  color: var(--cadence-color-text-secondary);
+  background: var(--cadence-color-surface-alt);
+}
+
+.severity-passant-tag.non-passant {
+  color: var(--cadence-color-danger);
+  background: rgba(218, 30, 40, 0.08);
+}
+
+/* ── Conséquence sur l'objet (Card info-bulle) ── */
+.consequence-card {
+  margin-top: 14px;
+  padding: 14px 18px 15px 16px;
+  background: var(--cadence-color-white);
+  border: 1px solid var(--cadence-color-border);
+  border-left: 3px solid var(--cadence-color-primary);
+  border-radius: var(--cadence-radius-lg);
+  box-shadow: var(--cadence-shadow-sm);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.consequence-icon-bubble {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--cadence-radius-pill);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.consequence-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 1px;
+}
+
+.consequence-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.consequence-title {
+  font-family: var(--cadence-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.passant-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: var(--cadence-radius-pill);
+  font-family: var(--cadence-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.passant-tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--cadence-radius-pill);
+}
+
+.consequence-card-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--cadence-color-primary);
+}
+
+.consequence-lead {
+  color: var(--cadence-color-text-secondary);
+}
+
+.consequence-highlight {
+  font-weight: 700;
+}
+
+/* ── Animation d'apparition d'info-bulle ── */
+.bubble-in {
+  animation: bubbleIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Diagram Panel ── */
+.diagram-panel {
+  margin-top: 18px;
+  border: 1px solid var(--cadence-color-border);
+  border-radius: var(--cadence-radius-xl);
+  padding: 16px 20px 14px;
+  background: var(--cadence-color-white);
+  box-shadow: var(--cadence-shadow-sm);
+}
+
+.diagram-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.line-name {
+  font-size: var(--cadence-font-size-small);
+  font-weight: 600;
+  color: var(--cadence-color-primary);
+}
+
+.diagram-scroll {
+  overflow-x: auto;
+  position: relative;
+  width: 100%;
 }
 
 .diagram-legend {
@@ -278,6 +493,9 @@ footer > div {
   gap: 25px;
   color: var(--cadence-color-text-secondary);
   font-size: var(--cadence-font-size-xsmall);
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--cadence-color-border-subtle);
 }
 
 .diagram-legend span {
@@ -293,6 +511,56 @@ footer > div {
 
 .diagram-legend .legend-impact i {
   border-top: 3px dotted var(--impact-color, var(--cadence-color-warning));
+}
+
+/* ── Barre d'options de rendu (Tweaks) ── */
+.tweaks-bar {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: var(--cadence-radius-lg);
+  background: var(--cadence-color-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: var(--cadence-font-size-xsmall);
+}
+
+.tweaks-title {
+  font-weight: 600;
+  color: var(--cadence-color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tweaks-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tweak-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--cadence-color-primary);
+}
+
+.tweak-toggle input {
+  cursor: pointer;
+}
+
+.tweak-select {
+  border: 1px solid var(--cadence-color-border);
+  background: var(--cadence-color-white);
+  border-radius: var(--cadence-radius-xs);
+  padding: 2px 6px;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .consequence-wrap {
@@ -378,9 +646,6 @@ dialog::backdrop {
   .form-content {
     min-height: 200px;
   }
-  .diagram-scroll svg {
-    height: 170px;
-  }
 }
 
 @media (max-width: 760px) {
@@ -423,20 +688,11 @@ dialog::backdrop {
     grid-template-columns: 1fr;
   }
   .diagram-panel {
-    padding: 15px 10px;
+    padding: 14px 12px;
   }
   .diagram-header {
     gap: 10px;
     flex-wrap: wrap;
-  }
-  .diagram-header > div {
-    gap: 8px;
-  }
-  .diagram-scroll {
-    overflow-x: auto;
-  }
-  .diagram-scroll svg {
-    min-width: 650px;
   }
   footer {
     flex-direction: column;

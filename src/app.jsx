@@ -1,5 +1,6 @@
-import { issue } from './validation.mjs';
 import React, { useState, useRef, useEffect } from 'react';
+import { issue } from './validation.mjs';
+import { LineDiagram, tint } from './LineDiagram.jsx';
 import {
   PrimaryButton,
   GhostButton,
@@ -15,39 +16,88 @@ import {
   AppLayout,
 } from '@ddaoellena/cadence-ui';
 
-const stations = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
-const labels = ['Périmètre', 'Sévérité de l’impact', 'Période', 'Message voyageurs', 'Récapitulatif'];
-const severities = {
-  interrupted: {
-    label: 'Service interrompu',
-    badge: 'Tronçon non passant',
+export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
+export const STEP_LABELS = ['Périmètre', 'Sévérité de l’impact', 'Période', 'Message voyageurs', 'Récapitulatif'];
+
+// Modèle officiel des 6 sévérités issu de la maquette de référence
+export const SEVERITIES = [
+  {
+    id: 'bloquante',
+    label: 'Bloquante',
+    color: '#DA1E28',
+    passant: false,
+    tag: 'Tronçon bloquant',
     variant: 'critical',
-    description: 'Le tronçon est non passant : aucune circulation n’est calculée sur ce tronçon pendant la période d’application.',
-    legend: 'Tronçon interrompu',
+    badge: 'Tronçon bloquant',
+    lead: 'Vous avez impacté un tronçon avec une sévérité « Bloquante ».',
+    conseq: 'Il s’agira donc d’un tronçon bloquant : il ne sera pas emprunté lors d’une recherche d’itinéraire, et une solution de contournement sera proposée aux voyageurs.',
   },
-  reduced: {
+  {
+    id: 'interrompu',
+    label: 'Service interrompu',
+    color: '#A1141B',
+    passant: false,
+    tag: 'Tronçon non passant',
+    variant: 'critical',
+    badge: 'Tronçon non passant',
+    lead: 'Vous avez impacté un tronçon avec une sévérité « Service interrompu ».',
+    conseq: 'Il s’agira donc d’un tronçon non passant : aucune circulation n’est calculée sur ce tronçon pendant la période d’application.',
+  },
+  {
+    id: 'modifie',
+    label: 'Service modifié',
+    color: '#FD4703',
+    passant: true,
+    tag: 'Tronçon passant',
+    variant: 'warning',
+    badge: 'Offre adaptée',
+    lead: 'Vous avez impacté un tronçon avec une sévérité « Service modifié ».',
+    conseq: 'Il s’agira donc d’un tronçon passant : les circulations sont maintenues mais l’offre est adaptée (parcours ou desserte modifiés).',
+  },
+  {
+    id: 'reduit',
     label: 'Service réduit',
+    color: '#FD7542',
+    passant: true,
+    tag: 'Tronçon passant',
+    variant: 'warning',
     badge: 'Offre de transport réduite',
-    variant: 'warning',
-    description: 'Le service est réduit : une partie des circulations est maintenue sur le tronçon pendant la période d’application.',
-    legend: 'Service réduit',
+    lead: 'Vous avez impacté un tronçon avec une sévérité « Service réduit ».',
+    conseq: 'Il s’agira donc d’un tronçon passant : les circulations sont maintenues mais la fréquence est réduite sur la période d’application.',
   },
-  delayed: {
-    label: 'Retards',
+  {
+    id: 'perturbe',
+    label: 'Perturbé / Retards',
+    color: '#FFA144',
+    passant: true,
+    tag: 'Tronçon passant',
+    variant: 'warning',
     badge: 'Circulation perturbée',
-    variant: 'warning',
-    description: 'Des retards sont signalés : les arrêts restent desservis sur le tronçon pendant la période d’application.',
-    legend: 'Retards signalés',
+    lead: 'Vous avez impacté un tronçon avec une sévérité « Perturbé ».',
+    conseq: 'Il s’agira donc d’un tronçon passant : les circulations sont maintenues, des retards sont signalés aux voyageurs sans solution de contournement proposée.',
   },
-};
+  {
+    id: 'informative',
+    label: 'Informative',
+    color: '#3EAAC5',
+    passant: true,
+    tag: 'Tronçon passant',
+    variant: 'info',
+    badge: 'Information préventive',
+    lead: 'Vous avez impacté un tronçon avec une sévérité « Informative ».',
+    conseq: 'Il s’agira donc d’un tronçon passant : aucun impact sur le calcul d’itinéraire, seul un message d’information (éventuellement préventif) est diffusé aux voyageurs.',
+  },
+];
+
+export const SEVERITY_MAP = Object.fromEntries(SEVERITIES.map((s) => [s.id, s]));
 
 const newImpact = () => ({
-  severity: 'interrupted',
+  severity: 'bloquante',
   from: 2,
   to: 3,
   start: '2026-11-02T06:00',
   end: '2026-11-06T23:00',
-  message: 'En raison de travaux, la ligne 12 est interrompue entre Université et Hôpital. Merci de votre compréhension.',
+  message: 'En raison de travaux de voirie, la ligne 12 est interrompue entre Université et Hôpital. Merci de votre compréhension.',
 });
 
 const initial = () => ({
@@ -59,88 +109,155 @@ const initial = () => ({
 function loadDraft() {
   try {
     const s = JSON.parse(localStorage.getItem('traffic-report-draft'));
-    if (
-      typeof s?.title === 'string' &&
-      typeof s?.cause === 'string' &&
-      s?.impacts?.length &&
-      s.impacts.every(
-        (i) =>
-          severities[i.severity] &&
-          Number.isInteger(i.from) &&
-          i.from >= 0 &&
-          Number.isInteger(i.to) &&
-          i.to < 6 &&
-          i.from < i.to &&
-          ['start', 'end', 'message'].every((k) => typeof i[k] === 'string')
-      )
-    )
-      return s;
+    if (typeof s?.title === 'string' && typeof s?.cause === 'string' && s?.impacts?.length) {
+      s.impacts = s.impacts.map((imp) => {
+        let severity = imp.severity;
+        if (severity === 'interrupted') severity = 'interrompu';
+        if (severity === 'reduced') severity = 'reduit';
+        if (severity === 'delayed') severity = 'perturbe';
+        return { ...imp, severity };
+      });
+      if (
+        s.impacts.every(
+          (i) =>
+            SEVERITY_MAP[i.severity] &&
+            Number.isInteger(i.from) &&
+            i.from >= 0 &&
+            Number.isInteger(i.to) &&
+            i.to <= 5 &&
+            i.from < i.to &&
+            ['start', 'end', 'message'].every((k) => typeof i[k] === 'string')
+        )
+      ) {
+        return s;
+      }
+    }
   } catch {}
   return null;
 }
 
 const formatDate = (s) => new Date(s).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
 
-function Diagram({ impact }) {
-  const s = severities[impact.severity],
-    interrupted = impact.severity === 'interrupted',
-    color = `var(--cadence-status-${s.variant}-fg)`,
-    x = (n) => 70 + n * 180;
+/* ── Sélecteur de sévérité enrichi (pastille couleur + statut passant/non passant) ── */
+function SeverityField({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, []);
+
+  const current = SEVERITY_MAP[value] || SEVERITIES[0];
+
   return (
-    <div className="diagram-panel">
-      <div className="diagram-header">
-        <div>
-          <span className="eyebrow">Schéma de conséquence</span>
-          <LineBadge code="12" mode="bus" size="sm" />
-          <span className="line-name">Ligne 12</span>
-        </div>
-        <Indicator variant={s.variant} label={s.badge} />
-      </div>
-      <div
-        className="diagram-scroll"
-        role="img"
-        aria-label={`Ligne 12, de Gare Centre à Zénith. ${s.label} entre ${stations[impact.from]} et ${stations[impact.to]}.`}
+    <div className="severity-field-container" ref={ref}>
+      <button
+        type="button"
+        className={`severity-field-btn ${open ? 'open' : ''}`}
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
       >
-        <svg viewBox="0 0 1040 140" aria-hidden="true">
-          <path d="M70 70H970" stroke="var(--cadence-color-primary)" strokeWidth="5" />
-          <path d={`M${x(impact.from)} 70H${x(impact.to)}`} stroke="var(--cadence-color-surface-alt)" strokeWidth="7" />
-          <path d={`M${x(impact.from)} 70H${x(impact.to)}`} stroke={color} strokeWidth="5" strokeDasharray="5 7" strokeLinecap="round" />
-          {stations.map((name, n) => {
-            const affected = n >= impact.from && n <= impact.to;
+        <span className="severity-field-current">
+          <span className="severity-dot" style={{ background: current.color }} />
+          <span className="severity-label">{current.label}</span>
+        </span>
+        <span className="severity-chevron" style={{ transform: open ? 'rotate(180deg)' : 'none' }}>
+          <Icons icon="chevron-down" size={18} />
+        </span>
+      </button>
+
+      {open && (
+        <div className="severity-popover" role="listbox">
+          {SEVERITIES.map((s) => {
+            const isSel = s.id === current.id;
             return (
-              <g key={name}>
-                <circle cx={x(n)} cy="70" r="8" fill="var(--cadence-color-white)" stroke={affected ? color : 'var(--cadence-color-primary)'} strokeWidth="2.5" />
-                {affected && interrupted && <path d={`M${x(n) - 4} 66l8 8m-8 0l8-8`} stroke={color} strokeWidth="2" />}
-                <text
-                  x={x(n)}
-                  y="98"
-                  textAnchor="middle"
-                  fill={affected ? color : 'var(--cadence-color-primary)'}
-                  fontSize="12"
-                  textDecoration={affected && interrupted ? 'line-through' : undefined}
-                >
-                  {name}
-                </text>
-              </g>
+              <button
+                type="button"
+                key={s.id}
+                role="option"
+                aria-selected={isSel}
+                className={`severity-option ${isSel ? 'selected' : ''}`}
+                onClick={() => {
+                  onChange(s.id);
+                  setOpen(false);
+                }}
+              >
+                <span className="severity-dot" style={{ background: s.color }} />
+                <span className="severity-option-label">{s.label}</span>
+                <span className={`severity-passant-tag ${s.passant ? 'passant' : 'non-passant'}`}>
+                  {s.passant ? 'passant' : 'non passant'}
+                </span>
+              </button>
             );
           })}
-          {interrupted && (
-            <g>
-              <circle cx={(x(impact.from) + x(impact.to)) / 2} cy="70" r="12" fill={color} stroke="var(--cadence-color-white)" strokeWidth="3" />
-              <path d={`M${(x(impact.from) + x(impact.to)) / 2 - 6} 70h12`} stroke="var(--cadence-color-white)" strokeWidth="3" />
-            </g>
-          )}
-          <g transform="translate(145 43)">
-            <rect width="34" height="18" rx="4" fill="var(--cadence-color-primary)" />
-            <path d="M5 5h5v6H5zm9 0h5v6h-5zm9 0h6v6h-6" fill="var(--cadence-color-white)" />
-            <circle cx="8" cy="19" r="3" />
-            <circle cx="27" cy="19" r="3" />
-          </g>
-        </svg>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Puce de statut passant / non passant ── */
+function PassantTag({ sev, colorOn }) {
+  const c = colorOn ? sev.color : 'var(--cadence-color-primary, #002830)';
+  return (
+    <span
+      className="passant-tag"
+      style={{
+        background: colorOn ? tint(sev.color, 14) : 'var(--cadence-color-surface-alt)',
+        border: `1px solid ${colorOn ? tint(sev.color, 45) : 'var(--cadence-color-border)'}`,
+        color: c,
+      }}
+    >
+      <span className="passant-tag-dot" style={{ background: c }} />
+      {sev.tag}
+    </span>
+  );
+}
+
+/* ── Carte explicative « Conséquence sur l'objet » ── */
+function ConsequenceCard({ sev, tweaks }) {
+  const colorOn = tweaks.colorCode !== false;
+  const showTag = tweaks.showTag !== false;
+  const accent = colorOn ? sev.color : 'var(--cadence-color-primary, #002830)';
+
+  const idx = sev.conseq.indexOf(' : ');
+  const head = idx >= 0 ? sev.conseq.slice(0, idx) : sev.conseq;
+  const rest = idx >= 0 ? sev.conseq.slice(idx + 3) : '';
+
+  return (
+    <div
+      className="consequence-card bubble-in"
+      style={{
+        borderLeft: `3px solid ${accent}`,
+      }}
+    >
+      <div
+        className="consequence-icon-bubble"
+        style={{
+          background: colorOn ? tint(sev.color, 14) : 'var(--cadence-color-surface-alt)',
+        }}
+      >
+        <Icons icon="annotation-info" size={18} color={accent} />
       </div>
-      <div className="diagram-legend">
-        <span><i />Service maintenu</span>
-        <span className="legend-impact" style={{ '--impact-color': color }}><i />{s.legend}</span>
+      <div className="consequence-card-body">
+        <div className="consequence-card-head">
+          <span className="consequence-title" style={{ color: colorOn ? accent : 'var(--cadence-color-text-secondary)' }}>
+            Conséquence sur l’objet
+          </span>
+          {showTag && <PassantTag sev={sev} colorOn={colorOn} />}
+        </div>
+        <p className="consequence-card-text">
+          <span className="consequence-lead">{sev.lead} </span>
+          <strong className="consequence-highlight" style={{ color: accent }}>
+            {head}
+          </strong>
+          {rest && <span>{' : ' + rest}</span>}
+        </p>
       </div>
     </div>
   );
@@ -154,16 +271,27 @@ export default function App() {
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState('');
   const [toast, setToast] = useState('');
-  const [saveState, setSaveState] = useState(restored ? 'Brouillon restauré depuis cet appareil.' : 'Vos modifications ne sont pas encore enregistrées.');
+  const [saveState, setSaveState] = useState(
+    restored ? 'Brouillon restauré depuis cet appareil.' : 'Vos modifications ne sont pas encore enregistrées.'
+  );
   const [record, setRecord] = useState(null);
   const [activeNav, setActiveNav] = useState('new');
   const [network, setNetwork] = useState('idfm');
+
+  // Options d'affichage interactives (Tweaks)
+  const [tweaks, setTweaks] = useState({
+    colorCode: true,
+    showTag: true,
+    animate: true,
+    speed: 'normale',
+    labels: true,
+  });
 
   const dialog = useRef(null);
   const general = useRef(null);
 
   const i = data.impacts[current];
-  const s = severities[i.severity];
+  const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
 
   useEffect(() => {
     if (!toast) return;
@@ -195,7 +323,10 @@ export default function App() {
   function save() {
     try {
       localStorage.setItem('traffic-report-draft', JSON.stringify(data));
-      setSaveState('Brouillon enregistré sur cet appareil · ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }));
+      setSaveState(
+        'Brouillon enregistré sur cet appareil · ' +
+          new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+      );
       setToast('Brouillon enregistré sur cet appareil.');
     } catch {
       setError('Le stockage local n’est pas disponible.');
@@ -208,7 +339,7 @@ export default function App() {
       setError('Renseignez un intitulé dans les informations générales.');
       return;
     }
-    for (let n = 0; n < data.impacts.length; n++)
+    for (let n = 0; n < data.impacts.length; n++) {
       for (const st of [0, 2, 3]) {
         const err = issue(data.impacts[n], st);
         if (err) {
@@ -218,6 +349,7 @@ export default function App() {
           return;
         }
       }
+    }
     setVerified(true);
     setError('');
     setToast('Déclaration vérifiée dans le prototype. Aucune diffusion effectuée.');
@@ -233,7 +365,7 @@ export default function App() {
     }
   }
 
-  const stationOptions = stations.map((label, n) => ({ id: String(n), label }));
+  const stationOptions = STATIONS.map((label, n) => ({ id: String(n), label }));
 
   const navSections = [
     {
@@ -288,9 +420,12 @@ export default function App() {
           <Indicator variant={verified ? 'nominal' : 'draft'} label={verified ? 'Vérifiée' : 'Brouillon'} />
         </div>
 
+        {/* Informations générales */}
         <details className="general panel" ref={general}>
           <summary>
-            <span className="success"><Icons icon="check" size={16} /></span>
+            <span className="success">
+              <Icons icon="check" size={16} />
+            </span>
             <div>
               <strong>Informations générales</strong>
               <p>Les informations générales sont communes à tous les impacts.</p>
@@ -298,7 +433,11 @@ export default function App() {
             <span className="chevron">⌄</span>
           </summary>
           <div className="general-fields">
-            <TextInput label="Intitulé de la perturbation" value={data.title} onChange={(e) => change({ title: e.target.value })} />
+            <TextInput
+              label="Intitulé de la perturbation"
+              value={data.title}
+              onChange={(e) => change({ title: e.target.value })}
+            />
             <Dropdown
               label="Cause"
               options={['Travaux', 'Incident technique', 'Événement'].map((label) => ({ id: label, label }))}
@@ -308,6 +447,7 @@ export default function App() {
           </div>
         </details>
 
+        {/* Tunnel de déclaration d'impacts */}
         <section className="panel impact">
           <div className="impact-head">
             <div>
@@ -341,7 +481,7 @@ export default function App() {
 
           <nav className="steps-container" aria-label="Étapes de la déclaration">
             <Stepper
-              steps={labels.map((label, n) => ({
+              steps={STEP_LABELS.map((label, n) => ({
                 id: String(n),
                 label,
                 state: n === step ? 'current' : n < step ? 'completed' : 'upcoming',
@@ -368,47 +508,74 @@ export default function App() {
 
             {step === 0 && (
               <div className="fields">
-                <Dropdown label="Arrêt de début" options={stationOptions} value={String(i.from)} onChange={(v) => updateImpact({ from: Number(v) })} />
-                <Dropdown label="Arrêt de fin" options={stationOptions} value={String(i.to)} onChange={(v) => updateImpact({ to: Number(v) })} />
+                <Dropdown
+                  label="Arrêt de début"
+                  options={stationOptions}
+                  value={String(i.from)}
+                  onChange={(v) => updateImpact({ from: Number(v) })}
+                />
+                <Dropdown
+                  label="Arrêt de fin"
+                  options={stationOptions}
+                  value={String(i.to)}
+                  onChange={(v) => updateImpact({ to: Number(v) })}
+                />
               </div>
             )}
 
             {step === 1 && (
               <div className="field">
-                <Dropdown
-                  label="Sévérité"
-                  options={Object.entries(severities).map(([id, v]) => ({ id, label: v.label }))}
-                  value={i.severity}
-                  onChange={(severity) => updateImpact({ severity })}
-                />
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>
+                  Sévérité
+                </label>
+                <SeverityField value={i.severity} onChange={(severity) => updateImpact({ severity })} />
               </div>
             )}
 
             {step === 2 && (
               <div className="fields">
-                <TextInput label="Début" type="datetime-local" value={i.start} onChange={(e) => updateImpact({ start: e.target.value })} />
-                <TextInput label="Fin" type="datetime-local" value={i.end} onChange={(e) => updateImpact({ end: e.target.value })} />
+                <TextInput
+                  label="Début"
+                  type="datetime-local"
+                  value={i.start}
+                  onChange={(e) => updateImpact({ start: e.target.value })}
+                />
+                <TextInput
+                  label="Fin"
+                  type="datetime-local"
+                  value={i.end}
+                  onChange={(e) => updateImpact({ end: e.target.value })}
+                />
               </div>
             )}
 
             {step === 3 && (
               <div className="field">
-                <TextArea label="Message" value={i.message} onChange={(e) => updateImpact({ message: e.target.value })} />
+                <TextArea
+                  label="Message"
+                  value={i.message}
+                  onChange={(e) => updateImpact({ message: e.target.value })}
+                />
               </div>
             )}
 
             {step === 4 && (
               <div className="review">
-                <strong>Ligne 12 · {stations[i.from]} → {stations[i.to]}</strong>
+                <strong>
+                  Ligne 12 · {STATIONS[i.from]} → {STATIONS[i.to]}
+                </strong>
                 <br />
-                {s.label} · Du {formatDate(i.start)} au {formatDate(i.end)}
+                <span style={{ color: sev.color, fontWeight: 600 }}>{sev.label}</span> · Du {formatDate(i.start)} au{' '}
+                {formatDate(i.end)}
                 <p>{i.message}</p>
               </div>
             )}
 
             {error && (
               <div className="form-error">
-                <InlineAlert type="error" title="Vérifiez les informations">{error}</InlineAlert>
+                <InlineAlert type="error" title="Vérifiez les informations">
+                  {error}
+                </InlineAlert>
               </div>
             )}
           </div>
@@ -422,6 +589,7 @@ export default function App() {
           </div>
         </section>
 
+        {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
         {issue(i, 0) ? (
           <div className="consequence-wrap">
             <InlineAlert type="warning" title="Schéma indisponible">
@@ -430,12 +598,61 @@ export default function App() {
           </div>
         ) : (
           <>
-            <Diagram impact={i} />
-            <div className="consequence-wrap">
-              <InlineAlert type={i.severity === 'interrupted' ? 'error' : 'warning'} title={`Conséquence sur l’objet · ${s.badge}`}>
-                Vous avez impacté un tronçon avec la sévérité « {s.label} ». {s.description}
-              </InlineAlert>
+            <LineDiagram impact={i} sev={sev} stations={STATIONS} tweaks={tweaks} />
+
+            {/* Options d'affichage interactives (Tweaks) */}
+            <div className="tweaks-bar">
+              <span className="tweaks-title">Options de rendu :</span>
+              <div className="tweaks-controls">
+                <label className="tweak-toggle">
+                  <input
+                    type="checkbox"
+                    checked={tweaks.colorCode}
+                    onChange={(e) => setTweaks((prev) => ({ ...prev, colorCode: e.target.checked }))}
+                  />
+                  <span>Code couleur</span>
+                </label>
+                <label className="tweak-toggle">
+                  <input
+                    type="checkbox"
+                    checked={tweaks.showTag}
+                    onChange={(e) => setTweaks((prev) => ({ ...prev, showTag: e.target.checked }))}
+                  />
+                  <span>Tag passant/bloquant</span>
+                </label>
+                <label className="tweak-toggle">
+                  <input
+                    type="checkbox"
+                    checked={tweaks.animate}
+                    onChange={(e) => setTweaks((prev) => ({ ...prev, animate: e.target.checked }))}
+                  />
+                  <span>Animation bus</span>
+                </label>
+                <label className="tweak-toggle">
+                  <span>Vitesse :</span>
+                  <select
+                    className="tweak-select"
+                    value={tweaks.speed}
+                    onChange={(e) => setTweaks((prev) => ({ ...prev, speed: e.target.value }))}
+                  >
+                    <option value="lente">Lente</option>
+                    <option value="normale">Normale</option>
+                    <option value="rapide">Rapide</option>
+                  </select>
+                </label>
+                <label className="tweak-toggle">
+                  <input
+                    type="checkbox"
+                    checked={tweaks.labels}
+                    onChange={(e) => setTweaks((prev) => ({ ...prev, labels: e.target.checked }))}
+                  />
+                  <span>Arrêts</span>
+                </label>
+              </div>
             </div>
+
+            {/* Carte « Conséquence sur l'objet » */}
+            <ConsequenceCard sev={sev} tweaks={tweaks} />
           </>
         )}
 
@@ -447,15 +664,28 @@ export default function App() {
           </div>
         </footer>
 
-        <p className="prototype-note">Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs</p>
+        <p className="prototype-note">
+          Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs
+        </p>
       </div>
 
-      {toast && <div className="toast" role="status">{toast}</div>}
+      {toast && (
+        <div className="toast" role="status">
+          {toast}
+        </div>
+      )}
 
+      {/* Modale « Mes déclarations » */}
       <dialog ref={dialog} onClose={() => setActiveNav('new')}>
         <div className="dialog-header">
           <h2>Mes déclarations</h2>
-          <GhostButton label="Fermer" onClick={() => { dialog.current?.close(); setActiveNav('new'); }} />
+          <GhostButton
+            label="Fermer"
+            onClick={() => {
+              dialog.current?.close();
+              setActiveNav('new');
+            }}
+          />
         </div>
         {record ? (
           <div className="record">
