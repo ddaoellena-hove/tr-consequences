@@ -11,7 +11,7 @@
  --tr-line-height-body:1.5; --tr-line-height-relaxed:1.8;
  --tr-tracking-annotation:.02em;
  --tr-diagram-width:1136px; --tr-diagram-height:120px;
- --tr-bus-width:46px; --tr-bus-height:24px; --tr-diagram-vehicle-layer:4;
+ --tr-bus-width:32px; --tr-bus-height:32px; --tr-diagram-vehicle-layer:4;
  --tr-severity-bloquante:#DA1E28;
  --tr-severity-interrompu:#A1141B;
  --tr-severity-modifie:#FD4703;

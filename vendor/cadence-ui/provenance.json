@@ -27,7 +27,8 @@
     "DatePicker",
     "Checkbox",
     "SegmentedControl",
-    "Badge"
+    "Badge",
+    "ModeIcon"
   ],
   "sha256": {
     "src/Accordion.tsx": "4aac3082b2bfb367c3cc245c48f7071bf941ae2dd4916661db5b43437d5ca480",
@@ -51,6 +52,7 @@
     "src/InlineAlert.tsx": "dc2ecd195343a78e23713449b2c5963a591ffa13e28ace636e8cf1a72abf1757",
     "src/LineBadge.tsx": "002ed6d2d24b28c68f0a2617baa9fc9a9aa0dc7984d0740369da3fa11d829473",
     "src/Modal.tsx": "e57d6cd225060303fa4c95491f6c76a4efc2770de231a340ebd3ebed66d9ab68",
+    "src/ModeIcon.tsx": "56bd2d42bd8a72a044e44a19d3e74fb91acd7ac2452f825563fe8a8fb6456a35",
     "src/PageHeader.tsx": "9a4262c3ec1c40ffe928973b77d284dae78a8ff0f800106e5cf25b6251ed0913",
     "src/PageSection.tsx": "9329c9ed195a60877875928cf20b15befbe54a014de1e44156d89e3a69fbb538",
     "src/PrimaryButton.tsx": "8d325fa841915ec6842e7bf1df5491a7571aa16515dd4dfcb6aa16cddcc4d367",
@@ -88,13 +90,14 @@
     "src/icon-registry.ts": "f9bca88e407aa2d8c1d6cab41c9302dabc235d9a795cc14ecc6c6f6c63104912",
     "src/icon-walk.tsx": "4a5fbbea3304aa99bc78d3dc84839aab2ddd85b9c3575910181b693eb63239cc",
     "src/icons.css": "551fae352085a6d2375cd9231a1a81b873e05ef9593edba4476e3e51ec4e0a02",
-    "src/index.ts": "d2a2f42f86795e41facaa55748d6188addec293c09083c9fed49524390650597",
+    "src/index.ts": "fbef09323dc4b7d31210556d265ca3337a3c3d86178ee2606626a775eba4a0e5",
     "src/indicator.css": "03ecbee7071b2eee8cff0ea4912751a1a89ed1678c0901e9165132abff130b9b",
     "src/inert-props.ts": "c9bfa2b4a6122cb1dbb488393af050e920f1686447a1289757f9a7431b832971",
     "src/inline-alert.css": "f58241f70dd8b06f485340d119ab2638bf72bac4b29d936d60bf8c68a4d17eeb",
     "src/line-badge-utils.ts": "14203c1d7d713dd8d220725040434adbde5f13269bc43534eef6dfa46a5b79f3",
     "src/line-badge.css": "1dd1fe5d0a559e59c6552950c7e681b884e74160350aaa626c5de3008bceb1fc",
     "src/modal.css": "9f4f2ef004c2204294d96fc689c0084b723842e85265c21e51ababa483fd891f",
+    "src/mode-icons.tsx": "195e72e7a8c31e407368da6a6c4e9399b5b0406aebec4409f5d44fb96116702b",
     "src/overlay-primitives.ts": "73e0008cd181a76c6db632e1393da7fcd4e436866d67a976e6b7053f0363a10a",
     "src/page-header.css": "a3d3b4bd31dac59d8b2912c43e4dd1af5bd6c955bcf16218a92d3201c5d270b9",
     "src/page-section.css": "5eaf84021c229ccf943cbbfb9ef04030b21468a50784d8a7d60e59209d69d65b",
