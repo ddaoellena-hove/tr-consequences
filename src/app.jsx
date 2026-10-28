@@ -145,7 +145,7 @@ const formatDate = (s) => new Date(s).toLocaleString('fr-FR', { dateStyle: 'shor
 // The domain model remains product-specific; presentation uses Cadence.
 function SeverityField({ value, onChange }) {
   return <Dropdown label="Sévérité" value={value} onChange={onChange}
-    options={SEVERITIES.map(s => ({ id: s.id,
+    options={SEVERITIES.map(s => ({ id: s.id, divider: s.id === 'modifie',
       label: `${s.label} · ${s.passant ? 'passant' : 'non passant'}`,
       icon: <span className="severity-dot" data-severity={s.id} aria-hidden="true" />
     }))} />;

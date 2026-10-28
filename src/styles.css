@@ -14,7 +14,7 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .impact-count { white-space:nowrap; color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); }
 .steps-container { padding:var(--tr-space-24); overflow-x:auto; }
 .form-content { padding:var(--tr-space-24) var(--tr-space-32) var(--tr-space-16); min-height:var(--tr-form-min-height); }
-.form-content h2 { font:var(--tr-font-weight-bold) var(--cadence-font-size-section) var(--cadence-font-display); margin:0 0 var(--tr-space-8); }
+.form-content h2 { font:var(--tr-font-weight-bold) var(--cadence-font-size-section) var(--cadence-font-sans); margin:0 0 var(--tr-space-8); }
 .help { color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-small); margin:0 0 var(--tr-space-24); }
 .wizard-actions { padding:var(--tr-space-12) var(--tr-space-32) var(--tr-space-24); }
 .wizard-actions > div, .page-actions > div { display:flex; flex-wrap:wrap; gap:var(--tr-space-12); }
