@@ -2,8 +2,8 @@
    Do not present these as official Cadence tokens. Severity colors preserve the
    existing product model; text uses Cadence's accessible semantic foregrounds. */
 :root {
- --tr-page-max:1400px; --tr-fields-max:850px; --tr-field-max:620px;
- --tr-form-min-height:175px; --tr-stepper-min-width:660px;
+ --tr-fields-max:720px; --tr-field-max:720px;
+ --tr-form-min-height:175px;
  --tr-dot-size:9px; --tr-border-width:1px; --tr-line-width:3px;
  --tr-space-2:2px; --tr-space-4:4px; --tr-space-8:8px; --tr-space-12:12px;
  --tr-space-16:16px; --tr-space-20:20px; --tr-space-24:24px; --tr-space-32:32px;
@@ -25,7 +25,7 @@
 [data-severity="reduit"] { --tr-impact-color:var(--tr-severity-reduit); --tr-impact-text:var(--cadence-status-warning-fg); }
 [data-severity="perturbe"] { --tr-impact-color:var(--tr-severity-perturbe); --tr-impact-text:var(--cadence-status-warning-fg); }
 [data-severity="informative"] { --tr-impact-color:var(--tr-severity-informative); --tr-impact-text:var(--cadence-status-info-fg); }
-.diagram-panel {
+.diagram-content {
  --tr-impact-subtle:color-mix(in srgb, var(--tr-impact-color) 14%, var(--cadence-color-white));
  --tr-impact-border:color-mix(in srgb, var(--tr-impact-color) 45%, var(--cadence-color-white));
 }

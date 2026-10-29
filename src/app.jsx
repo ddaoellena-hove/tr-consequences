@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { issue } from './validation.mjs';
+import React, { useState, useEffect, useMemo } from 'react';
+import { issue, impactErrors, generalErrors, CAUSES, validDate } from './validation.mjs';
 import { LineDiagram } from './LineDiagram.jsx';
 import {
   PrimaryButton,
@@ -17,7 +17,8 @@ import {
   PageHeader,
   Breadcrumbs,
   Accordion, PageSection, FormActions, ProgressBar, Modal, Toaster, toast,
-  DatePicker, Checkbox, SegmentedControl, Badge,
+  DatePicker, SegmentedControl, Badge,
+  ErrorSummary, DescriptionList, FieldRow, Toggle, EmptyState, SummaryList,
 } from '@ddaoellena/cadence-ui';
 
 export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
@@ -119,7 +120,7 @@ function loadDraft() {
         if (severity === 'interrupted') severity = 'interrompu';
         if (severity === 'reduced') severity = 'reduit';
         if (severity === 'delayed') severity = 'perturbe';
-        return { ...imp, severity };
+        return { ...imp, severity, start: validDate(imp.start) ? imp.start : '', end: validDate(imp.end) ? imp.end : '' };
       });
       if (
         s.impacts.every(
@@ -140,7 +141,8 @@ function loadDraft() {
   return null;
 }
 
-const formatDate = (s) => new Date(s).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+const formatDate = s => validDate(s) ? new Date(s).toLocaleString('fr-FR', {dateStyle:'short', timeStyle:'short'}) : 'Non renseigné';
+const dateValue = s => validDate(s) ? new Date(s) : null;
 
 // The domain model remains product-specific; presentation uses Cadence.
 function SeverityField({ value, onChange }) {
@@ -151,8 +153,7 @@ function SeverityField({ value, onChange }) {
     }))} />;
 }
 function ConsequenceCard({ sev, tweaks }) {
-  const tone = tweaks.colorCode === false ? 'information' : sev.variant === 'critical' ? 'error' : sev.variant === 'warning' ? 'warning' : 'information';
-  return <div className="consequence-wrap"><InlineAlert type={tone} title="Conséquence sur l’objet">
+  return <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur l’objet">
     {tweaks.showTag && <Indicator variant={tweaks.colorCode ? sev.variant : 'draft'} label={sev.tag} />}
     <p>{sev.lead} <strong>{sev.conseq}</strong></p>
   </InlineAlert></div>;
@@ -164,12 +165,24 @@ const localDateValue = date => {
 const notify = title => toast({type:'information', title});
 
 export default function App() {
+  const [narrow, setNarrow] = useState(() => window.matchMedia('(max-width: 760px)').matches);
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 760px)');
+    const update = () => setNarrow(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
   const [restored] = useState(loadDraft);
   const [data, setData] = useState(() => restored || initial());
   const [current, setCurrent] = useState(0);
   const [step, setStep] = useState(1);
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [datePending, setDatePending] = useState({});
+  const [summaryVersion, setSummaryVersion] = useState(0);
+  const [impactSteps, setImpactSteps] = useState({0: 1});
+  const [completed, setCompleted] = useState({0: [0]});
   const [saveState, setSaveState] = useState(
     restored ? 'Brouillon restauré depuis cet appareil.' : 'Vos modifications ne sont pas encore enregistrées.'
   );
@@ -187,32 +200,42 @@ export default function App() {
   });
 
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [generalVersion, setGeneralVersion] = useState(0);
 
-  const generalComplete = Boolean(data.title.trim() && ['Travaux', 'Incident technique', 'Événement'].includes(data.cause));
+  const generalComplete = Object.keys(generalErrors(data)).length === 0;
   const i = data.impacts[current];
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
+  const startDate = useMemo(() => dateValue(i.start), [i.start]);
+  const endDate = useMemo(() => dateValue(i.end), [i.end]);
 
 
   function change(update) {
     setData((d) => ({ ...d, ...update }));
     setVerified(false);
     setError('');
+    setFieldErrors({});
     setSaveState('Modifications non enregistrées');
   }
 
   function updateImpact(patch) {
+    if ('start' in patch || 'end' in patch) setDatePending(prev => ({...prev, ...('start' in patch ? {start:false} : {}), ...('end' in patch ? {end:false} : {})}));
     change({ impacts: data.impacts.map((item, n) => (n === current ? { ...item, ...patch } : item)) });
+    const editedStep = 'from' in patch || 'to' in patch ? 0 : 'severity' in patch ? 1 : 'message' in patch ? 3 : 2;
+    setCompleted(prev => ({...prev, [current]: (prev[current] || []).filter(n => n < editedStep)}));
+  }
+
+  function showFieldErrors(errors) {
+    setFieldErrors(errors);
+    setSummaryVersion(v => v + 1);
   }
 
   function go(n) {
-    const err = n > step ? issue(i, step) : '';
-    if (err) {
-      setError(err);
-      return;
-    }
-    setError('');
-    setStep(n);
+    const errors = n > step ? {...impactErrors(i, step), ...(step === 2 ? Object.fromEntries(Object.entries(datePending).filter(([,pending])=>pending).map(([field])=>[field, 'Corrigez et confirmez la date et l’heure saisies.'])) : {})} : {};
+    if (Object.keys(errors).length) return showFieldErrors(errors);
+    if (n > step) setCompleted(prev => ({...prev, [current]: [...new Set([...(prev[current] || []), step])]}));
+    setError(''); setFieldErrors({}); setDatePending({}); setStep(n);
+    setImpactSteps(prev => ({...prev, [current]:n}));
   }
 
   function save() {
@@ -229,24 +252,24 @@ export default function App() {
   }
 
   function validate() {
-    if (!data.title.trim()) {
+    const general = generalErrors(data);
+    if (Object.keys(general).length) {
       setGeneralVersion(v => v + 1);
-      setError('Renseignez un intitulé dans les informations générales.');
-      return;
+      return showFieldErrors(general);
     }
     for (let n = 0; n < data.impacts.length; n++) {
       for (const st of [0, 2, 3]) {
-        const err = issue(data.impacts[n], st);
-        if (err) {
-          setCurrent(n);
-          setStep(st);
-          setError(`Impact ${n + 1} : ${err}`);
+        const errors = impactErrors(data.impacts[n], st);
+        if (Object.keys(errors).length) {
+          setCurrent(n); setStep(st);
+          setImpactSteps(prev => ({...prev, [n]:st}));
+          showFieldErrors(errors);
           return;
         }
       }
     }
-    setVerified(true);
-    setError('');
+    setCompleted(Object.fromEntries(data.impacts.map((_, n) => [n, [0,1,2,3,4]])));
+    setVerified(true); setFieldErrors({}); setError('');
     notify('Déclaration vérifiée dans le prototype. Aucune diffusion effectuée.');
   }
 
@@ -295,12 +318,13 @@ export default function App() {
   );
 
   return (
-    <AppLayout sidebar={sidebarElement} contentLabel="Déclaration de perturbation">
-      <PageHeader
+    <AppLayout className="traffic-report-app" sidebar={narrow ? null : sidebarElement} contentLabel="Déclaration de perturbation">
+      <div className="declaration-content cadence-scrollbar">
+      <PageHeader sticky={!narrow}
         breadcrumbs={
           <Breadcrumbs
             items={[
-              { id: 'disruptions', label: 'Perturbations' },
+              { id: 'disruptions', label: 'Perturbations', onClick: () => handleNavClick('history') },
               { id: 'new', label: 'Nouvelle déclaration' },
             ]}
           />
@@ -309,6 +333,7 @@ export default function App() {
         subtitle="Déclaration de perturbation"
         actions={
           <>
+            {narrow && <GhostButton size="sm" label="Menu" onClick={() => setMobileNavOpen(true)}/>}
             <Badge label="Espace de démonstration"/>
             <Badge label="FR"/>
             <Indicator variant={verified ? 'nominal' : 'draft'} label={verified ? 'Vérifiée' : 'Brouillon'} />
@@ -317,6 +342,8 @@ export default function App() {
       />
 
       <div className="page-wrapper">
+        <ErrorSummary key={summaryVersion} errors={Object.entries(fieldErrors).map(([field,message]) => ({id:field, message, target:`field-${field}`}))} />
+        {error && <InlineAlert type="error" title="Enregistrement impossible">{error}</InlineAlert>}
         {/* Informations générales */}
         <PageSection title="Informations générales" surface="card" gap={0} className="general"
           actions={<Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />}>
@@ -325,17 +352,16 @@ export default function App() {
           title: 'Intitulé et cause',
           content: <><p className="section-description">Les informations générales sont communes à tous les impacts.</p>
           <div className="general-fields">
-            <TextInput
+            <div id="field-title"><TextInput
               label="Intitulé de la perturbation"
-              value={data.title}
+              value={data.title} state={fieldErrors.title ? 'error' : 'enabled'} helperText={fieldErrors.title}
               onChange={(e) => change({ title: e.target.value })}
-            />
-            <Dropdown
-              label="Cause"
-              options={['Travaux', 'Incident technique', 'Événement'].map((label) => ({ id: label, label }))}
-              value={data.cause}
-              onChange={(cause) => change({ cause })}
-            />
+            /></div>
+            <div id="field-cause" role="group" aria-label="Cause" aria-describedby={fieldErrors.cause ? 'error-cause' : undefined}><Dropdown label="Cause"
+              options={CAUSES.map(label => ({id:label,label}))} value={data.cause}
+              onChange={cause => change({cause})}/>
+              {fieldErrors.cause && <p id="error-cause" className="field-error" role="alert">{fieldErrors.cause}</p>}
+            </div>
           </div>
 </>
         }]} />
@@ -351,8 +377,9 @@ export default function App() {
                 options={data.impacts.map((_, n) => ({ id: String(n), label: `Impact n° ${n + 1}` }))}
                 value={String(current)}
                 onChange={(value) => {
-                  setCurrent(Number(value));
-                  setError('');
+                  const next = Number(value);
+                  setCurrent(next); setStep(impactSteps[next] ?? 0); setDatePending({});
+                  setError(''); setFieldErrors({});
                 }}
               />
               <span className="impact-count">
@@ -368,17 +395,19 @@ export default function App() {
                 change({ impacts: [...data.impacts, newImpact()] });
                 setCurrent(data.impacts.length);
                 setStep(0);
+                setImpactSteps(prev => ({...prev, [data.impacts.length]:0}));
+                setCompleted(prev => ({...prev, [data.impacts.length]:[]}));
                 notify('Un nouvel impact a été ajouté.');
               }}
             />
           </div>
 
-          <nav className="steps-container" aria-label="Étapes de la déclaration">
-            <Stepper
+          <nav className="steps-container cadence-scrollbar" aria-label="Étapes de la déclaration">
+            <Stepper orientation={narrow ? 'vertical' : 'horizontal'}
               steps={STEP_LABELS.map((label, n) => ({
                 id: String(n),
                 label,
-                state: n === step ? 'current' : n < step ? 'completed' : 'upcoming',
+                state: n === step ? 'current' : (completed[current] || []).includes(n) && !issue(i,n) ? 'completed' : 'upcoming',
               }))}
               onStepClick={(n) => go(Number(n))}
             />
@@ -387,32 +416,25 @@ export default function App() {
           <ProgressBar value={(step + 1) * 20} aria-label="Progression de la déclaration" />
 
           <div className="form-content">
-            <h2>{['Périmètre de l’impact', 'Sévérité de l’impact', 'Période d’application', 'Message voyageurs', 'Récapitulatif de l’impact'][step]}</h2>
-            <p className="help">
-              {[
-                'Sélectionnez les arrêts délimitant le tronçon de la ligne 12.',
-                'Précisez les conséquences de la perturbation sur le service.',
-                'Définissez la période durant laquelle cet impact s’applique.',
-                'Rédigez le message associé à cet impact.',
-                'Vérifiez les informations avant de valider votre déclaration.',
-              ][step]}
-            </p>
+            <PageSection headingLevel={3} gap={20}
+              title={['Périmètre de l’impact','Sévérité de l’impact','Période d’application','Message voyageurs','Récapitulatif de l’impact'][step]}
+              description={['Sélectionnez les arrêts délimitant le tronçon de la ligne 12.','Précisez les conséquences de la perturbation sur le service.','Définissez la période durant laquelle cet impact s’applique.','Rédigez le message associé à cet impact.','Vérifiez les informations avant de valider votre déclaration.'][step]}>
 
             {step === 0 && (
-              <div className="fields">
+              <FieldRow className="fields">
                 <Dropdown
                   label="Arrêt de début"
                   options={stationOptions}
                   value={String(i.from)}
                   onChange={(v) => updateImpact({ from: Number(v) })}
                 />
-                <Dropdown
+                <div id="field-to" role="group" aria-label="Arrêt de fin" aria-describedby={fieldErrors.to ? 'error-to' : undefined}><Dropdown
                   label="Arrêt de fin"
                   options={stationOptions}
                   value={String(i.to)}
                   onChange={(v) => updateImpact({ to: Number(v) })}
-                />
-              </div>
+                />{fieldErrors.to && <p id="error-to" className="field-error" role="alert">{fieldErrors.to}</p>}</div>
+              </FieldRow>
             )}
 
             {step === 1 && (
@@ -422,43 +444,37 @@ export default function App() {
             )}
 
             {step === 2 && (
-              <div className="fields">
-                <DatePicker label="Début" withTime variant="button" value={new Date(i.start)}
+              <FieldRow className="fields">
+                <div id="field-start" onChangeCapture={() => setDatePending(prev => ({...prev,start:true}))} role="group" aria-label="Début" aria-describedby={fieldErrors.start ? 'error-start' : undefined}><DatePicker label="Début" withTime value={startDate}
                   onChange={date => updateImpact({start: localDateValue(date)})} />
-                <DatePicker label="Fin" withTime variant="button" value={new Date(i.end)}
+                  {fieldErrors.start && <p id="error-start" className="field-error" role="alert">{fieldErrors.start}</p>}</div>
+                <div id="field-end" onChangeCapture={() => setDatePending(prev => ({...prev,end:true}))} role="group" aria-label="Fin" aria-describedby={fieldErrors.end ? 'error-end' : undefined}><DatePicker label="Fin" withTime value={endDate}
                   onChange={date => updateImpact({end: localDateValue(date)})} />
-              </div>
+                  {fieldErrors.end && <p id="error-end" className="field-error" role="alert">{fieldErrors.end}</p>}</div>
+              </FieldRow>
             )}
 
             {step === 3 && (
-              <div className="field">
+              <div className="field" id="field-message">
                 <TextArea
                   label="Message"
-                  value={i.message}
+                  value={i.message} state={fieldErrors.message ? 'error' : 'enabled'} helperText={fieldErrors.message}
                   onChange={(e) => updateImpact({ message: e.target.value })}
                 />
               </div>
             )}
 
             {step === 4 && (
-              <div className="review">
-                <strong>
-                  Ligne 12 · {STATIONS[i.from]} → {STATIONS[i.to]}
-                </strong>
-                <br />
-                <span className="severity-summary" data-severity={sev.id}>{sev.label}</span> · Du {formatDate(i.start)} au{' '}
-                {formatDate(i.end)}
-                <p>{i.message}</p>
-              </div>
+              <DescriptionList aria-label="Récapitulatif de l’impact" density="compact" items={[
+                {id:'line',label:'Ligne',value:<LineBadge code="12" mode="bus"/>},
+                {id:'section',label:'Tronçon',value:`${STATIONS[i.from]} → ${STATIONS[i.to]}`},
+                {id:'severity',label:'Sévérité',value:<Indicator variant={sev.variant} label={sev.label}/>},
+                {id:'start',label:'Début',value:formatDate(i.start)},
+                {id:'end',label:'Fin',value:formatDate(i.end)},
+                {id:'message',label:'Message voyageurs',value:i.message},
+              ]}/>
             )}
-
-            {error && (
-              <div className="form-error">
-                <InlineAlert type="error" title="Vérifiez les informations">
-                  {error}
-                </InlineAlert>
-              </div>
-            )}
+            </PageSection>
           </div>
 
           <FormActions className="wizard-actions" justify="between">
@@ -485,7 +501,7 @@ export default function App() {
             <PageSection title="Options d’affichage" headingLevel={3} className="tweaks-bar" gap={12}>
               <div className="tweaks-controls">
                 {[['colorCode','Code couleur'],['showTag','Tag passant/bloquant'],['animate','Animation bus'],['labels','Arrêts']].map(([key,label]) =>
-                  <div className="display-option" key={key}><Checkbox aria-label={label} state={tweaks[key] ? 'checked' : 'unchecked'}
+                  <div className="display-option" key={key}><Toggle aria-label={label} state={tweaks[key] ? 'active' : 'default'}
                     onChange={value => setTweaks(prev => ({...prev,[key]:value}))}/><span>{label}</span></div>)}
                 <SegmentedControl aria-label="Vitesse d’animation" size="sm" value={tweaks.speed} disabled={!tweaks.animate}
                   options={[{value:'lente',label:'Lente'},{value:'normale',label:'Normale'},{value:'rapide',label:'Rapide'}]}
@@ -498,6 +514,14 @@ export default function App() {
           </>
         )}
 
+
+
+        <p className="prototype-note">
+          Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs
+        </p>
+      </div>
+      </div>
+      <footer className="declaration-footer" aria-label="Actions de la déclaration">
         <FormActions className="page-actions" justify="between">
           <span>{saveState}</span>
           <div>
@@ -505,26 +529,23 @@ export default function App() {
             {step === 4 && <PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate} />}
           </div>
         </FormActions>
-
-        <p className="prototype-note">
-          Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs
-        </p>
-      </div>
+      </footer>
 
       <Toaster />
+      <Modal isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} title="Navigation">
+        <SummaryList aria-label="Navigation principale" items={[
+          {id:'new',title:'Nouvelle déclaration'}, {id:'history',title:'Mes déclarations'}
+        ]} onItemClick={item=>{setMobileNavOpen(false);handleNavClick(item.id);}}/>
+        <Dropdown label="Réseau" options={[{id:'idfm',label:'Île-de-France Mobilités'}]} value={network} onChange={setNetwork}/>
+        <GhostButton label="Se déconnecter" onClick={()=>{setMobileNavOpen(false);notify('Déconnexion simulée (espace de démonstration).');}}/>
+      </Modal>
 
       {/* Modale « Mes déclarations » */}
       <Modal isOpen={historyOpen} onClose={() => {setHistoryOpen(false);setActiveNav('new');}} title="Mes déclarations"
         footer={<GhostButton label="Fermer" onClick={() => {setHistoryOpen(false);setActiveNav('new');}}/>}>
-        {record ? (
-          <div className="record">
-            <strong>{record.title}</strong>
-            <br />
-            {record.impacts.length} impact(s) · Brouillon enregistré sur cet appareil
-          </div>
-        ) : (
-          <p>Aucun brouillon enregistré sur cet appareil.</p>
-        )}
+        {record ? <SummaryList aria-label="Mes déclarations enregistrées" density="compact" items={[{
+          id:'local-draft',title:record.title,meta:`${record.impacts.length} impact(s) · Enregistré sur cet appareil`,status:'draft',statusLabel:'Brouillon'
+        }]}/> : <EmptyState size="inline" title="Aucun brouillon enregistré" description="Les brouillons enregistrés sur cet appareil apparaîtront ici."/>}
       </Modal>
     </AppLayout>
   );

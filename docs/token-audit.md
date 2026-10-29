@@ -10,10 +10,10 @@ Les espacements et dimensions de composition, absents des tokens Cadence fournis
 
 - Les coordonnées SVG, tailles de pictogrammes, épaisseurs de tracé et calculs de trajectoire sont des données géométriques, conservées dans le schéma ; elles ne sont pas intégralement tokenisées.
 - Les transformations et durées calculées de l’animation sont appliquées avec Web Animations API, pas avec des styles JSX.
-- Le breakpoint `760px` reste une constante CSS documentée : les propriétés personnalisées CSS ne fonctionnent pas dans les conditions `@media` natives.
+- Les breakpoints `760px` et `1024px` restent des constantes CSS documentées : les propriétés personnalisées CSS ne fonctionnent pas dans les conditions `@media` natives.
 - Les proportions (`100%`, `1fr`), zéros et mots-clés de mise en page restent du CSS standard.
 - Le code importé `vendor/cadence-ui` reste identique au design system local. Cadence utilise lui-même des styles inline pour des valeurs calculées (progression, positionnement, espacement, graphiques) et des valeurs fixes internes. L’audit ne prétend donc pas que le DOM final est dépourvu de tout attribut style.
 
 ## Contrôle reproductible
 
-`npm run check:tokens` contrôle les fichiers JSX et CSS applicatifs : styles inline, couleurs littérales hors fichier de tokens, références à des tokens inexistants et dimensions CSS hors tokens (exception du breakpoint ci-dessus). Ce contrôle statique ne remplace pas une vérification exhaustive du design system ou du rendu navigateur.
+`npm run check:tokens` contrôle les fichiers JSX et CSS applicatifs : styles inline, couleurs littérales hors fichier de tokens, références à des tokens inexistants et dimensions CSS hors tokens (exception des breakpoints ci-dessus). Ce contrôle statique ne remplace pas une vérification exhaustive du design system ou du rendu navigateur.

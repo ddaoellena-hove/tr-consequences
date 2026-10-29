@@ -32,3 +32,10 @@ Les données, les sévérités supplémentaires et leurs conséquences sont illu
 ## Vérification des tokens
 
 `npm run check:tokens` contrôle les styles applicatifs. Les extensions Traffic Report sont centralisées dans `src/tokens.css`. Voir [l’audit des tokens et ses exceptions](docs/token-audit.md) pour distinguer tokens Cadence, tokens produit, géométrie SVG et styles calculés internes à la bibliothèque.
+
+
+## Migration de l’audit du 29 octobre
+
+`npm test` vérifie les règles de validation. La saisie utilise maintenant ErrorSummary, DescriptionList, FieldRow, Toggle, EmptyState et SummaryList, en complément des composants déjà intégrés. Les dates avec heures utilisent DatePicker en variante champ. L’avancement est indépendant pour chaque impact ; les champs invalides sont accessibles depuis le résumé.
+
+Sur petit écran, la navigation passe par une modale Cadence et le Stepper devient vertical. Le schéma de conséquences conserve son bus et sa géométrie métier, dans une PageSection avec défilement horizontal identifié.

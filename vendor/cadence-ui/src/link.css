@@ -1,0 +1,80 @@
+/* ── Link : navigation (href) ou 3e action d'un groupe (onClick + hideArrow) ── */
+.link {
+  align-items: center;
+  background: none;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+  font-weight: 400;
+  gap: 4px;
+  padding: 0;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+/* Action (rendu en <button>) : jamais coupée sur plusieurs lignes dans un groupe.
+   Un lien de navigation (<a href>) garde le retour à la ligne du texte. */
+.link--action {
+  white-space: nowrap;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link__arrow {
+  flex-shrink: 0;
+  font-size: 1.2em;
+}
+
+.link:focus-visible {
+  box-shadow: var(--cadence-focus-ring, 0 0 0 2px rgb(255, 255, 255), 0 0 0 4px rgb(26, 62, 69));
+  outline: none;
+}
+
+.link--disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── Tailles ─────────────────────────────────────────────────────────────── */
+/* Alignées sur les boutons : 11 / 12 / 13px */
+.link--sm {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.link--md {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.link--lg {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/* ── Variantes ───────────────────────────────────────────────────────────── */
+/* AA sur blanc et sur --cadence-color-surface-alt */
+.link--primary {
+  color: var(--cadence-color-link, rgb(29, 78, 216));
+}
+
+.link--destructive {
+  color: var(--cadence-color-danger-text, rgb(185, 28, 28));
+}
+
+.link--destructive:hover {
+  color: var(--cadence-color-danger-active, rgb(185, 28, 28));
+}
+
+.link--inverse {
+  color: var(--cadence-color-white, rgb(255, 255, 255));
+}
+
+.link--inverse:hover {
+  color: var(--cadence-color-border, rgb(229, 229, 229));
+}

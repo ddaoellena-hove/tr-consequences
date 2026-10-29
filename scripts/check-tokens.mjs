@@ -9,7 +9,7 @@ for (const name of files) {
  if (name !== 'tokens.css') assert(!/#[\da-f]{3,8}\b|rgba?\(/i.test(source), `${name}: literal color`);
  for (const [, token] of source.matchAll(/var\((--[\w-]+)/g)) assert(declared.has(token),`${name}: undefined ${token}`);
  if (name === 'styles.css') {
-  const withoutMedia = source.replace(/@media\s*\(max-width:\s*760px\)/g,'');
+  const withoutMedia = source.replace(/@media\s*\(max-width:\s*(?:760|1024)px\)/g,'');
   assert(!/\d+(?:\.\d+)?(?:px|rem|em)\b/.test(withoutMedia),`${name}: static dimension outside tokens`);
  }
 }

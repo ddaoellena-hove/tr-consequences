@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { LineBadge, Indicator } from '@ddaoellena/cadence-ui';
+import { LineBadge, Indicator, PageSection } from '@ddaoellena/cadence-ui';
 
 
 // Géométrie de référence du diagramme
@@ -183,21 +183,12 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
   }, [sev?.id, tweaks.animate, tweaks.speed, stopFrom, stopTo, passant]);
 
   return (
-    <div className="diagram-panel" data-severity={sev?.id} data-color-code={colorOn}>
-      {/* En-tête du schéma */}
-      <div className="diagram-header">
-        <div className="diagram-identity">
-          <span className="eyebrow">Schéma de conséquence</span>
-          <LineBadge code="12" mode="bus" size="sm" />
-          <span className="line-name">Ligne 12</span>
-        </div>
-        {sev && (
-          <Indicator variant={colorOn ? sev.variant : 'draft'} label={sev.tag} />
-        )}
-      </div>
-
+    <PageSection title="Schéma de conséquence" surface="card" gap={0} className="diagram-section"
+      actions={<div className="diagram-identity"><LineBadge code="12" mode="bus" size="sm"/><span className="line-name">Ligne 12</span>
+        {sev && <Indicator variant={colorOn ? sev.variant : 'draft'} label={sev.tag}/>}</div>}>
+    <div className="diagram-content" data-severity={sev?.id} data-color-code={colorOn}>
       {/* Canevas SVG et Bus animés */}
-      <div className="diagram-scroll" role="img" aria-label={`Schéma de ligne 12. ${sev?.label || 'État nominal'}.`}>
+      <div className="diagram-scroll cadence-scrollbar" role="img" aria-label={`Ligne 12 : ${stations.join(', ')}. ${sev?.label || 'État nominal'} entre ${stations[fromIndex]} et ${stations[toIndex]}.`}>
         <div className="diagram-canvas">
           <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="diagram-svg">
             {/* Piste de base (fond) */}
@@ -294,7 +285,7 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
                   x={midX}
                   y={lineY - 23}
                   textAnchor="middle"
-                  fontFamily="var(--cadence-font-mono, monospace)"
+                  fontFamily="var(--cadence-font-sans)"
                   fontSize="var(--cadence-font-size-caption)"
                   fontWeight="var(--tr-font-weight-medium)"
                   fill={colorOn ? sev.color : 'var(--cadence-color-primary)'}
@@ -380,5 +371,6 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
         )}
       </div>
     </div>
+    </PageSection>
   );
 }
