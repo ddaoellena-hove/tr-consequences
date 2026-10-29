@@ -67,3 +67,9 @@ Le passage d’incomplet à complet des informations générales désactive auto
 Effacer un champ obligatoire ou commencer une saisie de date réactive le contexte général ; corriger et confirmer permet de reprendre automatiquement. Les champs facultatifs d’une section déjà valide ne réactivent pas cette étape. Le clic explicite sur la première étape permet toujours de consulter les informations complètes, sans bascule immédiate vers les impacts.
 
 Contrôles réalisés : dernier champ obligatoire, effacement/correction, étiquette facultative, année de publication partielle puis retour à sa valeur initiale, retour explicite par le sélecteur mobile et reprise d’un impact déjà à Sévérité. Le focus reste sur Nom et le scroll à sa position initiale pendant les bascules testées sur mobile et desktop. Les 37 tests, le contrôle des tokens et le build passent.
+
+## Traductions dans un Drawer — 30 octobre 2026
+
+Les actions Traductions du message générique et de chaque canal ouvrent désormais un Drawer Cadence de largeur lg, à la place de la Modal. Le panneau conserve la langue, l’ajout sans doublon, l’édition du titre/message et la suppression des traductions. L’en-tête et l’action Fermer restent fixes ; le corps défile. Les modifications sont conservées dans l’impact au fil de la saisie, comme auparavant, sans nouveau mécanisme d’annulation ou de traduction automatique. La fermeture restitue le focus au bouton Traductions.
+
+Vérifications : ajout d’une traduction anglaise, saisie des deux champs, compteur mis à jour, fermeture et réouverture avec les valeurs conservées. Les 37 tests, le contrôle des tokens et le build passent.

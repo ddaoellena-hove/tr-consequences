@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {TextInput,TextArea,Dropdown,Checkbox,SegmentedControl,GhostButton,PrimaryButton,PageSection,Modal,InlineAlert} from '@ddaoellena/cadence-ui';
+import {TextInput,TextArea,Dropdown,Checkbox,SegmentedControl,GhostButton,PageSection,Drawer,InlineAlert} from '@ddaoellena/cadence-ui';
 import {CHANNELS,workflowErrors} from './disruption-workflow.mjs';
 import {WorkflowDate} from './ImpactSchedule.jsx';
 const LANGUAGE_OPTIONS=[{id:'en',label:'Anglais'},{id:'es',label:'Espagnol'}];
@@ -32,13 +32,13 @@ export function ImpactMessages({impact,errors,onChange,onPending,pendingNotifica
    <div><GhostButton size="sm" iconStart="check" label="Vérifier les messages" onClick={()=>{const result={...workflowErrors(impact,3),...(pendingNotification?{notification:'Corrigez et confirmez la date et l’heure de notification.'}:{})};setCheck(result);onValidation?.(Object.keys(result).length===0);}}/></div>
    {check&&(Object.keys(check).length?<InlineAlert type="error" title="Messages à compléter">{Object.values(check).join(' ')}</InlineAlert>:<InlineAlert type="success" title="Messages vérifiés">Les messages des canaux sélectionnés sont renseignés. Cette vérification est locale.</InlineAlert>)}
   </PageSection>
-  <Modal isOpen={translationsOpen} onClose={()=>setTranslationsOpen(false)} title={translationTarget==='generic'?'Traductions du message générique':`Traductions · ${CHANNELS.find(c=>c.id===translationTarget)?.label||''}`} footer={<GhostButton label="Fermer" onClick={()=>setTranslationsOpen(false)}/>}>
+  <Drawer width="lg" isOpen={translationsOpen} onClose={()=>setTranslationsOpen(false)} title={translationTarget==='generic'?'Traductions du message générique':`Traductions · ${CHANNELS.find(c=>c.id===translationTarget)?.label||''}`} subtitle="Ajoutez et complétez les traductions par langue pour ce message." secondaryAction={{label:'Fermer',onClick:()=>setTranslationsOpen(false)}}>
    <div className="workflow-stack"><p className="workflow-muted">Traductions saisies manuellement. Elles sont conservées avec cet impact ; aucune traduction automatique n’est générée.</p>
     <Dropdown label="Langue" options={LANGUAGE_OPTIONS} value={language} onChange={setLanguage}/><div><GhostButton size="sm" iconStart="plus" label="Ajouter la traduction" disabled={translations.some(t=>t.locale===language)} onClick={()=>editTranslations([...translations,{locale:language,title:'',body:''}])}/></div>
     {translations.map(t=><PageSection title={LANGUAGE_OPTIONS.find(l=>l.id===t.locale)?.label||t.locale} key={t.locale} headingLevel={3} gap={12} actions={<GhostButton size="sm" icon="trash" tone="danger" aria-label="Supprimer" onClick={()=>editTranslations(translations.filter(v=>v.locale!==t.locale))}/>}>
      <TextInput label="Titre traduit" value={t.title} onChange={e=>editTranslations(translations.map(v=>v.locale===t.locale?{...v,title:e.target.value}:v))}/><TextArea label="Message traduit" value={t.body} onChange={e=>editTranslations(translations.map(v=>v.locale===t.locale?{...v,body:e.target.value}:v))}/>
     </PageSection>)}
    </div>
-  </Modal>
+  </Drawer>
  </div>;
 }

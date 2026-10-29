@@ -375,7 +375,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "3d3b962207199b253c4901248dbafa4b19d7202ab5e2e2d4a83e36b0566739d3"
+      "sha256": "a274fd929a7b111d452138ac559ee5386a166bc7bb463eb82b419cd7c078aa93"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -390,7 +390,7 @@
     {
       "path": "snapshots/traffic-report/src/ImpactMessages.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ImpactMessages.jsx",
-      "sha256": "3dd8c89cf01af8bb6372365bc866c9526830ffba4be46d80884597e11a05218b"
+      "sha256": "4275f741167f348ec8ced8cc8258f6c6e752b9583e4f236b8d3e4560a07924e3"
     },
     {
       "path": "snapshots/traffic-report/src/DisruptionSummary.jsx",
@@ -565,5 +565,5 @@
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Avancement automatique après complétion des informations générales, sans focus ni scroll imposés ; reprise de la position d’impact, champs facultatifs et retour manuel conservés. Cas vérifiés desktop/mobile."
+  "updated_note": "Ajout et édition de traductions dans un Drawer Cadence lg, au lieu de Modal ; compteur, données et retour de focus conservés."
 }
