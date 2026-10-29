@@ -39,3 +39,11 @@ Les données, les sévérités supplémentaires et leurs conséquences sont illu
 `npm test` vérifie les règles de validation. La saisie utilise maintenant ErrorSummary, DescriptionList, FieldRow, Toggle, EmptyState et SummaryList, en complément des composants déjà intégrés. Les dates avec heures utilisent DatePicker en variante champ. L’avancement est indépendant pour chaque impact ; les champs invalides sont accessibles depuis le résumé.
 
 Sur petit écran, la navigation passe par une modale Cadence et le Stepper devient vertical. Le schéma de conséquences conserve son bus et sa géométrie métier, dans une PageSection avec défilement horizontal identifié.
+
+## Tableau de bord
+
+Le tableau de bord est l’entrée par défaut. Il reprend la maquette sous forme de TableCard Cadence : statuts En cours / À venir / Passées / Brouillons, vues par perturbation ou par impact, recherche, filtres, tri, sélection et pagination. Un Drawer permet de consulter le détail. Duplication et suppression confirmée agissent sur les données de démonstration enregistrées localement. La création et la modification ouvrent le formulaire existant.
+
+Les données du tableau sont conservées sous `traffic-report-records-v1` ; l’ancien brouillon reste accessible via `traffic-report-draft`. Les dates d’initialisation sont relatives au jour de création du jeu de démonstration pour peupler les quatre statuts. Aucune connexion backend ni diffusion voyageurs. Le formulaire et le schéma conservent une limite de six arrêts de démonstration, même si la ligne et les libellés peuvent varier par déclaration.
+
+Sources : `src/Dashboard.jsx`, `src/dashboard-data.mjs`, `src/traffic-model.mjs`. Tests de données et de persistance dans `tests/dashboard.test.mjs`. Les couleurs des badges de ligne sont des données GTFS de démonstration, conformément à l’exception LineBadge.

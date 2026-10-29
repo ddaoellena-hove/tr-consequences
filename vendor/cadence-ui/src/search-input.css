@@ -1,0 +1,93 @@
+/* ── SearchInput ─────────────────────────────────────────────────────────── */
+/* Même hauteur (29px) et même bordure que les boutons sm et les filtres en
+   variante bouton, pour s'aligner sur eux ; mais une forme de champ pour s'en
+   distinguer : coins de 8px au lieu de la pilule, et un léger creux (ombre
+   interne en haut) là où les boutons ont un relief. */
+.search-input {
+  align-items: center;
+  background-color: var(--cadence-color-white, #ffffff);
+  border: 1px solid var(--cadence-color-border-strong, #bfc9cb);
+  border-radius: var(--cadence-radius-md, 8px);
+  /* Creux : ombre interne en haut (champ de saisie), pas de relief (bouton) */
+  box-shadow: inset 0 1px 2px rgba(0, 40, 48, 0.08);
+  box-sizing: border-box;
+  color: var(--cadence-color-primary, #002830);
+  display: flex;
+  font-family: var(--cadence-font-sans, "Inter", Helvetica, sans-serif);
+  gap: 5px;
+  height: var(--cadence-control-height-compact, 29px);
+  min-width: 0;
+  padding: 0 11px 0 9px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  width: 100%;
+}
+
+/* Avec le bouton « effacer » : il se colle au bord droit */
+.search-input--filled {
+  padding-right: 3px;
+}
+
+.search-input:hover:not(.search-input--disabled) {
+  border-color: var(--cadence-color-label, #1a3e45);
+}
+
+.search-input:focus-within {
+  border-color: var(--cadence-color-label, #1a3e45);
+  box-shadow: var(--cadence-focus-ring, 0 0 0 2px #ffffff, 0 0 0 4px #1a3e45);
+}
+
+.search-input__icon {
+  color: var(--cadence-color-icon-muted, #69797d);
+  flex-shrink: 0;
+}
+
+.search-input__input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  flex: 1;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  height: 100%;
+  letter-spacing: -0.12px;
+  min-width: 0;
+  outline: none;
+  padding: 0;
+}
+
+/* Placeholder dans le gris de la loupe (#69797d, AA 4,6:1 sur blanc) */
+.search-input__input::placeholder {
+  color: var(--cadence-color-placeholder, #737373);
+  font-weight: 400;
+  opacity: 1;
+}
+
+/* Bouton natif d'effacement masqué : remplacé par la croix commune */
+.search-input__input::-webkit-search-cancel-button,
+.search-input__input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ── Bouton « effacer » : croix commune (CloseButton), ramenée à 21px pour
+   tenir dans le champ de 29px ── */
+.search-input .base-button.search-input__clear {
+  height: 21px;
+  width: 21px;
+}
+
+/* ── Désactivé : comme PrimaryButton outline désactivé ── */
+.search-input--disabled {
+  background-color: var(--cadence-color-divider, #f0f0f0);
+  border-color: var(--cadence-color-border, #e5e5e5);
+  box-shadow: none;
+  color: var(--cadence-color-text-disabled, #808080);
+  cursor: not-allowed;
+}
+
+.search-input--disabled .search-input__input {
+  cursor: not-allowed;
+}

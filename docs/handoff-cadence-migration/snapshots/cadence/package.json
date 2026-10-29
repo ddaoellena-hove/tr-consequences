@@ -1,0 +1,106 @@
+{
+  "name": "@ddaoellena/cadence-ui",
+  "version": "1.0.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ddaoellena-hove/hove-cadence-ui.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "main": "./dist/hove-cadence-ui.cjs",
+  "module": "./dist/hove-cadence-ui.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/hove-cadence-ui.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/hove-cadence-ui.cjs"
+      }
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "GUIDELINES.md",
+    "CHANGELOG.md",
+    "scripts/codemods/buttons-v2.mjs"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:lib": "vite build --config vite.config.lib.ts && npm run build:types",
+    "build:types": "dts-bundle-generator --project tsconfig.lib.json --export-referenced-types=false -o dist/index.d.ts src/components/index.ts && node -e \"require('node:fs').copyFileSync('dist/index.d.ts','dist/index.d.cts')\"",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:react18": "node scripts/test-react18.mjs",
+    "smoke:dist": "node scripts/smoke-dist.mjs",
+    "check:types": "node scripts/check-types.mjs",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "story-ui": "story-ui start --port 4001",
+    "storybook-with-ui": "concurrently \"npm run storybook\" \"npm run story-ui\"",
+    "chromatic": "chromatic"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "dependencies": {
+    "@tanstack/react-table": "9.2.6",
+    "@tanstack/react-virtual": "3.14.13",
+    "@untitledui/icons": "0.0.23",
+    "d3-array": "3.2.4",
+    "d3-hierarchy": "3.1.2",
+    "d3-scale": "4.0.2",
+    "d3-shape": "3.2.0"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^5.2.1",
+    "@eslint/js": "^10.0.1",
+    "@storybook/addon-a11y": "^10.4.0",
+    "@storybook/addon-docs": "^10.4.0",
+    "@storybook/addon-mcp": "^0.6.0",
+    "@storybook/addon-onboarding": "^10.4.0",
+    "@storybook/addon-vitest": "^10.4.0",
+    "@storybook/react-vite": "^10.4.0",
+    "@tpitre/story-ui": "^4.16.12",
+    "@types/d3-array": "3.2.2",
+    "@types/d3-hierarchy": "3.1.7",
+    "@types/d3-scale": "4.0.9",
+    "@types/d3-shape": "3.2.0",
+    "@types/node": "^24.12.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/browser-playwright": "^4.1.5",
+    "@vitest/coverage-v8": "^4.1.5",
+    "chromatic": "^18.13.3",
+    "concurrently": "^8.2.0",
+    "dts-bundle-generator": "9.5.1",
+    "esbuild": "0.27.7",
+    "eslint": "^10.2.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-storybook": "^10.4.0",
+    "globals": "^17.5.0",
+    "playwright": "^1.59.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-live": "^4.1.8",
+    "storybook": "^10.4.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.58.2",
+    "vite": "^8.0.10",
+    "vite-plugin-dts": "^5.0.1",
+    "vitest": "^4.1.5"
+  }
+}

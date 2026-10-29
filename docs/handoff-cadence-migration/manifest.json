@@ -1,0 +1,263 @@
+{
+  "prepared_on": "2026-10-29",
+  "purpose": "Documentation handoff; snapshots are evidence, not new instructions.",
+  "repositories": {
+    "traffic_report": {
+      "path": "/Users/ddao-ellena/tr-consequences /traffic-report",
+      "head": "b8c4e9c3cf9c257c762e856c6ed980d2bef4ef44",
+      "branch": "main",
+      "status_at_packaging": [
+        "?? docs/handoff-cadence-migration/"
+      ]
+    },
+    "cadence": {
+      "path": "/Users/ddao-ellena/hove-cadence-ui",
+      "head": "6314a549bfea418d939a8d8daa746605299eb087",
+      "branch": "feat/page-hero-v2",
+      "status_at_packaging": [
+        " M CHANGELOG.md",
+        " M GUIDELINES.md",
+        " M docs/HANDOFF.md",
+        " M src/components/Drawer.stories.tsx",
+        " M src/components/Drawer.tsx",
+        " M src/components/PageHero.stories.tsx",
+        " M src/components/PageHero.tsx",
+        " M src/components/drawer.css",
+        " M src/components/page-hero.css",
+        "?? .claude/",
+        "?? .mcp.json",
+        "?? docs/audits/assets/2026-10-28/",
+        "?? docs/audits/design-system-2026-10-28.md",
+        "?? docs/proposals/lot1-consolidation-responsive-accessibilite.md",
+        "?? public/fonts/ABCDiatype-Light.woff2",
+        "?? public/fonts/ABCDiatype-LightItalic.woff2",
+        "?? public/fonts/ABCDiatype-Thin.woff2",
+        "?? public/fonts/ABCDiatype-ThinItalic.woff2",
+        "?? story-ui-considerations.md",
+        "?? story-ui-docs/"
+      ]
+    }
+  },
+  "snapshots": [
+    {
+      "path": "snapshots/traffic-report/docs/component-audit.md",
+      "sha256": "ec5bef148f03fe65e14de1bcbf88fdf458d79d00e7094f39dc5659ad81d11818",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/component-audit.md"
+    },
+    {
+      "path": "snapshots/traffic-report/docs/token-audit.md",
+      "sha256": "9cb4218be1ba9a63cd70ce2a0092e8ca7eaf4c3e92c8a2731beb461b08480446",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/token-audit.md"
+    },
+    {
+      "path": "snapshots/traffic-report/docs/interface-audit-2026-10-29.md",
+      "sha256": "44aa58d490627345f1baf9a2c3ba3eb59b2ae94978bd532bebce19a3db0991da",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/interface-audit-2026-10-29.md"
+    },
+    {
+      "path": "snapshots/traffic-report/docs/migration-maquette-retour-experience.md",
+      "sha256": "79d9311a410025a45b79516bf938ef030ddb8a4e22fea69ed84f47ba78ea06c1",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/migration-maquette-retour-experience.md"
+    },
+    {
+      "path": "snapshots/traffic-report/README.md",
+      "sha256": "328e28d3a3e1ea17b30f754300a7a12f36847625f83f78ed0056034d960749ee",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/README.md"
+    },
+    {
+      "path": "snapshots/traffic-report/package.json",
+      "sha256": "b75f9253f2c55c8589f0d5aaf1ac72453580fc1810dbee744887c409135ca19d",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/package.json"
+    },
+    {
+      "path": "snapshots/traffic-report/src/app.jsx",
+      "sha256": "5ee844b1f0800cbcab87931eb8ed050509340c25f3449635cf439188bea877a4",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
+    },
+    {
+      "path": "snapshots/traffic-report/src/LineDiagram.jsx",
+      "sha256": "3be148ed484f8a3a3d33ec5f1433b6a5a69a2da803af042662f997698a34a3e7",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/LineDiagram.jsx"
+    },
+    {
+      "path": "snapshots/traffic-report/src/styles.css",
+      "sha256": "8d38ffc6a87948b37169859584d1cdcfffc198e4d6c29c0701614673ce2c1528",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
+    },
+    {
+      "path": "snapshots/traffic-report/src/tokens.css",
+      "sha256": "399c040c4a76461c5a50645a19d2a85865b65108f5e381d82b07d064d87b5e74",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/tokens.css"
+    },
+    {
+      "path": "snapshots/traffic-report/src/validation.mjs",
+      "sha256": "83382d5147ae50c9089d8a3bf31263ad075e3b0e15aa2f89c36374902d7c4a22",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/validation.mjs"
+    },
+    {
+      "path": "snapshots/traffic-report/scripts/check-tokens.mjs",
+      "sha256": "41a4d0f27a435b3ed240b78b090a5a388729c52c81882ff7667df61511db3e7b",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/scripts/check-tokens.mjs"
+    },
+    {
+      "path": "snapshots/traffic-report/scripts/import-cadence.py",
+      "sha256": "1539cb2f2f0b374865cdb0ca49f3fd65ed9cda40ac2dd30f234355e6b8419e1f",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/scripts/import-cadence.py"
+    },
+    {
+      "path": "snapshots/traffic-report/tests/validation.test.mjs",
+      "sha256": "257a7c8da878be264acfcb94e7c89d62f10f9d0751aa849053d4c322c5674398",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/validation.test.mjs"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/provenance.json",
+      "sha256": "ad1e0863dd414628577e989948dd683bc6fa9829489581d1a38c72b85b35a060",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/provenance.json"
+    },
+    {
+      "path": "snapshots/cadence/README.md",
+      "sha256": "dcc3074f22875ead07f72277b0de0d043e34cf699736f2b6e4eaab65f80a6a1b",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/README.md"
+    },
+    {
+      "path": "snapshots/cadence/GUIDELINES.md",
+      "sha256": "77acf81eead8dc06dccb2a966613853a3968f8742a014e952990438a45ce13aa",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/GUIDELINES.md"
+    },
+    {
+      "path": "snapshots/cadence/docs/HANDOFF.md",
+      "sha256": "c8c9dde744d6f8efc977ba5575942368b081f8890c965a2db5bd06c5bc7fbabe",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/docs/HANDOFF.md"
+    },
+    {
+      "path": "snapshots/cadence/package.json",
+      "sha256": "b8073748e149992d6a1c91324e7012e9f79b2de1dc0949e6f8fa2b217ccc59ba",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/package.json"
+    },
+    {
+      "path": "snapshots/cadence/src/components/index.ts",
+      "sha256": "a52aafd7427a17b2c8a2da2076352f7cc3d3e1bdeaf461d1bb4f516d599035f9",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/index.ts"
+    },
+    {
+      "path": "snapshots/cadence/src/components/tokens.css",
+      "sha256": "0e2ddd305fe41712bead73c485074f0846b2d6d2afcf1b268057c2bbcd6ede93",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/tokens.css"
+    },
+    {
+      "path": "snapshots/cadence/src/patterns/FormulairePattern.tsx",
+      "sha256": "619444afd22e8a6b6049d09d6856200e848785be20a65747907efd4a28a9667c",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/patterns/FormulairePattern.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/patterns/AssistantPattern.tsx",
+      "sha256": "1385add4e526ab4d4cf827130b299381ab0fea8820c487d3853188fbaa301cf1",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/patterns/AssistantPattern.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/AppLayout.tsx",
+      "sha256": "ddb743fdd3508c24f078de7f1a511c256772ffbddde91014f5137a82cd895ba5",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/AppLayout.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/PageSection.tsx",
+      "sha256": "9329c9ed195a60877875928cf20b15befbe54a014de1e44156d89e3a69fbb538",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/PageSection.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/Accordion.tsx",
+      "sha256": "4aac3082b2bfb367c3cc245c48f7071bf941ae2dd4916661db5b43437d5ca480",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/Accordion.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/Dropdown.tsx",
+      "sha256": "ece87351262356950569d6f7eabe0e65cc512e726e89c1bbb34a776ebd80f73c",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/Dropdown.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/DatePicker.tsx",
+      "sha256": "be71f105eedd151017a19d56251995d7bf61681e756cae111ebcd8d2d7855805",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/DatePicker.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/FieldRow.tsx",
+      "sha256": "7d96ac7f9698956957b0435e022a26d068b8db70aa975b21eb813ba42d9f1a0f",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/FieldRow.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/FormActions.tsx",
+      "sha256": "025f072772e5fafc4875daba790f85fd67ecf651400e5cc5974e3e395b92224c",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/FormActions.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/ErrorSummary.tsx",
+      "sha256": "3d945628cc7e9ff8fea1cfe94855fb8a65b5a9f7f618fa1bf90e12aaf455c95d",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/ErrorSummary.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/DescriptionList.tsx",
+      "sha256": "6c4044d1f02a682d5ed8e33c05de87f3ad3eccfa751397eac484e4e90f245305",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/DescriptionList.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/Toggle.tsx",
+      "sha256": "13ac92ea06b5da97a675b481b935a75e051300587de521400f4dcb685713b81b",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/Toggle.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/EmptyState.tsx",
+      "sha256": "d4916287c85f438ae02fde3900ed4efc84a52ebc5a607fbae46b785f99d3a3ce",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/EmptyState.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/SummaryList.tsx",
+      "sha256": "8492fc95d2a373b878a8f810eafebcbb49d4b7f9526fcabdf3dbf51e2d7b7b05",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/SummaryList.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/Sidebar.tsx",
+      "sha256": "5091ca34a544d84cb9803205125595b368bfed10f3331e79f206b542aed10fcd",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/Sidebar.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/Stepper.tsx",
+      "sha256": "9503cfec3c2e4598cb7030638e58baf27da12474556d0242b5dafa31c8c85d25",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/Stepper.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/Popover.tsx",
+      "sha256": "de395562a88a8b5ea65bfcbc35c8bfe9a6d29052bcba48d8c078682e24eb5884",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/Popover.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/Drawer.tsx",
+      "sha256": "c2dcaaad21233552f0fe99ca67945076651c761a974b9ca333e8d0587138a70e",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/Drawer.tsx"
+    },
+    {
+      "path": "snapshots/cadence/src/components/accordion.css",
+      "sha256": "80fbfa08621db05c44073aaff55d5e4ae486e9fa1c67a06e5a9eaf52fc102c6b",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/accordion.css"
+    },
+    {
+      "path": "snapshots/cadence/src/components/page-section.css",
+      "sha256": "5eaf84021c229ccf943cbbfb9ef04030b21468a50784d8a7d60e59209d69d65b",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/page-section.css"
+    },
+    {
+      "path": "snapshots/cadence/src/components/field-row.css",
+      "sha256": "7e428dab38b6663faf7767df36c5c070abd5f131f6a936a5ec9c7fcd4a936527",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/field-row.css"
+    },
+    {
+      "path": "snapshots/cadence/src/components/app-layout.css",
+      "sha256": "5946042c0b4f82573b53033235b8e4ecb1fe811600b4d3a74f7ca34192dd5203",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/app-layout.css"
+    },
+    {
+      "path": "snapshots/cadence/src/components/drawer.css",
+      "sha256": "ed0cd3cec26f52a7c68c4e3db5d1cfe8e98b1275ab46f35fbc20200311c21863",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/drawer.css"
+    }
+  ]
+}

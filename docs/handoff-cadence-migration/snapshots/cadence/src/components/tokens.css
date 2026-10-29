@@ -1,0 +1,276 @@
+/* ════════════════════════════════════════════════════════════════════════
+   Cadence UI — Design tokens
+   Source de vérité des couleurs, polices et rayons du design system.
+   Chaque composant utilise var(--cadence-*, <fallback>) : les fallbacks
+   garantissent un rendu correct même si ce fichier n'est pas chargé.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Police display : Uxum Grotesque (commerciale). Les fichiers woff2 sont servis
+   depuis /fonts (dossier public du projet / app consommatrice). Absente, le
+   token --cadence-font-display retombe sur Space Grotesk. Inter, Space Grotesk
+   et Spline Sans Mono sont chargées via Google Fonts (index.html / Storybook). */
+@font-face {
+  font-family: "Uxum Grotesque";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/UxumGrotesque-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Uxum Grotesque";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/UxumGrotesque-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Uxum Grotesque";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/UxumGrotesque-Bold.woff2") format("woff2");
+}
+
+/* Police d'interface : ABC Diatype (commerciale). woff2 servis depuis /fonts
+   (public). Inter reste chargée (Google Fonts) et en tête de repli : pour
+   revenir à Inter, remettre "Inter" en premier dans --cadence-font-sans. */
+@font-face {
+  font-family: "ABC Diatype";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/ABCDiatype-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "ABC Diatype";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/ABCDiatype-RegularItalic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "ABC Diatype";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/ABCDiatype-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "ABC Diatype";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/ABCDiatype-MediumItalic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "ABC Diatype";
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url("/fonts/ABCDiatype-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "ABC Diatype";
+  font-style: italic;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url("/fonts/ABCDiatype-BoldItalic.woff2") format("woff2");
+}
+
+:root {
+  /* Lot 6 : typographie et statuts sur fond sombre. */
+  --cadence-font-size-small: 12px;
+  --cadence-font-size-body: 13px;
+  --cadence-font-size-emphasis: 14px;
+  --cadence-font-size-section: 16px;
+  --cadence-font-size-heading: 22px;
+  --cadence-font-size-kpi: 28px;
+  --cadence-font-size-kpi-large: 44px;
+  --cadence-status-active-on-dark: #40c2da;
+  --cadence-status-upcoming-on-dark: #c4b5fd;
+  --cadence-status-completed-on-dark: #86efac;
+  --cadence-status-draft-on-dark: #cbd5e1;
+  --cadence-status-warning-on-dark: #fdba74;
+  --cadence-status-info-on-dark: #93c5fd;
+  --cadence-status-critical-on-dark: #fca5a5;
+  --cadence-status-nominal-on-dark: #86efac;
+  --cadence-dataviz-neutral: #69797d;
+
+  /* ── Couleurs — encre & texte ──────────────────────────────────────────── */
+  --cadence-color-primary: #002830;        /* Encre principale — texte fort, titres, boutons */
+  --cadence-color-label: #1a3e45;          /* Labels de formulaire, badges ; fond de PrimaryButton au repos */
+  --cadence-color-primary-hover: #10353d;  /* Survol d'un PrimaryButton : un cran plus foncé que le repos (13,1:1 avec texte blanc) */
+  --cadence-color-text-muted: #809397;     /* Texte secondaire NON AA (3,2:1) — réservé aux icônes et au grand texte/gras */
+  --cadence-color-text-secondary: #607075; /* Texte secondaire AA sur tous les fonds clairs (5,2:1 sur blanc, 4,55:1 sur surface-alt) — descriptions, aides, petits libellés */
+  --cadence-color-text-disabled: #808080;  /* Texte des états désactivés */
+  --cadence-color-placeholder: #737373;    /* Placeholders des champs */
+
+  /* ── Couleurs — icônes ─────────────────────────────────────────────────── */
+  --cadence-color-icon-muted: #69797d;     /* Icônes, chevrons et poignées discrets — jamais du texte (4,5:1 de justesse sur blanc) */
+  --cadence-color-icon-neutral: #737373;   /* Icônes neutres (pictos métier) */
+  --cadence-color-icon-disabled: #c5cfd3;  /* Pictos inactifs : flèches de tri non actives (TableHeader, DataTable) */
+
+  /* ── Couleurs — états ──────────────────────────────────────────────────── */
+  --cadence-color-danger: #da1e28;         /* Actions destructives, erreurs */
+  --cadence-color-success: #24a148;        /* Confirmations, états valides */
+  --cadence-color-info: #0f62fe;           /* Accent « information » d'AlertToast (barre, icône, progression) */
+  --cadence-color-warning: #f1c21b;        /* Accent « avertissement » d'AlertToast — ⚠️ 1,7:1 sur blanc : jamais en couleur de texte */
+  --cadence-color-danger-hover: #c91720;   /* Survol d'un PrimaryButton tone="danger" (5,8:1 avec texte blanc) */
+  --cadence-color-danger-active: #b91c1c;  /* Appui d'un PrimaryButton tone="danger" (6,5:1 avec texte blanc) */
+  --cadence-color-danger-text: #b91c1c;    /* Texte danger sur fond clair : GhostButton danger, Link destructive (AA sur blanc et surface-alt) */
+  --cadence-color-danger-border: #ed8e93;  /* Bordure d'un PrimaryButton outline tone="danger" (le texte porte le contraste) */
+
+  /* ── Couleurs — liens ──────────────────────────────────────────────────── */
+  --cadence-color-link: #1d4ed8;           /* Texte de Link (6,7:1 sur blanc, 5,9:1 sur surface-alt) — l'accent reste aux états */
+
+  /* ── Voiles d'interaction (éléments sans fond) ─────────────────────────── */
+  /* Translucides : ils foncent d'un cran n'importe quel fond (blanc ou surface-alt). */
+  --cadence-color-hover-overlay: rgba(0, 40, 48, 0.06);          /* Survol d'un GhostButton */
+  --cadence-color-active-overlay: rgba(0, 40, 48, 0.12);         /* Appui d'un GhostButton */
+  --cadence-color-danger-hover-overlay: rgba(218, 30, 40, 0.06);  /* Survol d'un GhostButton danger */
+  --cadence-color-danger-active-overlay: rgba(218, 30, 40, 0.12); /* Appui d'un GhostButton danger */
+
+  /* ── Couleurs — accent interactif (sélection) ──────────────────────────── */
+  --cadence-color-accent: #1b6cff;         /* Élément actif / sélectionné : Sidebar, options de menu ; remplissage de ProgressBar */
+  --cadence-color-accent-subtle: #f0f6ff;  /* Fond de survol d'un élément actif (Sidebar) */
+  --cadence-color-accent-on-dark: #3b8eff; /* Pastille de notification sur fond sombre (Sidebar) */
+  --cadence-color-selected-surface: #c8d6e4; /* Fond d'une carte sélectionnée (TableCard) */
+
+  /* ── Couleurs — surfaces & bordures ────────────────────────────────────── */
+  --cadence-color-white: #ffffff;          /* Surfaces de premier plan */
+  --cadence-color-segmented-track: #e6f0fa;
+  --cadence-color-segmented-track-disabled: #dde8f0;
+  --cadence-color-segmented-hover: rgba(255, 255, 255, 0.45); /* Survol d'un segment inactif */
+
+  /* ── Champs : focus ─────────────────────────────────────────────────────── */
+  --cadence-color-field-focus: #2d5f6b;                      /* Bordure d'un champ focalisé (1,5px) */
+  --cadence-color-field-focus-subtle: rgba(45, 95, 107, 0.1); /* Jour sélectionné d'un calendrier */
+  --cadence-field-focus-ring: 0 0 0 4px rgba(45, 95, 107, 0.12); /* Halo d'un champ focalisé */
+  --cadence-color-control-border-active: #405e64;            /* Bordure d'une carte de choix survolée ou cochée */
+
+  /* ── Voile ──────────────────────────────────────────────────────────────── */
+  --cadence-color-scrim: rgba(0, 0, 0, 0.5);                 /* Voile de Modal et Drawer */
+
+  /* ── Sur fond sombre (Sidebar, en-tête sombre) ──────────────────────────── */
+  --cadence-color-on-dark: rgba(255, 255, 255, 0.9);         /* Texte et icône actifs */
+  --cadence-color-on-dark-muted: rgba(255, 255, 255, 0.6);   /* Texte secondaire, icône au repos */
+  --cadence-color-on-dark-subtle: rgba(255, 255, 255, 0.4);  /* Chevron au repos, contour de focus */
+  --cadence-color-on-dark-hover: rgba(255, 255, 255, 0.07);  /* Survol */
+  --cadence-color-on-dark-active: rgba(255, 255, 255, 0.15); /* Élément actif, curseur de défilement */
+  --cadence-color-on-dark-divider: rgba(255, 255, 255, 0.1); /* Séparateur, fond discret */
+  --cadence-color-surface-alt: #eef1f4;    /* Fonds de wrapper (TableCard, Badge) */
+  --cadence-color-surface-subtle: #fafafa; /* Fond de carte discret sur fond blanc (fichiers de FileUpload) */
+  --cadence-color-border: #e5e5e5;         /* Bordures par défaut */
+  --cadence-color-border-strong: #bfc9cb;
+  --cadence-color-scrollbar-thumb: rgba(0, 40, 48, 0.2);        /* Curseur des barres de défilement (cadence-scrollbar) */
+  --cadence-color-scrollbar-thumb-hover: rgba(0, 40, 48, 0.36); /* … au survol */  /* Bordures appuyées, états disabled, contour de PrimaryButton outline */
+  --cadence-color-divider: #f0f0f0;        /* Séparateurs internes (colonnes, footers) */
+  --cadence-color-skeleton: var(--cadence-color-surface-alt, #eef1f4); /* Fond des squelettes de chargement (Skeleton, DataTable, Card) */
+
+  /* ── Typographie ───────────────────────────────────────────────────────── */
+  /* Police d'interface. Inter conservée en repli (toujours chargée) : pour
+     revenir à Inter, la remettre en tête ici — c'est le seul endroit à changer. */
+  --cadence-font-sans: "ABC Diatype", "Inter", Helvetica, sans-serif;
+  --cadence-font-display: "Uxum Grotesque", "Space Grotesk", sans-serif;
+  --cadence-font-mono: "Spline Sans Mono", monospace;
+  --cadence-font-size-caption: 11px;  /* Petits textes : aide sous un champ, fil d'Ariane */
+
+  /* ── Rayons ────────────────────────────────────────────────────────────── */
+  /* Référence pour les nouveaux composants — les existants migrent au fil de l'eau. */
+  --cadence-radius-sm: 6px;    /* Petits éléments : badges, boutons d'icône */
+  --cadence-radius-md: 8px;    /* Contenus internes : body de TableCard */
+  --cadence-radius-lg: 10px;   /* Champs et wrappers : inputs, cards */
+  --cadence-radius-xl: 12px;   /* Conteneurs : counter-input, AppLayout */
+  --cadence-radius-2xl: 16px;  /* Modale, grandes cartes riches : RichCheckbox / RichRadioButton large */
+  --cadence-radius-pill: 999px; /* Pilules et cercles : boutons, SearchInput, Toggle, halos ronds */
+
+  /* ── Hauteurs de contrôle ─────────────────────────────────────────────────
+     Deux gabarits pour aligner des contrôles sur une même rangée.
+     compact : barres d'outils et en-têtes de dashboard (boutons sm,
+     SearchInput, déclencheurs variant="button"). field : champs d'une ligne
+     de formulaire et SegmentedControl. */
+  --cadence-control-height-compact: 29px;
+  --cadence-control-height-field: 40px;
+
+  /* ── Statuts (Indicator) ───────────────────────────────────────────────── */
+  /* Paires texte/fond des 8 variantes d'Indicator. Dans du code applicatif,
+     un statut passe toujours par ces tokens, jamais par un hex. */
+  --cadence-status-active-fg: #007a65;     /* En cours — texte et picto (teal) */
+  --cadence-status-active-bg: #e0f4f1;     /* En cours — fond */
+  --cadence-status-upcoming-fg: #6d28d9;   /* À venir — texte et picto (violet) */
+  --cadence-status-upcoming-bg: #ede9fe;   /* À venir — fond */
+  --cadence-status-completed-fg: #15803d;  /* Passée / terminée — texte et picto (vert) */
+  --cadence-status-completed-bg: #dcfce7;  /* Passée / terminée — fond */
+  --cadence-status-draft-fg: #475569;      /* Brouillon — texte et picto (ardoise) */
+  --cadence-status-draft-bg: var(--cadence-color-surface-alt, #eef1f4); /* Brouillon — fond (suit la surface alternative) */
+  --cadence-status-warning-fg: #c2410c;    /* Ralenti / avertissement — texte et picto (orange) */
+  --cadence-status-warning-bg: #fff7ed;    /* Ralenti / avertissement — fond */
+  --cadence-status-info-fg: #1d4ed8;       /* Information — texte et picto (bleu) */
+  --cadence-status-info-bg: #eff6ff;       /* Information — fond */
+  --cadence-status-critical-fg: #b91c1c;   /* Critique — texte et picto (rouge) */
+  --cadence-status-critical-bg: #fee2e2;   /* Critique — fond */
+  --cadence-status-nominal-fg: #166534;    /* Normal / RAS — texte et picto (vert foncé) */
+  --cadence-status-nominal-bg: #f0fdf4;    /* Normal / RAS — fond */
+
+  /* ── Thèmes produits ───────────────────────────────────────────────────── */
+  --cadence-product-datahub: #004650;         /* Fond de la Sidebar — Datahub (pétrole) */
+  --cadence-product-traffic-report: #2f2f3b;  /* Fond de la Sidebar — Traffic Report (ardoise) */
+  --cadence-product-insights: #3b2f2f;        /* Fond de la Sidebar — Insights (brun) */
+
+  /* ── Data visualisation ────────────────────────────────────────────────── */
+  /* Séries : ordre d'assignation. Contraste sur blanc ≥ 3:1 (traits, marqueurs). */
+  --cadence-dataviz-series-1: #6b3fd6;  /* Violet       — 6,35:1, série principale */
+  --cadence-dataviz-series-2: #1a91e8;  /* Bleu         — 3,35:1 */
+  --cadence-dataviz-series-3: #007d79;  /* Teal         — 4,99:1 */
+  --cadence-dataviz-series-4: #b36b00;  /* Ambre        — 4,18:1 (ex-#f1a21b, 2,12:1) */
+  --cadence-dataviz-series-5: #a0185e;  /* Magenta      — 7,53:1 */
+  --cadence-dataviz-series-6: #f04e4e;  /* Corail       — 3,56:1 */
+  --cadence-dataviz-series-7: #5a2d82;  /* Violet foncé — 9,85:1 */
+  --cadence-dataviz-series-8: #55606e;  /* Ardoise      — 6,39:1, neutre / divers */
+  /* Rampe séquentielle (Heatmap) : teinte pétrole unique, clarté croissante
+     (lisible en daltonisme et en niveaux de gris). Contraste sur blanc. */
+  --cadence-dataviz-seq-1: #eaf4f5;  /* 1,12:1 — texte encre */
+  --cadence-dataviz-seq-2: #c6e2e5;  /* 1,36:1 — texte encre */
+  --cadence-dataviz-seq-3: #94c8ce;  /* 1,84:1 — texte encre */
+  --cadence-dataviz-seq-4: #5fa9b1;  /* 2,69:1 — texte encre */
+  --cadence-dataviz-seq-5: #2f8892;  /* 4,15:1 — texte blanc */
+  --cadence-dataviz-seq-6: #0f6670;  /* 6,66:1 — texte blanc */
+  --cadence-dataviz-seq-7: #004650;  /* 10,54:1 — texte blanc */
+  /* Seuils et annotations */
+  --cadence-dataviz-threshold: #1a3e45;         /* 11,55:1 — ligne de seuil tiretée + libellé */
+  --cadence-dataviz-threshold-breach: #b91c1c;  /* 6,47:1 — côté défavorable d'un seuil */
+  --cadence-dataviz-annotation: #55606e;        /* 6,39:1 — trait / bord de bande annotée + libellé */
+  --cadence-dataviz-annotation-band: rgba(85, 96, 110, 0.08);  /* remplissage d'une bande annotée */
+
+  /* ── Élévation ─────────────────────────────────────────────────────────── */
+  /* Ombres portées partagées. Les reliefs internes (inset) des boutons et du
+     Toggle restent propres à chaque composant. */
+  /* Champs au repos (TextInput, TextArea, Dropdown, Autocomplete, CounterInput) */
+  --cadence-shadow-sm: 0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04);
+  /* Champs au survol */
+  --cadence-shadow-md: 0px 0px 12px rgba(0, 0, 0, 0.08), 0px 0px 2px rgba(0, 0, 0, 0.25);
+  /* Menus déroulants (Dropdown, Autocomplete) */
+  --cadence-shadow-lg: 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  /* Carte interactive soulevée au survol (Card) : ombre large et douce, portée vers le bas */
+  --cadence-shadow-raised: 0 16px 32px -8px rgba(0, 0, 0, 0.16), 0 4px 10px rgba(0, 0, 0, 0.05);
+  /* Dialogues au-dessus d'un voile (Modal) */
+  --cadence-shadow-overlay: 0px 20px 60px rgba(0, 0, 0, 0.2), 0px 4px 16px rgba(0, 0, 0, 0.1);
+
+  /* ── Focus ─────────────────────────────────────────────────────────────── */
+  /* Anneau de focus unique du design system, appliqué sur :focus-visible par
+     l'ensemble des composants interactifs. (Les champs de formulaire gardent en
+     plus leur liseré --cadence-color-field-focus + halo --cadence-field-focus-ring.) */
+  /* Couleur de l'anneau — 11,6:1 sur blanc, 10,2:1 sur --cadence-color-surface-alt */
+  --cadence-focus-color: #1a3e45;
+  /* Anneau box-shadow : liseré blanc de 2px puis anneau plein de 2px (visible aussi sur fond sombre) */
+  --cadence-focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px #1a3e45;
+
+  /* ── Z-index ───────────────────────────────────────────────────────────── */
+  /* Couches globales. Les valeurs locales 0/1/2 (empilement interne d'un
+     composant) restent en dur. */
+  --cadence-z-sticky: 100;     /* Éléments collants (position: sticky) dans le contenu : PageHeader */
+  --cadence-z-popover: 100;    /* Panneaux et bulles ancrés : Popover, DatePicker, DateRangePicker, TimePicker, Tooltip, ChartTooltip */
+  --cadence-z-dropdown: 200;   /* Menus déroulants : Dropdown, Autocomplete, menus en portail (ActionMenu/ExportMenu), ColumnManager */
+  --cadence-z-modal: 1000;     /* Voile et surface des surcouches modales : Modal, Drawer */
+  --cadence-z-toast: 1100;     /* Toasts en overlay, au-dessus des modales (recette 2) */
+}
