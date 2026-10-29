@@ -41,7 +41,8 @@
     "Tab",
     "Pagination",
     "BulkActionBar",
-    "Drawer"
+    "Drawer",
+    "TimePicker"
   ],
   "sha256": {
     "src/Accordion.tsx": "4aac3082b2bfb367c3cc245c48f7071bf941ae2dd4916661db5b43437d5ca480",
@@ -92,6 +93,7 @@
     "src/TextArea.tsx": "375f41fb21f4a7328d86be537e50473c6002eb56f918cb2e45f752e95a963568",
     "src/TextInput.tsx": "a536dd9963c077ef3014e4d710cf085bb855f76ab884d5d1bda8d67b4edc8207",
     "src/TimeFields.tsx": "991c38c5990e7807353d635406c215f64c3882d4cb3256f4a44ad83963baedd5",
+    "src/TimePicker.tsx": "00eafe2d2db4b89e0d22c6e7a161b067768751192d7c39219960625ef921824f",
     "src/Toaster.tsx": "9a3c6ad24fddf9b528159109181d8b119546f89f1108c416be1325cf7a578cdd",
     "src/Toggle.tsx": "13ac92ea06b5da97a675b481b935a75e051300587de521400f4dcb685713b81b",
     "src/Tooltip.tsx": "41aadab3bbe35dc2d0499cd3add249b0b0504f8105d2c8f11dff7ba33753d81f",
@@ -128,7 +130,7 @@
     "src/icon-registry.ts": "f9bca88e407aa2d8c1d6cab41c9302dabc235d9a795cc14ecc6c6f6c63104912",
     "src/icon-walk.tsx": "4a5fbbea3304aa99bc78d3dc84839aab2ddd85b9c3575910181b693eb63239cc",
     "src/icons.css": "551fae352085a6d2375cd9231a1a81b873e05ef9593edba4476e3e51ec4e0a02",
-    "src/index.ts": "5fa1c9d8e55613ef0e126d257ca7a87e8d01b0f45ac51abad1f07c9d04b79865",
+    "src/index.ts": "3067059004efb44857cbda2d7e80f46d5e1acdc4bfe5ce61a79562cab809bc8e",
     "src/indicator-label.ts": "6e723d5237b8bd02ff07dcf9a199cc66feaf01e501ca5b0320338f3ad32c5da7",
     "src/indicator.css": "03ecbee7071b2eee8cff0ea4912751a1a89ed1678c0901e9165132abff130b9b",
     "src/inert-props.ts": "c9bfa2b4a6122cb1dbb488393af050e920f1686447a1289757f9a7431b832971",
@@ -160,6 +162,8 @@
     "src/text-area.css": "f3aa8a8db519999dc4cd630d7e1cfea7f419418b4c97d38d93d9a3a72f5fa2d7",
     "src/text-input.css": "d0e917399711ec62766725adcf83205d0c449933dfa9e866f7d01ab1c404a01d",
     "src/time-fields.css": "d9f06b7ca17ab29e86a57b6290e49f76188097391947440075a661b1e211f546",
+    "src/time-picker-utils.ts": "1dbb0d555a5336c79899d710bb82903f997934362e36602a9909496fb1eb281b",
+    "src/time-picker.css": "0e48e3911c0fe15ec098c5d9935875466b34749b2760286a137c9ce9ebe0afb7",
     "src/toast-announce-context.ts": "1464170a6bd35803aafa51ef2be78009d4419d9ddd4e53204a08260f59f2069d",
     "src/toast-store.ts": "95736f79f123ec161fda7f42ccde4ffdaee3678a62a605f0c60953ca02880d62",
     "src/toaster.css": "9a6b899634e6b846ff8367562c70063172babb57932cf21046f32d7f3bc566d2",

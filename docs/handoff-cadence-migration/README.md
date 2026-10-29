@@ -37,3 +37,5 @@ Aucune évolution d’API n’est nécessaire pour livrer cette documentation. L
 Le dossier couvre désormais le dashboard et le formulaire. Les copies source Traffic Report ont été actualisées ; des copies des composants Cadence effectivement embarqués complètent les références du checkout DS. Les archives et empreintes ont été régénérées. La passation ne signifie pas que les guidelines du design system ont déjà été modifiées.
 
 Dernier complément : [Champs des informations générales](INFORMATIONS-GENERALES.md).
+
+Dernière extension : [Parcours complet en cinq étapes](snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md). Cette référence complète les états historiques précédents.

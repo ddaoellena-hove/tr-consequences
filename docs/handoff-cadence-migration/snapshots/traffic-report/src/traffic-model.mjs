@@ -1,6 +1,6 @@
 import {withGeneralInformation} from './general-information.mjs';
 export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
-export const STEP_LABELS = ['Périmètre', 'Sévérité de l’impact', 'Période', 'Message voyageurs', 'Récapitulatif'];
+export const STEP_LABELS = ['Objets impactés', 'Sévérité de l’impact', 'Période(s) ou créneau(x) d’impact', 'Messages & canaux de communication', 'Résumé de la perturbation'];
 
 // Modèle officiel des 6 sévérités issu de la maquette de référence
 export const SEVERITIES = [
@@ -89,3 +89,16 @@ export const initial = () => withGeneralInformation({
   impacts: [newImpact()],
 });
 
+
+// Keep progress attached to the remaining impacts when the positional form is reindexed.
+export function removeFormImpact({impacts, current, impactSteps, completed}, removed) {
+ if (impacts.length <= 1 || !Number.isInteger(removed) || removed < 0 || removed >= impacts.length) return null;
+ const remaining = impacts.filter((_, index) => index !== removed);
+ const reindex = values => Object.fromEntries(remaining.map((_, index) => {
+  const oldIndex = index >= removed ? index + 1 : index;
+  return [index, values[oldIndex]];
+ }).filter(([,value]) => value !== undefined));
+ const nextCurrent = current > removed ? current - 1 : current === removed ? Math.min(current, remaining.length - 1) : current;
+ const nextSteps = reindex(impactSteps);
+ return {impacts:remaining, current:nextCurrent, impactSteps:nextSteps, completed:reindex(completed), step:nextSteps[nextCurrent] ?? 0};
+}

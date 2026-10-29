@@ -1,0 +1,16 @@
+.workflow-stack { display:flex; flex-direction:column; gap:var(--tr-space-24); min-width:0; }
+.workflow-card-content { display:flex; flex-direction:column; gap:var(--tr-space-16); padding:var(--tr-space-20); min-width:0; }
+.workflow-card-content p { margin:0; }
+.workflow-muted { margin:0; color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-small); }
+.workflow-row { width:100%; }
+.workflow-row .dropdown, .workflow-date, .workflow-date .date-picker, .workflow-date .date-picker__field { width:100%; }
+.workflow-fieldset { border:0; padding:0; margin:0; min-width:0; }
+.workflow-fieldset legend { font-weight:var(--tr-font-weight-semibold); margin-bottom:var(--tr-space-12); padding:0; }
+.workflow-choices, .workflow-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--tr-space-16); }
+.workflow-choice { display:flex; align-items:center; gap:var(--tr-space-8); }
+.workflow-template { display:flex; align-items:flex-end; gap:var(--tr-space-12); flex-wrap:wrap; }
+.workflow-preview { display:flex; flex-direction:column; gap:var(--tr-space-16); white-space:pre-wrap; overflow-wrap:anywhere; }
+.workflow-object.page-section--card, .workflow-schedule.page-section--card { overflow:visible; }
+.workflow-object .page-section__icon { width:var(--tr-space-24); height:var(--tr-space-24); flex-basis:var(--tr-space-24); background:transparent; }
+@media (max-width:1024px) { .workflow-row { flex-direction:column; align-items:stretch; } .workflow-row > * { width:100%; } }
+@media (max-width:760px) { .workflow-card-content { padding:var(--tr-space-16); } }

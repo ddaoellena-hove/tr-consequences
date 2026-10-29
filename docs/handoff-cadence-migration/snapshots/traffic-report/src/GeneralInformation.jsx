@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {PageSection, TextInput, Dropdown, DatePicker, Checkbox, PrimaryButton, GhostButton, FieldRow} from '@ddaoellena/cadence-ui';
+import {PageSection, TextInput, Dropdown, DatePicker, Checkbox, GhostButton, FieldRow} from '@ddaoellena/cadence-ui';
 import {CAUSES, validDate} from './validation.mjs';
 import {LABEL_OPTIONS} from './general-information.mjs';
 import {makeId} from './dashboard-data.mjs';
@@ -43,7 +43,7 @@ export function GeneralInformation({data, errors, onChange, onPublicationPending
     </div>)}
     {errors.properties&&<p id="error-properties" className="field-error" role="alert">{errors.properties}</p>}
    </div>
-   <div><PrimaryButton size="sm" label="Ajouter une propriété" iconEnd="plus" onClick={()=>onChange({properties:[...data.properties,{id:makeId(),name:'',value:''}]})}/></div>
+   <div><GhostButton size="sm" label="Ajouter une propriété" iconStart="plus" onClick={()=>onChange({properties:[...data.properties,{id:makeId(),name:'',value:''}]})}/></div>
   </PageSection>
  </PageSection>;
 }

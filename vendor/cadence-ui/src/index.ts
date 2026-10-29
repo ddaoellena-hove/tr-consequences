@@ -39,3 +39,4 @@ export { BulkActionBar } from "./BulkActionBar";
 export { Drawer } from "./Drawer";
 export { toast, useToast } from "./useToast";
 import "./tokens.css";
+export { TimePicker } from "./TimePicker";

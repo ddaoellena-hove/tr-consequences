@@ -1,3 +1,4 @@
+import {workflowErrors} from './disruption-workflow.mjs';
 export const CAUSES = ['Travaux', 'Incident technique', 'Événement'];
 export const validDate = value => typeof value === 'string' && value.trim() !== '' && Number.isFinite(Date.parse(value));
 export function generalErrors(data) {
@@ -11,6 +12,7 @@ export function generalErrors(data) {
   };
 }
 export function impactErrors(impact, step) {
+  if(Array.isArray(impact.objects)) return workflowErrors(impact,step);
   if (step === 0 && (!Number.isInteger(impact.from) || !Number.isInteger(impact.to) || impact.from < 0 || impact.to > 5 || impact.from >= impact.to))
     return { to: 'L’arrêt de fin doit se situer après l’arrêt de début.' };
   if (step === 2) {

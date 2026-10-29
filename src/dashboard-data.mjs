@@ -1,3 +1,4 @@
+import {normalizeImpact,projectImpact,impactIntervals,objectTitle} from './disruption-workflow.mjs';
 import {withGeneralInformation} from './general-information.mjs';
 import { STATIONS, SEVERITY_MAP, newImpact } from './traffic-model.mjs';
 export const RECORDS_KEY = 'traffic-report-records-v1';
@@ -41,37 +42,42 @@ export function demoRecords(){return [
  impact('imp-draft','section','Université → Hôpital','bloquante',[{code:'12',mode:'bus',name:'Ligne 12',operator:'Réseau de démonstration'}],'Déclaration à compléter',7,9),
  ],{publication:'draft',stations:STATIONS,line:{code:'12',mode:'bus',name:'Ligne 12'}}),
 ];}
-export function isRecord(value){return Boolean(value&&typeof value.id==='string'&&typeof value.title==='string'&&typeof value.cause==='string'&&Array.isArray(value.stations)&&value.stations.length===6&&value.stations.every(v=>typeof v==='string')&&Array.isArray(value.impacts)&&value.impacts.length&&value.impacts.every(i=>i&&typeof i.id==='string'&&SEVERITY_MAP[i.severity]&&typeof i.start==='string'&&typeof i.end==='string'&&typeof i.message==='string'&&Array.isArray(i.lines)&&i.lines.every(l=>l&&typeof l.code==='string')&&Number.isInteger(i.from)&&Number.isInteger(i.to)&&i.from>=0&&i.from<6&&i.to>=0&&i.to<6));}
+export function isRecord(value){return Boolean(value&&typeof value.id==='string'&&typeof value.title==='string'&&typeof value.cause==='string'&&Array.isArray(value.stations)&&value.stations.length===6&&value.stations.every(v=>typeof v==='string')&&Array.isArray(value.impacts)&&value.impacts.length&&value.impacts.every(i=>i&&typeof i.id==='string'&&(SEVERITY_MAP[i.severity]||value.publication==='draft'&&i.severity==='')&&typeof i.start==='string'&&typeof i.end==='string'&&typeof i.message==='string'&&Array.isArray(i.lines)&&i.lines.every(l=>l&&typeof l.code==='string')&&Number.isInteger(i.from)&&Number.isInteger(i.to)&&i.from>=0&&i.from<6&&i.to>=0&&i.to<6));}
 export function loadRecords(){try{const text=localStorage.getItem(RECORDS_KEY);if(text!==null){const values=JSON.parse(text);if(Array.isArray(values)&&values.every(isRecord))return values;}}catch{}return demoRecords();}
 export function storeRecords(records){localStorage.setItem(RECORDS_KEY,JSON.stringify(records));}
 export function upsertRecord(data,publication='draft'){
  data=withGeneralInformation(data);
  const current=loadRecords();const now=new Date().toISOString();
- const item={...data,id:data.id||makeId(),publication,updatedAt:now,stations:data.stations||STATIONS,line:data.line||{code:'12',mode:'bus',name:'Ligne 12'},impacts:data.impacts.map(i=>({...i,id:i.id||makeId(),scope:i.scope||'section',title:i.title||`${(data.stations||STATIONS)[i.from]} → ${(data.stations||STATIONS)[i.to]}`,lines:i.lines||[data.line||{code:'12',mode:'bus',name:'Ligne 12'}],detail:i.detail||''}))};
+ const item={...data,id:data.id||makeId(),publication,updatedAt:now,stations:data.stations||STATIONS,line:data.line||{code:'12',mode:'bus',name:'Ligne 12'},impacts:data.impacts.map(raw=>{const i=projectImpact(normalizeImpact(raw,data.title),data.stations||STATIONS);return ({...i,id:i.id||makeId(),scope:i.scope||'section',title:i.title||`${(data.stations||STATIONS)[i.from]} → ${(data.stations||STATIONS)[i.to]}`,lines:i.lines||[data.line||{code:'12',mode:'bus',name:'Ligne 12'}],detail:i.detail||''});})};
  storeRecords(current.some(r=>r.id===item.id)?current.map(r=>r.id===item.id?item:r):[item,...current]);return item;
 }
-export function periodOf(record){const starts=record.impacts.map(i=>Date.parse(i.start)).filter(Number.isFinite);const ends=record.impacts.map(i=>Date.parse(i.end)).filter(Number.isFinite);return {start:starts.length?Math.min(...starts):null,end:ends.length?Math.max(...ends):null};}
-export function statusOf(record,now=Date.now()){if(record.publication==='draft')return 'draft';const{start,end}=periodOf(record);return end!==null&&end<now?'past':start!==null&&start>now?'upcoming':'active';}
-export const SCOPE_LABELS={line:'Ligne',stop:'Arrêt / déviation',section:'Tronçon',access:'Entrée / sortie',poi:'Point d’intérêt'};
+export function periodOf(record){const intervals=record.impacts.flatMap(i=>impactIntervals(i));return {start:intervals.length?Math.min(...intervals.map(p=>p.start)):null,end:intervals.length?Math.max(...intervals.map(p=>p.end)):null};}
+export function statusOf(record,now=Date.now()){
+ if(record.publication==='draft')return 'draft';
+ const intervals=record.impacts.flatMap(i=>impactIntervals(i,now));
+ if(intervals.some(p=>p.start<=now&&now<p.end))return 'active';
+ return intervals.some(p=>p.start>now)?'upcoming':intervals.length?'past':'active';
+}
+export const SCOPE_LABELS={line:'Ligne',stop:'Arrêt / déviation',section:'Tronçon',access:'Entrée / sortie',poi:'Point d’intérêt',network:'Réseau',course:'Course'};
 export const severityRank={bloquante:0,interrompu:1,modifie:2,reduit:3,perturbe:4,informative:5};
-export function dominantSeverity(impacts){return [...impacts].sort((a,b)=>severityRank[a.severity]-severityRank[b.severity])[0]?.severity||'informative';}
+export function dominantSeverity(impacts){return [...impacts].sort((a,b)=>(severityRank[a.severity]??6)-(severityRank[b.severity]??6))[0]?.severity??'';}
 export function dashboardRows(records,{tab='active',view='disruption',query='',line='all',severity='all',cause='all',scope='all',sort='updatedAt',direction='desc'}={},now=Date.now()){
  const q=query.trim().toLocaleLowerCase('fr');
  const rows=[];
  for(const record of records){if(statusOf(record,now)!==tab||cause!=='all'&&record.cause!==cause)continue;
   if(view==='impact'){
-   for(const impact of record.impacts){const searchable=[record.title,record.cause,impact.title,impact.detail,impact.message,...impact.lines.map(l=>l.name||l.code)].join(' ').toLocaleLowerCase('fr');
-    if((q&&!searchable.includes(q))||(line!=='all'&&!impact.lines.some(l=>`${l.mode}:${l.code}`===line))||(severity!=='all'&&impact.severity!==severity)||(scope!=='all'&&impact.scope!==scope))continue;
+   for(const impact of record.impacts){const searchable=[record.title,record.cause,impact.title,impact.detail,impact.message,...(impact.objects||[]).map(o=>objectTitle(o,record.stations)),...impact.lines.map(l=>l.name||l.code)].join(' ').toLocaleLowerCase('fr');
+    if((q&&!searchable.includes(q))||(line!=='all'&&!impact.lines.some(l=>`${l.mode}:${l.code}`===line))||(severity!=='all'&&impact.severity!==severity)||(scope!=='all'&&!(impact.objects?.some(o=>o.scope===scope)||impact.scope===scope)))continue;
     rows.push({key:`${record.id}/${impact.id}`,record,impacts:[impact],title:impact.title||record.title});
    }
   }else{
-   const searchable=[record.title,record.cause,...record.impacts.flatMap(i=>[i.title,i.detail,i.message,...i.lines.map(l=>l.name||l.code)])].join(' ').toLocaleLowerCase('fr');
+   const searchable=[record.title,record.cause,...record.impacts.flatMap(i=>[i.title,i.detail,i.message,...(i.objects||[]).map(o=>objectTitle(o,record.stations)),...i.lines.map(l=>l.name||l.code)])].join(' ').toLocaleLowerCase('fr');
    // A disruption matches only when the same impact satisfies all impact filters.
-   if(q&&!searchable.includes(q)||!record.impacts.some(i=>(line==='all'||i.lines.some(l=>`${l.mode}:${l.code}`===line))&&(severity==='all'||i.severity===severity)&&(scope==='all'||i.scope===scope)))continue;
+   if(q&&!searchable.includes(q)||!record.impacts.some(i=>(line==='all'||i.lines.some(l=>`${l.mode}:${l.code}`===line))&&(severity==='all'||i.severity===severity)&&(scope==='all'||i.objects?.some(o=>o.scope===scope)||i.scope===scope)))continue;
    rows.push({key:record.id,record,impacts:record.impacts,title:record.title});
   }
  }
- const sortValue=row=>sort==='severity'?severityRank[dominantSeverity(row.impacts)]:sort==='title'?row.title:sort==='updatedAt'?Date.parse(row.record.updatedAt)||0:periodOf({impacts:row.impacts})[sort]??0;
+ const sortValue=row=>sort==='severity'?(severityRank[dominantSeverity(row.impacts)]??6):sort==='title'?row.title:sort==='updatedAt'?Date.parse(row.record.updatedAt)||0:periodOf({impacts:row.impacts})[sort]??0;
  return rows.sort((a,b)=>{const av=sortValue(a),bv=sortValue(b);const compared=typeof av==='string'?av.localeCompare(bv,'fr'):av-bv;return(direction==='asc'?1:-1)*compared||a.key.localeCompare(b.key);});
 }
 export function removeRows(records,rows,view){

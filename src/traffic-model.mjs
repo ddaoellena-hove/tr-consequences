@@ -1,6 +1,6 @@
 import {withGeneralInformation} from './general-information.mjs';
 export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
-export const STEP_LABELS = ['Périmètre', 'Sévérité de l’impact', 'Période', 'Message voyageurs', 'Récapitulatif'];
+export const STEP_LABELS = ['Objets impactés', 'Sévérité de l’impact', 'Période(s) ou créneau(x) d’impact', 'Messages & canaux de communication', 'Résumé de la perturbation'];
 
 // Modèle officiel des 6 sévérités issu de la maquette de référence
 export const SEVERITIES = [

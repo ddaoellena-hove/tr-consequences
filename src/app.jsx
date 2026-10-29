@@ -1,17 +1,21 @@
-import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, newImpact, initial, removeFormImpact } from './traffic-model.mjs';
+import './workflow.css';
+import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, initial, removeFormImpact } from './traffic-model.mjs';
 import Dashboard from './Dashboard.jsx';
+import {ImpactObjects} from './ImpactObjects.jsx';
+import {ImpactSchedule} from './ImpactSchedule.jsx';
+import {ImpactMessages} from './ImpactMessages.jsx';
+import {DisruptionSummary} from './DisruptionSummary.jsx';
+import {normalizeWorkflow,emptyWorkflowImpact,projectImpact} from './disruption-workflow.mjs';
 import {GeneralInformation} from './GeneralInformation.jsx';
 import {withGeneralInformation} from './general-information.mjs';
 import { upsertRecord, makeId } from './dashboard-data.mjs';
 import React, { useState, useEffect, useMemo } from 'react';
-import { issue, impactErrors, generalErrors, CAUSES, validDate } from './validation.mjs';
+import { issue, impactErrors, generalErrors, validDate } from './validation.mjs';
 import { LineDiagram } from './LineDiagram.jsx';
 import {
   PrimaryButton,
   GhostButton,
   Dropdown,
-  TextInput,
-  TextArea,
   Stepper,
   InlineAlert,
   Indicator,
@@ -22,8 +26,8 @@ import {
   PageHeader,
   Breadcrumbs,
   Accordion, PageSection, FormActions, ProgressBar, Modal, Toaster, toast,
-  DatePicker, SegmentedControl, Badge,
-  ErrorSummary, DescriptionList, FieldRow, Toggle, EmptyState, SummaryList,
+  SegmentedControl, Badge,
+  ErrorSummary, Toggle, EmptyState, SummaryList,
 } from '@ddaoellena/cadence-ui';
 
 function loadDraft() {
@@ -40,24 +44,22 @@ function loadDraft() {
       if (
         s.impacts.every(
           (i) =>
-            SEVERITY_MAP[i.severity] &&
+            (SEVERITY_MAP[i.severity] || i.severity === '') &&
             Number.isInteger(i.from) &&
             i.from >= 0 &&
             Number.isInteger(i.to) &&
             i.to <= 5 &&
-            i.from < i.to &&
+            i.from <= 5 && i.to >= 0 &&
             ['start', 'end', 'message'].every((k) => typeof i[k] === 'string')
         )
       ) {
-        return withGeneralInformation(s);
+        return normalizeWorkflow(withGeneralInformation(s));
       }
     }
   } catch {}
   return null;
 }
 
-const formatDate = s => validDate(s) ? new Date(s).toLocaleString('fr-FR', {dateStyle:'short', timeStyle:'short'}) : 'Non renseigné';
-const dateValue = s => validDate(s) ? new Date(s) : null;
 
 // The domain model remains product-specific; presentation uses Cadence.
 function SeverityField({ value, onChange }) {
@@ -73,10 +75,6 @@ function ConsequenceCard({ sev, tweaks }) {
     <p>{sev.lead} <strong>{sev.conseq}</strong></p>
   </InlineAlert></div>;
 }
-const localDateValue = date => {
-  const pad = n => String(n).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-};
 const notify = title => toast({type:'information', title});
 
 export default function App() {
@@ -91,17 +89,17 @@ export default function App() {
   useEffect(() => {document.title = screen === 'dashboard' ? 'Traffic Report — Toutes les perturbations' : 'Traffic Report — Déclaration de perturbation';}, [screen]);
   useEffect(() => { const update=()=>setScreen(window.location.hash === '#declaration' ? 'form' : 'dashboard'); window.addEventListener('hashchange',update); return()=>window.removeEventListener('hashchange',update); }, []);
   const [restored] = useState(loadDraft);
-  const [data, setData] = useState(() => restored || initial());
+  const [data, setData] = useState(() => normalizeWorkflow(restored || initial()));
   const [current, setCurrent] = useState(0);
   const [impactToDelete, setImpactToDelete] = useState(null);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
   const [datePending, setDatePending] = useState({});
   const [summaryVersion, setSummaryVersion] = useState(0);
-  const [impactSteps, setImpactSteps] = useState({0: 1});
-  const [completed, setCompleted] = useState({0: [0]});
+  const [impactSteps, setImpactSteps] = useState({0: 0});
+  const [completed, setCompleted] = useState({});
   const [saveState, setSaveState] = useState(
     restored ? 'Brouillon restauré depuis cet appareil.' : 'Vos modifications ne sont pas encore enregistrées.'
   );
@@ -128,8 +126,9 @@ export default function App() {
   const line = data.line || {code:'12',mode:'bus',name:'Ligne 12'};
   const i = data.impacts[current];
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
-  const startDate = useMemo(() => dateValue(i.start), [i.start]);
-  const endDate = useMemo(() => dateValue(i.end), [i.end]);
+  const diagramObject=i.objects.find(object=>object.scope==='section');
+  const diagramImpact=diagramObject?{...i,from:diagramObject.from,to:diagramObject.to}:i;
+  
 
 
   function change(update) {
@@ -142,8 +141,8 @@ export default function App() {
 
   function updateImpact(patch) {
     if ('start' in patch || 'end' in patch) setDatePending(prev => ({...prev, ...('start' in patch ? {start:false} : {}), ...('end' in patch ? {end:false} : {})}));
-    change({ impacts: data.impacts.map((item, n) => (n === current ? { ...item, ...patch } : item)) });
-    const editedStep = 'from' in patch || 'to' in patch ? 0 : 'severity' in patch ? 1 : 'message' in patch ? 3 : 2;
+    change({ impacts: data.impacts.map((item, n) => (n === current ? projectImpact({ ...item, ...patch },stations) : item)) });
+    const editedStep = 'objects' in patch || 'from' in patch || 'to' in patch ? 0 : 'severity' in patch ? 1 : ['periods','slots','scheduleMode'].some(k=>k in patch) ? 2 : 3;
     setCompleted(prev => ({...prev, [current]: (prev[current] || []).filter(n => n < editedStep)}));
   }
 
@@ -153,9 +152,14 @@ export default function App() {
   }
 
   function go(n) {
-    const errors = n > step ? {...impactErrors(i, step), ...(step === 2 ? Object.fromEntries(Object.entries(datePending).filter(([,pending])=>pending).map(([field])=>[field, 'Corrigez et confirmez la date et l’heure saisies.'])) : {})} : {};
-    if (Object.keys(errors).length) return showFieldErrors(errors);
-    if (n > step) setCompleted(prev => ({...prev, [current]: [...new Set([...(prev[current] || []), step])]}));
+    if(n>step){
+      for(let target=0;target<n;target++){
+        const pending=Object.fromEntries(Object.entries(datePending).filter(([key,value])=>value&&(key==='notification'?target===3:target===2)).map(([key])=>[key,'Corrigez et confirmez la date ou l’heure saisie.']));
+        const errors={...impactErrors(i,target),...pending};
+        if(Object.keys(errors).length){setStep(target);setImpactSteps(prev=>({...prev,[current]:target}));return showFieldErrors(errors);}
+      }
+      setCompleted(prev=>({...prev,[current]:Array.from({length:n},(_,index)=>index)}));
+    }
     setError(''); setFieldErrors({}); setDatePending({}); setStep(n);
     setImpactSteps(prev => ({...prev, [current]:n}));
   }
@@ -182,8 +186,8 @@ export default function App() {
       return showFieldErrors(general);
     }
     for (let n = 0; n < data.impacts.length; n++) {
-      for (const st of [0, 2, 3]) {
-        const errors = impactErrors(data.impacts[n], st);
+      for (const st of [0, 1, 2, 3]) {
+        const errors = {...impactErrors(data.impacts[n], st),...(n===current?Object.fromEntries(Object.entries(datePending).filter(([key,value])=>value&&(key==='notification'?st===3:st===2)).map(([key])=>[key,'Corrigez et confirmez la date ou l’heure saisie.'])):{})};
         if (Object.keys(errors).length) {
           setCurrent(n); setStep(st);
           setImpactSteps(prev => ({...prev, [n]:st}));
@@ -205,12 +209,12 @@ export default function App() {
     if (window.location.hash !== hash) window.location.hash = hash;
   }
   function openRecord(record) {
-    setData(withGeneralInformation(structuredClone(record))); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
+    setData(normalizeWorkflow(withGeneralInformation(structuredClone(record)))); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
     setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
     setSaveState('Déclaration chargée depuis cet appareil.'); navigate('form');
   }
   function createRecord() {
-    setData({...initial(),id:makeId()}); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
+    setData(normalizeWorkflow({...initial(),title:'',cause:'',id:makeId(),impacts:[emptyWorkflowImpact()]})); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
     setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
     setSaveState('Nouvelle déclaration · modifications non enregistrées.'); navigate('form');
   }
@@ -329,7 +333,7 @@ export default function App() {
               label="Ajouter un impact"
               iconStart="plus"
               onClick={() => {
-                change({ impacts: [...data.impacts, newImpact()] });
+                change({ impacts: [...data.impacts, emptyWorkflowImpact()] });
                 setCurrent(data.impacts.length);
                 setStep(0);
                 setImpactSteps(prev => ({...prev, [data.impacts.length]:0}));
@@ -355,63 +359,14 @@ export default function App() {
 
           <div className="form-content">
             <PageSection headingLevel={3} gap={20}
-              title={['Périmètre de l’impact','Sévérité de l’impact','Période d’application','Message voyageurs','Récapitulatif de l’impact'][step]}
-              description={['Sélectionnez les arrêts délimitant le tronçon de la ligne.','Précisez les conséquences de la perturbation sur le service.','Définissez la période durant laquelle cet impact s’applique.','Rédigez le message associé à cet impact.','Vérifiez les informations avant de valider votre déclaration.'][step]}>
+              title={STEP_LABELS[step]}
+              description={['Ajoutez les objets du réseau concernés par cet impact.','Précisez les conséquences de la perturbation sur le service.','Choisissez des périodes continues ou des créneaux récurrents.','Choisissez les canaux et préparez leurs messages.','Vérifiez l’ensemble des impacts avant de valider la perturbation.'][step]}>
 
-            {step === 0 && (
-              <FieldRow className="fields">
-                <Dropdown
-                  label="Arrêt de début"
-                  options={stationOptions}
-                  value={String(i.from)}
-                  onChange={(v) => updateImpact({ from: Number(v) })}
-                />
-                <div id="field-to" role="group" aria-label="Arrêt de fin" aria-describedby={fieldErrors.to ? 'error-to' : undefined}><Dropdown
-                  label="Arrêt de fin"
-                  options={stationOptions}
-                  value={String(i.to)}
-                  onChange={(v) => updateImpact({ to: Number(v) })}
-                />{fieldErrors.to && <p id="error-to" className="field-error" role="alert">{fieldErrors.to}</p>}</div>
-              </FieldRow>
-            )}
-
-            {step === 1 && (
-              <div className="field">
-                <SeverityField value={i.severity} onChange={(severity) => updateImpact({ severity })} />
-              </div>
-            )}
-
-            {step === 2 && (
-              <FieldRow className="fields">
-                <div id="field-start" onChangeCapture={() => setDatePending(prev => ({...prev,start:true}))} role="group" aria-label="Début" aria-describedby={fieldErrors.start ? 'error-start' : undefined}><DatePicker label="Début" withTime value={startDate}
-                  onChange={date => updateImpact({start: localDateValue(date)})} />
-                  {fieldErrors.start && <p id="error-start" className="field-error" role="alert">{fieldErrors.start}</p>}</div>
-                <div id="field-end" onChangeCapture={() => setDatePending(prev => ({...prev,end:true}))} role="group" aria-label="Fin" aria-describedby={fieldErrors.end ? 'error-end' : undefined}><DatePicker label="Fin" withTime value={endDate}
-                  onChange={date => updateImpact({end: localDateValue(date)})} />
-                  {fieldErrors.end && <p id="error-end" className="field-error" role="alert">{fieldErrors.end}</p>}</div>
-              </FieldRow>
-            )}
-
-            {step === 3 && (
-              <div className="field" id="field-message">
-                <TextArea
-                  label="Message"
-                  value={i.message} state={fieldErrors.message ? 'error' : 'enabled'} helperText={fieldErrors.message}
-                  onChange={(e) => updateImpact({ message: e.target.value })}
-                />
-              </div>
-            )}
-
-            {step === 4 && (
-              <DescriptionList aria-label="Récapitulatif de l’impact" density="compact" items={[
-                {id:'line',label:'Ligne',value:<LineBadge code={line.code} mode={line.mode} color={line.color}/>},
-                {id:'section',label:'Tronçon',value:`${stations[i.from]} → ${stations[i.to]}`},
-                {id:'severity',label:'Sévérité',value:<Indicator variant={sev.variant} label={sev.label}/>},
-                {id:'start',label:'Début',value:formatDate(i.start)},
-                {id:'end',label:'Fin',value:formatDate(i.end)},
-                {id:'message',label:'Message voyageurs',value:i.message},
-              ]}/>
-            )}
+            {step === 0 && <ImpactObjects impact={i} stations={stations} line={line} errors={fieldErrors} onChange={updateImpact}/>}
+            {step === 1 && <div className="field" id="field-severity"><SeverityField value={i.severity} onChange={severity=>updateImpact({severity})}/>{fieldErrors.severity&&<p className="field-error" role="alert">{fieldErrors.severity}</p>}</div>}
+            {step === 2 && <ImpactSchedule impact={i} errors={fieldErrors} onChange={updateImpact} onPending={(key,value)=>setDatePending(prev=>({...prev,[key]:value}))}/>}
+            {step === 3 && <ImpactMessages key={current} impact={i} errors={fieldErrors} onChange={updateImpact} onPending={(key,value)=>setDatePending(prev=>({...prev,[key]:value}))}/>}
+            {step === 4 && <DisruptionSummary data={data} stations={stations} onEdit={(index,target)=>{setCurrent(index);setStep(target);setImpactSteps(prev=>({...prev,[index]:target}));setFieldErrors({});setDatePending({});}}/>}
             </PageSection>
           </div>
 
@@ -425,7 +380,7 @@ export default function App() {
         </PageSection>
 
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
-        {step === 1 && (issue(i, 0) ? (
+        {step === 1 && SEVERITY_MAP[i.severity] && (!diagramObject ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Le schéma animé est disponible pour un tronçon.</InlineAlert></div> : issue(i, 0) ? (
           <div className="consequence-wrap">
             <InlineAlert type="warning" title="Schéma indisponible">
               Sélectionnez un tronçon dont l’arrêt de fin se situe après l’arrêt de début.
@@ -433,7 +388,8 @@ export default function App() {
           </div>
         ) : (
           <>
-            <LineDiagram impact={i} sev={sev} stations={stations} line={line} tweaks={tweaks} />
+            {i.objects.length>1&&<p className="workflow-muted">Aperçu du premier tronçon sélectionné. La sévérité s’applique à tous les objets de cet impact.</p>}
+            <LineDiagram impact={diagramImpact} sev={sev} stations={stations} line={line} tweaks={tweaks} />
 
             {/* Options d'affichage interactives (Tweaks) */}
             <PageSection title="Options d’affichage" headingLevel={3} className="tweaks-bar" gap={12}>
