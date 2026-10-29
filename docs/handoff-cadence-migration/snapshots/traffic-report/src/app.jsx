@@ -128,7 +128,7 @@ export default function App() {
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
   const diagramObject=i.objects.find(object=>object.scope==='section');
   const diagramImpact=diagramObject?{...i,from:diagramObject.from,to:diagramObject.to}:i;
-  
+
 
 
   function change(update) {
