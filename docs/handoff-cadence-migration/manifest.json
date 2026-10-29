@@ -74,7 +74,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "4617c678acb8adac9102b32cbd427bdc5e220c5931d441fbe8169070ec5f36ec",
+      "sha256": "097fae39c74cf018f38553ed7f5794fe6d4ab44b60b1760e1dc4569953dd4ce1",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -265,7 +265,7 @@
     {
       "path": "snapshots/traffic-report/src/Dashboard.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/Dashboard.jsx",
-      "sha256": "248d8e29611872a4cc2dd43b7dde866b67244d5d04060d317711e786310fb1db"
+      "sha256": "08e357d8f712db2d51bd8e8aaea1cf673aa7f43cdafd7fc276f91596a9047f80"
     },
     {
       "path": "snapshots/traffic-report/src/dashboard.css",
@@ -375,7 +375,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "011b708f215f96716e57469d6849e017bc125b2256e84a9f5a2f799618ab619c"
+      "sha256": "76a95ab9b10304f2cd181119c7640f3202a0f4be5d326e00c2a9fd7100155f91"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -585,5 +585,5 @@
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Icône translate-01 fournie par l’utilisateur, tracé exact dans le registre Cadence et les boutons Traductions génériques / par canal ; source et empreinte tracées."
+  "updated_note": "Après création réussie : retour dashboard, onglet correspondant au statut et toast de succès avec le titre de la perturbation. Parcours navigateur validé."
 }

@@ -10,7 +10,7 @@ import {DisruptionSummary} from './DisruptionSummary.jsx';
 import {normalizeWorkflow,emptyWorkflowImpact,projectImpact} from './disruption-workflow.mjs';
 import {GeneralInformation} from './GeneralInformation.jsx';
 import {withGeneralInformation} from './general-information.mjs';
-import { upsertRecord, makeId } from './dashboard-data.mjs';
+import { upsertRecord, makeId, statusOf } from './dashboard-data.mjs';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { issue, impactErrors, generalErrors, validDate, canCreateDisruption } from './validation.mjs';
 import { LineDiagram } from './LineDiagram.jsx';
@@ -93,6 +93,7 @@ export default function App() {
   useEffect(() => { const update=()=>setScreen(window.location.hash === '#declaration' ? 'form' : 'dashboard'); window.addEventListener('hashchange',update); return()=>window.removeEventListener('hashchange',update); }, []);
   const [restored] = useState(loadDraft);
   const [data, setData] = useState(() => normalizeWorkflow(restored || initial()));
+  const [dashboardTab,setDashboardTab]=useState('active');
   const [current, setCurrent] = useState(0);
   const [impactToDelete, setImpactToDelete] = useState(null);
   const [step, setStep] = useState(0);
@@ -233,11 +234,14 @@ export default function App() {
         }
       }
     }
-    try { const saved = upsertRecord(data, 'published'); setData(saved); localStorage.setItem('traffic-report-draft', JSON.stringify(saved)); }
+    let created;
+    try { created = upsertRecord(data, 'published'); setData(created); localStorage.setItem('traffic-report-draft', JSON.stringify(created)); }
     catch { setError('La déclaration n’a pas pu être enregistrée sur cet appareil.'); return; }
     setCompleted(Object.fromEntries(data.impacts.map((_, n) => [n, [0,1,2,3,4]])));
     setVerified(true); setFieldErrors({}); setError('');
-    notify('Déclaration enregistrée dans le tableau de bord de démonstration. Aucune diffusion voyageurs.');
+    setDashboardTab(statusOf(created));
+    navigate('dashboard');
+    toast({type:'success',title:'Perturbation créée',description:`« ${created.title} » a été ajoutée au tableau de bord.`,duration:6000});
   }
 
   function navigate(destination) {
@@ -304,7 +308,7 @@ export default function App() {
     />
   );
 
-  if (screen === 'dashboard') return <Dashboard onCreate={createRecord} onEdit={openRecord} onResume={restored ? () => {const draft=loadDraft();if(draft)openRecord(draft);} : undefined}/>;
+  if (screen === 'dashboard') return <Dashboard initialTab={dashboardTab} onCreate={createRecord} onEdit={openRecord} onResume={restored ? () => {const draft=loadDraft();if(draft)openRecord(draft);} : undefined}/>;
 
   return (
     <AppLayout className="traffic-report-app" sidebar={narrow ? null : sidebarElement} contentLabel="Déclaration de perturbation">

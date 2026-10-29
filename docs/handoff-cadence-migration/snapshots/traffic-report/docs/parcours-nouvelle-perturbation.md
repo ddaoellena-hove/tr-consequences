@@ -75,3 +75,9 @@ Les actions Traductions du message générique et de chaque canal ouvrent désor
 Vérifications : ajout d’une traduction anglaise, saisie des deux champs, compteur mis à jour, fermeture et réouverture avec les valeurs conservées. Les 37 tests, le contrôle des tokens et le build passent.
 
 Les GhostButton Traductions du message générique et des canaux utilisent le pictogramme fourni `translate-01.svg`, enregistré sous `translate-01` dans le registre Cadence et consommé via `iconStart`. Le tracé est conservé à l’identique ; sa couleur hérite du bouton. La copie vendor enregistre l’empreinte du fichier fourni.
+
+## Retour au tableau de bord après création — 30 octobre 2026
+
+Après une création réussie, le formulaire revient à `#dashboard` et le Toaster Cadence affiche un succès « Perturbation créée », avec le nom de la perturbation (6 secondes). Le tableau de bord charge les données enregistrées et ouvre l’onglet du statut calculé du nouvel enregistrement pour le rendre visible. Ce toast est émis uniquement par l’action de création réussie ; un simple retour ultérieur au tableau de bord ne le redéclenche pas. Les erreurs de validation ou de stockage gardent le formulaire ouvert. Le prototype conserve son stockage local et n’ajoute aucune diffusion réelle.
+
+Vérification navigateur : création depuis Messages après vérification, retour à `#dashboard`, onglet À venir sélectionné, nouvelle ligne en tête et toast visible. Les 37 tests, le contrôle des tokens et le build passent.
