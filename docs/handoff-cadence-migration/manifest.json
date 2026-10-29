@@ -74,7 +74,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "73733df0b1404466443facd849a909e3264584ea06f21c201e2979ffdee596d7",
+      "sha256": "4617c678acb8adac9102b32cbd427bdc5e220c5931d441fbe8169070ec5f36ec",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -375,7 +375,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "32c2208f9de2507640ce74570100a0ffa8fd2dd01d243c5c1be4325543c5aa49"
+      "sha256": "3d3b962207199b253c4901248dbafa4b19d7202ab5e2e2d4a83e36b0566739d3"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -565,5 +565,5 @@
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Retour à la taille initiale des pastilles (12 px), coches (8 px), espacements et footer. Essai d’agrandissement annulé."
+  "updated_note": "Avancement automatique après complétion des informations générales, sans focus ni scroll imposés ; reprise de la position d’impact, champs facultatifs et retour manuel conservés. Cas vérifiés desktop/mobile."
 }

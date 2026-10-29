@@ -11,7 +11,7 @@ import {normalizeWorkflow,emptyWorkflowImpact,projectImpact} from './disruption-
 import {GeneralInformation} from './GeneralInformation.jsx';
 import {withGeneralInformation} from './general-information.mjs';
 import { upsertRecord, makeId } from './dashboard-data.mjs';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { issue, impactErrors, generalErrors, validDate, canCreateDisruption } from './validation.mjs';
 import { LineDiagram } from './LineDiagram.jsx';
 import {consequenceDiagrams} from './consequence-diagrams.mjs';
@@ -116,6 +116,20 @@ export default function App() {
   const [publicationPending, setPublicationPending] = useState(false);
 
   const generalComplete = Object.keys(generalErrors(data)).length === 0 && !publicationPending;
+  const previouslyGeneralComplete=useRef(generalComplete);
+  useEffect(()=>{
+    const becameComplete=!previouslyGeneralComplete.current&&generalComplete;
+    previouslyGeneralComplete.current=generalComplete;
+    if(becameComplete)setGeneralActive(false);
+  },[generalComplete]);
+  function changeGeneral(update) {
+    if(Object.keys(generalErrors({...data,...update})).length||publicationPending)setGeneralActive(true);
+    change(update);
+  }
+  function updatePublicationPending(pending) {
+    if(pending)setGeneralActive(true);
+    setPublicationPending(pending);
+  }
   const stations = data.stations || STATIONS;
   const line = data.line || {code:'12',mode:'bus',name:'Ligne 12'};
   const i = data.impacts[current];
@@ -319,14 +333,14 @@ export default function App() {
       <div className="page-wrapper">
         {error && <InlineAlert type="error" title="Enregistrement impossible">{error}</InlineAlert>}
         {/* Informations générales */}
-        <div onFocusCapture={()=>setGeneralActive(true)}>
+        <div onFocusCapture={()=>{if(!generalComplete)setGeneralActive(true);}}>
         <PageSection title="Informations générales" surface="card" gap={0} className="general section-preview"
           actions={<Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />}>
         <Accordion key={generalVersion} items={[{
           id:'general', defaultOpen: generalVersion > 0 || generalActive,
           title: 'Détails de la perturbation',
-          content: <GeneralInformation data={data} errors={fieldErrors} onChange={change}
-            onPublicationPending={setPublicationPending}/>
+          content: <GeneralInformation data={data} errors={fieldErrors} onChange={changeGeneral}
+            onPublicationPending={updatePublicationPending}/>
 
         }]} />
         </PageSection>

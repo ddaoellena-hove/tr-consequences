@@ -54,8 +54,16 @@ Modifier un impact invalide la validation de l’étape concernée et des étape
 
 ## Informations générales dans le stepper — 30 octobre 2026
 
-Le stepper de déclaration compte six étapes : Informations générales, Objets impactés, Sévérité, Périodes / créneaux, Messages, Résumé. La première est commune à tous les impacts ; les cinq suivantes suivent l’impact sélectionné. Le clic sur la première étape ouvre l’accordéon et rend le formulaire accessible ; La section Informations générales ne contient plus de bouton Suivant ; le stepper permet de rejoindre les objets impactés. Précédent depuis Objets revient aux informations générales. Le focus dans une section actualise le contexte actif du stepper.
+Le stepper de déclaration compte six étapes : Informations générales, Objets impactés, Sévérité, Périodes / créneaux, Messages, Résumé. La première est commune à tous les impacts ; les cinq suivantes suivent l’impact sélectionné. Le clic sur la première étape ouvre l’accordéon et rend le formulaire accessible ; La section Informations générales ne contient plus de bouton Suivant ; le stepper permet de rejoindre les objets impactés. Précédent depuis Objets revient aux informations générales. Le focus dans Impacts actualise le contexte actif ; le focus dans Informations générales ne réactive cette étape que si elle est incomplète. Le retour explicite par le stepper reste disponible.
 
 La première pastille reflète les champs obligatoires et la saisie de publication en cours. La progression et les compteurs affichés sont sur six étapes ; les indices internes des cinq étapes d’impact et des validations restent inchangés. La création peut toujours être activée après validation des messages (cinquième étape globale), sans visite obligatoire du résumé. Les données des informations générales ne sont pas dupliquées par impact.
 
 L’essai d’agrandissement des pastilles est annulé : pastille de 12 px, coche de 8 px et hauteur du footer antérieure rétablies.
+
+## Avancement automatique des informations générales — 30 octobre 2026
+
+Le passage d’incomplet à complet des informations générales désactive automatiquement le contexte général dans le stepper. L’étape courante de l’impact sélectionné devient active (Objets au début, ou l’étape déjà atteinte). La transition dépend aussi de la confirmation de la date de publication. Elle ne déplace ni le focus ni le scroll et ne modifie ni les validations d’impact ni les conditions de création.
+
+Effacer un champ obligatoire ou commencer une saisie de date réactive le contexte général ; corriger et confirmer permet de reprendre automatiquement. Les champs facultatifs d’une section déjà valide ne réactivent pas cette étape. Le clic explicite sur la première étape permet toujours de consulter les informations complètes, sans bascule immédiate vers les impacts.
+
+Contrôles réalisés : dernier champ obligatoire, effacement/correction, étiquette facultative, année de publication partielle puis retour à sa valeur initiale, retour explicite par le sélecteur mobile et reprise d’un impact déjà à Sévérité. Le focus reste sur Nom et le scroll à sa position initiale pendant les bascules testées sur mobile et desktop. Les 37 tests, le contrôle des tokens et le build passent.
