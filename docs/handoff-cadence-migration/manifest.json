@@ -114,7 +114,7 @@
     },
     {
       "path": "snapshots/traffic-report/vendor/cadence-ui/provenance.json",
-      "sha256": "a73de7f270c080bbdbcb1fc6fb337dc166a31dd5b9a605c929220fefd62ba94a",
+      "sha256": "283aa9210e55f18c686cccb99ee5e3d48aaa8f1519f24be5682bafa6063510cc",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/provenance.json"
     },
     {
@@ -375,7 +375,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "a274fd929a7b111d452138ac559ee5386a166bc7bb463eb82b419cd7c078aa93"
+      "sha256": "011b708f215f96716e57469d6849e017bc125b2256e84a9f5a2f799618ab619c"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -390,7 +390,7 @@
     {
       "path": "snapshots/traffic-report/src/ImpactMessages.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ImpactMessages.jsx",
-      "sha256": "4275f741167f348ec8ced8cc8258f6c6e752b9583e4f236b8d3e4560a07924e3"
+      "sha256": "333ddaa0209bda4b795bb58abeb4cdac1ca306d0b8d8759275b1060331ee3757"
     },
     {
       "path": "snapshots/traffic-report/src/DisruptionSummary.jsx",
@@ -561,9 +561,29 @@
       "path": "snapshots/traffic-report/tests/declaration-steps.test.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/declaration-steps.test.mjs",
       "sha256": "bf944e8ec35115561d393568005bfe73a06422a2c3507641c516709ac59886ab"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/icon-registry.ts",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/icon-registry.ts",
+      "sha256": "cfef1d3d70789031536b94bec815c80cd4a8c6adc74b86526088c8d0be50a1eb"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/icon-translate.tsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/icon-translate.tsx",
+      "sha256": "c7687604d584efb224988dc88ec6feba9b5b80ac963bba80b63caee3dbe6a7fa"
+    },
+    {
+      "path": "snapshots/cadence/src/components/icon-registry.ts",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/icon-registry.ts",
+      "sha256": "cfef1d3d70789031536b94bec815c80cd4a8c6adc74b86526088c8d0be50a1eb"
+    },
+    {
+      "path": "snapshots/cadence/src/components/icon-translate.tsx",
+      "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/icon-translate.tsx",
+      "sha256": "c7687604d584efb224988dc88ec6feba9b5b80ac963bba80b63caee3dbe6a7fa"
     }
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Ajout et édition de traductions dans un Drawer Cadence lg, au lieu de Modal ; compteur, données et retour de focus conservés."
+  "updated_note": "Icône translate-01 fournie par l’utilisateur, tracé exact dans le registre Cadence et les boutons Traductions génériques / par canal ; source et empreinte tracées."
 }

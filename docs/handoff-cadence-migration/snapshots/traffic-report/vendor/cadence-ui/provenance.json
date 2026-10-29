@@ -134,7 +134,7 @@
     "src/form-actions.css": "5157318acf1747fa2fa479e82583b93a169c1081eb1c0d48f7de564f25f94d78",
     "src/ghost-button.css": "634d017095027500f67ee50ee5198592aec1d7385fd44e615d6badefa0d4722f",
     "src/icon-mobility.tsx": "05120b4b30c05600ccc2456da2d80e28c9706183846b0c5a123c0ef4ade5d3ee",
-    "src/icon-registry.ts": "f9bca88e407aa2d8c1d6cab41c9302dabc235d9a795cc14ecc6c6f6c63104912",
+    "src/icon-registry.ts": "cfef1d3d70789031536b94bec815c80cd4a8c6adc74b86526088c8d0be50a1eb",
     "src/icon-walk.tsx": "4a5fbbea3304aa99bc78d3dc84839aab2ddd85b9c3575910181b693eb63239cc",
     "src/icons.css": "551fae352085a6d2375cd9231a1a81b873e05ef9593edba4476e3e51ec4e0a02",
     "src/index.ts": "5f6e3ec767fe95e0ce3a9384041b1701601dfaed1b841783250300281f28bbc1",
@@ -180,6 +180,14 @@
     "src/tokens.css": "a5cdfa8c633e821a9f630fa12f87add939582a7e5457a5bce46db6ec8a817a07",
     "src/tooltip.css": "a774c37dc849a0b3c8df8c3accf221f6a9b120373a4b908bf6832278951d1116",
     "src/use-popover-fit.ts": "20260ff05c4e1d2f17ae2780a3b7b33eefac86731170e296ee832d5e92f85b3e",
-    "src/useToast.ts": "33780455bc3d414f33908a617a4f2279993fcffdc9eb333509796f321c2a2f3e"
+    "src/useToast.ts": "33780455bc3d414f33908a617a4f2279993fcffdc9eb333509796f321c2a2f3e",
+    "src/icon-translate.tsx": "c7687604d584efb224988dc88ec6feba9b5b80ac963bba80b63caee3dbe6a7fa"
+  },
+  "custom_icons": {
+    "translate-01": {
+      "source": "/Users/ddao-ellena/Documents/__HOVE/ICONS/translate-01.svg",
+      "source_sha256": "16de99472a4765afd959c39c8f20eb7cb7d41c9e22a5adf2aed833c50991180d",
+      "adaptation": "Exact path geometry; fill inherits the Cadence control color."
+    }
   }
 }

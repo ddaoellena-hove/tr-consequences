@@ -180,4 +180,4 @@ Le rayon de 12 px réutilise `--cadence-radius-xl`. Ces tokens sont définis dan
 4. Pour chaque contribution : API documentée, stories (états, libellés longs, clavier, responsive), tests de comportement nécessaires, guidelines, migration des usages et retrait des contournements locaux devenus inutiles.
 5. Publier le package selon le processus du dépôt, puis mettre à jour et tester les produits consommateurs. Ne pas affirmer que l’intégration est faite tant que leurs dépendances et usages n’ont pas été migrés.
 
-Les noms `FormField`, `RepeatableFieldGroup` et `surface="elevated"` restent proposés. Les seuls ajouts communs effectivement réalisés dans ce chantier sont les tokens globaux ci-dessus ; les composants/variantes décrits ici restent à développer.
+Les noms `FormField`, `RepeatableFieldGroup` et `surface="elevated"` restent proposés. Les ajouts communs effectivement réalisés comprennent les tokens globaux ci-dessus et l’icône `translate-01` fournie par l’utilisateur, ajoutée au registre pour les boutons Traductions. Les composants/variantes décrits ici restent à développer.

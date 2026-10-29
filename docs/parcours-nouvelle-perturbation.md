@@ -73,3 +73,5 @@ Contrôles réalisés : dernier champ obligatoire, effacement/correction, étiqu
 Les actions Traductions du message générique et de chaque canal ouvrent désormais un Drawer Cadence de largeur lg, à la place de la Modal. Le panneau conserve la langue, l’ajout sans doublon, l’édition du titre/message et la suppression des traductions. L’en-tête et l’action Fermer restent fixes ; le corps défile. Les modifications sont conservées dans l’impact au fil de la saisie, comme auparavant, sans nouveau mécanisme d’annulation ou de traduction automatique. La fermeture restitue le focus au bouton Traductions.
 
 Vérifications : ajout d’une traduction anglaise, saisie des deux champs, compteur mis à jour, fermeture et réouverture avec les valeurs conservées. Les 37 tests, le contrôle des tokens et le build passent.
+
+Les GhostButton Traductions du message générique et des canaux utilisent le pictogramme fourni `translate-01.svg`, enregistré sous `translate-01` dans le registre Cadence et consommé via `iconStart`. Le tracé est conservé à l’identique ; sa couleur hérite du bouton. La copie vendor enregistre l’empreinte du fichier fourni.
