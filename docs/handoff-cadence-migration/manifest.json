@@ -124,7 +124,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "9570a0caffbdcdfae02a50b79449847ba458137b9dc6b618a341813924371215",
+      "sha256": "0c3a044fa1db868e3f00f5eec0e814e734fead48c816adf803ce8d190de8dc03",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "09e5c39a63c94367f00780e91d4d1a3ae12b20f757a4b7cddbf70dd05bcdaa6e",
+      "sha256": "0ece69c695e8bcf80541dc5f40e190bcd650d2d17ad32fd7bbc060964b529117",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -425,7 +425,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "7a2459ee2d5284a52dc41ff036844c710c5f60c15e478dab662016f493b8db58"
+      "sha256": "a786431c9e266d9561497a928c825107badb4143346285e18dc1a2c51e539618"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -576,5 +576,5 @@
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
   "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
-  "updated_note": "Schéma sans carte imbriquée, pleine largeur dans Impacts avec séparateur gris ; alerte de conséquence sans badge."
+  "updated_note": "30 octobre : suppression des options d’affichage ; schéma animé conservé avec sa configuration par défaut."
 }

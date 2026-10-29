@@ -27,9 +27,11 @@ import {
   PageHeader,
   Breadcrumbs,
   Accordion, PageSection, FormActions, ProgressBar, Modal, Toaster, toast,
-  SegmentedControl, Badge,
-  Toggle, EmptyState, SummaryList,
+  Badge,
+  EmptyState, SummaryList,
 } from '@ddaoellena/cadence-ui';
+
+const DIAGRAM_OPTIONS={colorCode:true,showTag:true,animate:true,speed:'normale',labels:true};
 
 function loadDraft() {
   try {
@@ -105,15 +107,6 @@ export default function App() {
   const [record, setRecord] = useState(null);
   const [activeNav, setActiveNav] = useState('new');
   const [network, setNetwork] = useState('idfm');
-
-  // Options d'affichage interactives (Tweaks)
-  const [tweaks, setTweaks] = useState({
-    colorCode: true,
-    showTag: true,
-    animate: true,
-    speed: 'normale',
-    labels: true,
-  });
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -379,19 +372,7 @@ export default function App() {
           <>
             {diagrams.views.length>1&&<p className="workflow-muted">Un schéma par ligne concernée : la sévérité s’applique au tronçon sélectionné sur chacune de ces lignes.</p>}
             {diagrams.unavailable.length>0&&<p className="workflow-muted">Aperçu indisponible pour : {diagrams.unavailable.join(', ')}. Le détail reste disponible dans le résumé.</p>}
-            {diagrams.views.map(view=><LineDiagram key={view.key} title={diagrams.views.length>1?`Conséquence sur ${view.line.name||`la ligne ${view.line.code}`}`:undefined} impact={{...i,from:view.from,to:view.to}} sev={sev} stations={view.stations} line={view.line} tweaks={tweaks}/>)}
-
-            {/* Options d'affichage interactives (Tweaks) */}
-            <PageSection title="Options d’affichage" headingLevel={3} className="tweaks-bar" gap={12}>
-              <div className="tweaks-controls">
-                {[['colorCode','Code couleur'],['showTag','Tag passant/bloquant'],['animate','Animation bus'],['labels','Arrêts']].map(([key,label]) =>
-                  <div className="display-option" key={key}><Toggle aria-label={label} state={tweaks[key] ? 'active' : 'default'}
-                    onChange={value => setTweaks(prev => ({...prev,[key]:value}))}/><span>{label}</span></div>)}
-                <SegmentedControl aria-label="Vitesse d’animation" size="sm" value={tweaks.speed} disabled={!tweaks.animate}
-                  options={[{value:'lente',label:'Lente'},{value:'normale',label:'Normale'},{value:'rapide',label:'Rapide'}]}
-                  onChange={speed=>setTweaks(prev=>({...prev,speed}))}/>
-              </div>
-            </PageSection>
+            {diagrams.views.map(view=><LineDiagram key={view.key} title={diagrams.views.length>1?`Conséquence sur ${view.line.name||`la ligne ${view.line.code}`}`:undefined} impact={{...i,from:view.from,to:view.to}} sev={sev} stations={view.stations} line={view.line} tweaks={DIAGRAM_OPTIONS}/>)}
 
             {/* Carte « Conséquence sur l'objet » */}
             <ConsequenceCard sev={sev} />

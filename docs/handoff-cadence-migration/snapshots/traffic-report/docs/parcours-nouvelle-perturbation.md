@@ -41,3 +41,7 @@ La composition locale `CompactImpactStepper` utilise les boutons, icônes et Dro
 Le schéma de conséquence, ses options d’affichage et son InlineAlert sont regroupés dans le corps de la section Impacts, après la sélection de sévérité et avant Précédent / Suivant. Cette composition comprend aussi les aperçus par ligne et les messages de remplacement ; elle reste limitée à l’étape Sévérité. Les titres des schémas sont de niveau 3, sous le titre de section de niveau 2.
 
 Le schéma ne possède plus de carte imbriquée : sa section nue occupe toute la largeur intérieure d’Impacts, après un séparateur gris sous le champ Sévérité. Les options et l’alerte conservent leur padding latéral. Le badge passant / bloquant est retiré de l’InlineAlert bleu ; il reste dans l’en-tête du schéma et sa légende.
+
+## Simplification du 30 octobre 2026
+
+La partie Options d’affichage est supprimée. Le schéma utilise une configuration fixe : couleurs et labels visibles, badge dans son en-tête, animation active à vitesse normale. L’alerte de conséquence reste sans badge. Les mentions antérieures des contrôles d’affichage décrivent l’historique du prototype.
