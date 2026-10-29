@@ -23,7 +23,7 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .field { max-width: var(--tr-field-max); }
 .field > .dropdown, .fields > .dropdown, .general-fields > .dropdown { width: 100%; }
 .impact-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--tr-space-12); padding:var(--tr-space-16) var(--tr-space-24); border-bottom:var(--tr-border-width) solid var(--cadence-color-divider); }
-.impact-head > div { display:flex; align-items:center; gap:var(--tr-space-12); }
+.impact-head > div { display:flex; align-items:center; flex-wrap:wrap; gap:var(--tr-space-12); }
 .impact-count { white-space:nowrap; color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); }
 .steps-container { padding:var(--tr-space-24); overflow-x:auto; }
 .form-content { padding:var(--tr-space-24) var(--tr-space-32) var(--tr-space-16); min-height:var(--tr-form-min-height); }

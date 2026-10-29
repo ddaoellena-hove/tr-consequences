@@ -1,4 +1,4 @@
-import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, newImpact, initial } from './traffic-model.mjs';
+import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, newImpact, initial, removeFormImpact } from './traffic-model.mjs';
 import Dashboard from './Dashboard.jsx';
 import {GeneralInformation} from './GeneralInformation.jsx';
 import {withGeneralInformation} from './general-information.mjs';
@@ -93,6 +93,7 @@ export default function App() {
   const [restored] = useState(loadDraft);
   const [data, setData] = useState(() => restored || initial());
   const [current, setCurrent] = useState(0);
+  const [impactToDelete, setImpactToDelete] = useState(null);
   const [step, setStep] = useState(1);
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState('');
@@ -321,6 +322,8 @@ export default function App() {
                 {data.impacts.length} impact{data.impacts.length > 1 ? 's' : ''}
               </span>
             </div>
+            <div>
+            <GhostButton size="sm" tone="danger" iconStart="trash" label="Supprimer l’impact" disabled={data.impacts.length === 1} onClick={()=>setImpactToDelete(current)}/>
             <GhostButton
               size="sm"
               label="Ajouter un impact"
@@ -334,6 +337,7 @@ export default function App() {
                 notify('Un nouvel impact a été ajouté.');
               }}
             />
+            </div>
           </div>
 
           <nav className="steps-container cadence-scrollbar" aria-label="Étapes de la déclaration">
@@ -421,7 +425,7 @@ export default function App() {
         </PageSection>
 
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
-        {issue(i, 0) ? (
+        {step === 1 && (issue(i, 0) ? (
           <div className="consequence-wrap">
             <InlineAlert type="warning" title="Schéma indisponible">
               Sélectionnez un tronçon dont l’arrêt de fin se situe après l’arrêt de début.
@@ -446,9 +450,7 @@ export default function App() {
             {/* Carte « Conséquence sur l'objet » */}
             <ConsequenceCard sev={sev} tweaks={tweaks} />
           </>
-        )}
-
-
+        ))}
 
         <p className="prototype-note">
           Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs
@@ -465,6 +467,20 @@ export default function App() {
         </FormActions>
       </footer>
 
+      <Modal isOpen={impactToDelete !== null} onClose={()=>setImpactToDelete(null)} size="small"
+        title={`Supprimer l’impact n° ${(impactToDelete ?? 0) + 1} ?`}
+        secondaryAction={{label:'Annuler', onClick:()=>setImpactToDelete(null)}}
+        primaryAction={{label:'Supprimer', destructive:true, onClick:()=>{
+          const next=removeFormImpact({impacts:data.impacts,current,impactSteps,completed},impactToDelete);
+          if(next){
+            change({impacts:next.impacts}); setCurrent(next.current); setStep(next.step);
+            setImpactSteps(next.impactSteps); setCompleted(next.completed); setDatePending({});
+            notify('L’impact a été supprimé.');
+          }
+          setImpactToDelete(null);
+        }}}>
+        <p>Le périmètre, la sévérité, la période et le message de cet impact seront retirés du formulaire. Les autres impacts seront conservés.</p>
+      </Modal>
       <Toaster />
       <Modal isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} title="Navigation">
         <SummaryList aria-label="Navigation principale" items={[
