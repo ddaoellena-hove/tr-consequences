@@ -295,7 +295,6 @@ export default function App() {
           />
         }
         title={data.publication ? data.title || 'Déclaration de perturbation' : 'Nouvelle perturbation prévue'}
-        subtitle="Déclaration de perturbation"
         actions={
           <>
             <GhostButton size="sm" label="Tableau de bord" iconStart="arrow-left" onClick={() => navigate('dashboard')}/>
