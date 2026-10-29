@@ -124,17 +124,17 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "668070fc767686b2928522dae317914c580356180aa469bccdebc69b8cdd436f",
+      "sha256": "9570a0caffbdcdfae02a50b79449847ba458137b9dc6b618a341813924371215",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
       "path": "snapshots/traffic-report/src/LineDiagram.jsx",
-      "sha256": "cf2417f71eea0fd65997948aa5c2ba54742bbe190aa30374eec9a01f457309a1",
+      "sha256": "df01824d6b4fa7a2efbff0f849af467cf8ccc0d4099b1c126944b88b51f08ceb",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/LineDiagram.jsx"
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "1d099307c188b32c1ef03ca3d1a5f3f593044f35789c203f86e139ba361a9c30",
+      "sha256": "09e5c39a63c94367f00780e91d4d1a3ae12b20f757a4b7cddbf70dd05bcdaa6e",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -425,7 +425,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "3fd58cb652bb77461603b2b4eff095d78752bc09bbe7092ae65fe31738de3ecb"
+      "sha256": "7a2459ee2d5284a52dc41ff036844c710c5f60c15e478dab662016f493b8db58"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -576,5 +576,5 @@
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
   "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
-  "updated_note": "Schéma, options et InlineAlert intégrés dans la section Impacts avant sa navigation, uniquement à l’étape Sévérité."
+  "updated_note": "Schéma sans carte imbriquée, pleine largeur dans Impacts avec séparateur gris ; alerte de conséquence sans badge."
 }

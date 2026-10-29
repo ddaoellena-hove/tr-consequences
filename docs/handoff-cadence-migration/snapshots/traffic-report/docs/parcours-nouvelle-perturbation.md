@@ -39,3 +39,5 @@ Sur mobile : un Dropdown Cadence expose l’étape active et la liste des étape
 La composition locale `CompactImpactStepper` utilise les boutons, icônes et Dropdown de Cadence ; elle ne modifie pas l’API Stepper de la bibliothèque. Le contrôle `go` et les validations existantes sont conservés. Ajouter cette variante compacte au design system reste une évolution distincte.
 
 Le schéma de conséquence, ses options d’affichage et son InlineAlert sont regroupés dans le corps de la section Impacts, après la sélection de sévérité et avant Précédent / Suivant. Cette composition comprend aussi les aperçus par ligne et les messages de remplacement ; elle reste limitée à l’étape Sévérité. Les titres des schémas sont de niveau 3, sous le titre de section de niveau 2.
+
+Le schéma ne possède plus de carte imbriquée : sa section nue occupe toute la largeur intérieure d’Impacts, après un séparateur gris sous le champ Sévérité. Les options et l’alerte conservent leur padding latéral. Le badge passant / bloquant est retiré de l’InlineAlert bleu ; il reste dans l’en-tête du schéma et sa légende.

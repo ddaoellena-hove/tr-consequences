@@ -209,3 +209,19 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 @media (max-width:1024px) {
  .declaration-toaster { bottom:calc(var(--tr-space-32) * 6); }
 }
+
+/* The consequence diagram uses the impact surface, without a nested card. */
+.impact-consequences { border-top:var(--tr-border-width) solid var(--cadence-color-divider); padding-block:var(--tr-space-24) var(--tr-space-16); }
+.impact-consequences > .diagram-section { margin:0; }
+.impact-consequences > .diagram-section + .diagram-section { margin-top:var(--tr-space-24); }
+.impact-consequences .diagram-section > .page-section__head { padding-inline:var(--tr-space-32); }
+.impact-consequences .diagram-content { padding:var(--tr-space-16) 0; }
+.impact-consequences > .tweaks-bar,
+.impact-consequences > .consequence-wrap,
+.impact-consequences > .workflow-muted { margin-inline:var(--tr-space-32); }
+@media (max-width:760px) {
+ .impact-consequences .diagram-section > .page-section__head { padding-inline:var(--tr-space-16); }
+ .impact-consequences > .tweaks-bar,
+ .impact-consequences > .consequence-wrap,
+ .impact-consequences > .workflow-muted { margin-inline:var(--tr-space-16); }
+}

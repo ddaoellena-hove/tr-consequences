@@ -70,9 +70,8 @@ function SeverityField({ value, onChange }) {
       icon: <span className="severity-dot" data-severity={s.id} aria-hidden="true" />
     }))} />;
 }
-function ConsequenceCard({ sev, tweaks }) {
+function ConsequenceCard({ sev }) {
   return <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur l’objet">
-    {tweaks.showTag && <Indicator variant={tweaks.colorCode ? sev.variant : 'draft'} label={sev.tag} />}
     <p>{sev.lead} <strong>{sev.conseq}</strong></p>
   </InlineAlert></div>;
 }
@@ -368,8 +367,9 @@ export default function App() {
             {step === 3 && <ImpactMessages key={current} impact={i} errors={fieldErrors} onChange={updateImpact} onPending={(key,value)=>setDatePending(prev=>({...prev,[key]:value}))}/>}
             {step === 4 && <DisruptionSummary data={data} stations={stations} onEdit={(index,target)=>{setCurrent(index);setStep(target);setImpactSteps(prev=>({...prev,[index]:target}));setFieldErrors({});setDatePending({});}}/>}
             </PageSection>
+          </div>
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
-        {step === 1 && SEVERITY_MAP[i.severity] && (diagrams.views.length===0 ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Consultez le détail des objets dans le résumé.</InlineAlert></div> : issue(i, 0) ? (
+        {step === 1 && SEVERITY_MAP[i.severity] && <div className="impact-consequences">{diagrams.views.length===0 ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Consultez le détail des objets dans le résumé.</InlineAlert></div> : issue(i, 0) ? (
           <div className="consequence-wrap">
             <InlineAlert type="warning" title="Schéma indisponible">
               Sélectionnez un tronçon dont l’arrêt de fin se situe après l’arrêt de début.
@@ -394,10 +394,9 @@ export default function App() {
             </PageSection>
 
             {/* Carte « Conséquence sur l'objet » */}
-            <ConsequenceCard sev={sev} tweaks={tweaks} />
+            <ConsequenceCard sev={sev} />
           </>
-        ))}
-          </div>
+        )}</div>}
           <FormActions className="wizard-actions" justify="between">
             <span>Étape {step+1} sur 5</span>
             <div>

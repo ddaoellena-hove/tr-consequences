@@ -6,7 +6,7 @@ Statut : présentation validée par l’utilisateur dans Traffic Report le 29 oc
 
 Donner un repère stable aux sections principales d’une page de formulaire ou d’un tableau de bord : titre et actions hors de la boîte, contenu dans une surface blanche arrondie avec une ombre discrète. La séparation entre sections améliore la lecture des interfaces denses.
 
-Références implémentées dans Traffic Report : Informations générales, Impacts de la perturbation, Schéma de conséquence et Perturbations du réseau. Les cartes d’objets imbriquées conservent leur présentation actuelle. Les sections sans surface restent inchangées.
+Références implémentées dans Traffic Report : Informations générales, Impacts de la perturbation et Perturbations du réseau. Le schéma de conséquence, désormais intégré dans Impacts, est une section nue pleine largeur. Les cartes d’objets imbriquées conservent leur présentation actuelle. Les sections sans surface restent inchangées.
 
 ## Anatomie validée
 
@@ -64,7 +64,7 @@ Dans Traffic Report, l’espace de 32 px est porté par la marge basse d’Infor
 4. Appliquer fond, bordure, rayon et ombre au corps uniquement ; laisser la racine transparente et l’en-tête extérieur sans bordure. Préserver l’association `aria-labelledby` entre la section et son titre.
 5. Prévoir la composition avec les actions d’en-tête, une description, un accordéon, des tableaux et des contrôles à menus. Les actions peuvent revenir à la ligne sur petit écran.
 6. Ajouter les exemples et critères ci-dessous à Storybook et aux guidelines. Le nom définitif de la variante doit suivre les conventions du dépôt.
-7. Migrer les quatre usages Traffic Report vers cette variante, puis supprimer les surcharges applicatives. Le token global d’ombre est déjà consommé directement.
+7. Migrer les trois usages principaux Traffic Report vers cette variante, puis supprimer les surcharges applicatives. Le token global d’ombre est déjà consommé directement.
 
 Ne pas déplacer le contenu dans un nouveau repère `section` sans titre : la section nommée doit continuer à englober en-tête et corps. Les titres de formulaire restent en Diatype et conservent leur hiérarchie ; le changement de surface ne doit pas introduire Uxum.
 
@@ -74,7 +74,7 @@ Ne pas déplacer le contenu dans un nouveau repère `section` sans titre : la se
 - Traffic Report `src/styles.css` : consommation directe du token global ; aucune définition ni alias d’ombre `--tr-*`. Le rayon Cadence existant est réutilisé directement.
 - `src/styles.css` : sélecteurs `.section-preview.page-section--card` et enfants directs `.page-section__head` / `.page-section__body`.
 - `src/app.jsx` : opt-in des sections Informations générales et Impacts de la perturbation.
-- `src/LineDiagram.jsx` : opt-in du schéma de conséquence.
+- `src/LineDiagram.jsx` : section nue intégrée dans Impacts, sans opt-in de surface avec ombre.
 - `src/Dashboard.jsx` : opt-in de la section Perturbations du réseau.
 
 Le nom technique `section-preview` est conservé jusqu’à la migration vers une véritable variante de la bibliothèque. Il ne représente pas une API publique de Cadence. Le token global a été ajouté au dépôt source Cadence et à la copie vendor ciblée. La variante de PageSection elle-même reste à intégrer dans la bibliothèque. Les autres changements déjà présents dans Cadence sont préservés.

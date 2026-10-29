@@ -183,7 +183,7 @@ export function LineDiagram({ impact, sev, stations, line = {code:'12',mode:'bus
   }, [sev?.id, tweaks.animate, tweaks.speed, stopFrom, stopTo, passant]);
 
   return (
-    <PageSection title={title} headingLevel={3} surface="card" gap={0} className="diagram-section section-preview"
+    <PageSection title={title} headingLevel={3} gap={0} className="diagram-section"
       actions={<div className="diagram-identity"><LineBadge code={line.code} mode={line.mode} color={line.color} size="sm"/><span className="line-name">{line.name||`Ligne ${line.code}`}</span>
         {sev && <Indicator variant={colorOn ? sev.variant : 'draft'} label={sev.tag}/>}</div>}>
     <div className="diagram-content" data-severity={sev?.id} data-color-code={colorOn}>
