@@ -1,6 +1,7 @@
 import './workflow.css';
 import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, initial, removeFormImpact } from './traffic-model.mjs';
 import Dashboard from './Dashboard.jsx';
+import {CompactImpactStepper} from './CompactImpactStepper.jsx';
 import {ImpactObjects} from './ImpactObjects.jsx';
 import {ImpactSchedule} from './ImpactSchedule.jsx';
 import {ImpactMessages} from './ImpactMessages.jsx';
@@ -17,7 +18,6 @@ import {
   PrimaryButton,
   GhostButton,
   Dropdown,
-  Stepper,
   InlineAlert,
   Indicator,
   LineBadge,
@@ -295,7 +295,6 @@ export default function App() {
           />
         }
         title={data.publication ? data.title || 'Déclaration de perturbation' : 'Nouvelle perturbation prévue'}
-        subtitle="Déclaration de perturbation"
         actions={
           <>
             <GhostButton size="sm" label="Tableau de bord" iconStart="arrow-left" onClick={() => navigate('dashboard')}/>
@@ -358,19 +357,6 @@ export default function App() {
             </div>
           </div>
 
-          <nav className="steps-container cadence-scrollbar" aria-label="Étapes de la déclaration">
-            <Stepper orientation={narrow ? 'vertical' : 'horizontal'}
-              steps={STEP_LABELS.map((label, n) => ({
-                id: String(n),
-                label,
-                state: n === step ? 'current' : (completed[current] || []).includes(n) && !issue(i,n) ? 'completed' : 'upcoming',
-              }))}
-              onStepClick={(n) => go(Number(n))}
-            />
-          </nav>
-
-          <ProgressBar className="declaration-progress" value={(step + 1) * 20} aria-label="Progression de la déclaration" />
-
           <div className="form-content">
             <PageSection headingLevel={3} gap={20}
               title={STEP_LABELS[step]}
@@ -384,13 +370,6 @@ export default function App() {
             </PageSection>
           </div>
 
-          <FormActions className="wizard-actions" justify="between">
-            <span>Étape {step + 1} sur 5</span>
-            <div>
-              <GhostButton size="sm" label="Précédent" disabled={step === 0} onClick={() => go(step - 1)} />
-              {step < 4 && <PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={() => go(step + 1)} />}
-            </div>
-          </FormActions>
         </PageSection>
 
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
@@ -429,13 +408,22 @@ export default function App() {
       </div>
       </div>
       <footer className="declaration-footer" aria-label="Actions de la déclaration">
-        <FormActions className="page-actions" justify="between">
-          <span>{saveState}</span>
-          <div>
-            <PrimaryButton outline size="sm" label="Enregistrer le brouillon" onClick={save} />
-            {step === 4 && <PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate} />}
+        <ProgressBar className="declaration-progress footer-progress" value={(step+1)*20} aria-label={`Position dans le parcours de l’impact n° ${current+1} : étape ${step+1} sur 5`}/>
+        <div className="declaration-footer-content">
+          <CompactImpactStepper current={step} impactNumber={current+1} compact={narrow}
+            steps={STEP_LABELS.map((label,n)=>({label,
+              state:n===step?(Object.keys(fieldErrors).length?'error':'current'):(completed[current]||[]).includes(n)?(issue(i,n)?'warning':'completed'):'upcoming',
+              available:n<=step||(completed[current]||[]).includes(n)}))}
+            onStepClick={go}/>
+          <div className="footer-action-area">
+            <FormActions className="footer-actions" justify="end">
+              <PrimaryButton outline size="sm" iconStart="save-01" label={narrow?'Brouillon':'Enregistrer le brouillon'} onClick={save}/>
+              <GhostButton size="sm" label="Précédent" iconStart="arrow-left" disabled={step===0} onClick={()=>go(step-1)}/>
+              {step<4?<PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={()=>go(step+1)}/>:<PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate}/>}
+            </FormActions>
+            <span className="footer-save-state" role="status">{saveState}</span>
           </div>
-        </FormActions>
+        </div>
       </footer>
 
       <Modal isOpen={impactToDelete !== null} onClose={()=>setImpactToDelete(null)} size="small"

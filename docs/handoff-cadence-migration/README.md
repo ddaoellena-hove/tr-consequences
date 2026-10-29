@@ -51,3 +51,7 @@ Un aperçu par ligne et par tronçon remplace la limitation au premier tronçon.
 ## PageSection : présentation validée
 
 Voir [PageSection — surface validée](PAGESECTION-SURFACE-VALIDEE.md) pour l’anatomie, les tokens, les espacements et la proposition d’intégration dans Cadence. Cette fiche décrit une évolution de composant à réaliser dans une mission distincte de la mise à jour documentaire.
+
+## Navigation du formulaire
+
+La navigation est désormais regroupée dans le footer fixe : stepper compact, contexte de l’impact, progression en haut et actions à droite. Sur mobile, liste des étapes dans un Dropdown ouvrant vers le haut. Voir le snapshot de `docs/parcours-nouvelle-perturbation.md` et `src/CompactImpactStepper.jsx`. Cette composition locale reste à formaliser comme variante Cadence si elle est retenue.

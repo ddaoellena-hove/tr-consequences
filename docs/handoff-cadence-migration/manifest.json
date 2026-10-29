@@ -124,7 +124,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "12f89e6f3b1ccd76b6276600cb37ad5162ecfadafef9d93fca940496f967f22c",
+      "sha256": "35b1a5ba510a2f763be84c4c5ac75b4ca7ba4fd57ffb70dbcbaa2948e09504cf",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "7fadca0245d11aa28ea9e7bd024b5e3cc70f4fbaf34a94c9ec80f6db6c1c250a",
+      "sha256": "541f6241a7f65bd2cb4bc14d678d6b6a083c947066232fc5aee0812a6c814276",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -425,7 +425,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "954abf074d450ad1d63b25894050aa39abe019ae1ef5d1820c77ab41d320d4e4"
+      "sha256": "739df035c1c0f932bdd06720c04274af1b14767bf88606ab9583dd9782f22c79"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -566,10 +566,15 @@
       "path": "snapshots/traffic-report/tests/consequence-diagrams.test.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/consequence-diagrams.test.mjs",
       "sha256": "0b58a30d91470f878a2436af9e30171cc9ed773964f6246733ee47e0c3c98eb5"
+    },
+    {
+      "path": "snapshots/traffic-report/src/CompactImpactStepper.jsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/CompactImpactStepper.jsx",
+      "sha256": "a50205be147d985824ce9aecb63b1f27794ea00f375090e170263774e0e7a91e"
     }
   ],
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
   "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
-  "updated_note": "Fondations Cadence : ombre de section et six tokens de composition globaux, consommés directement par les pages Traffic Report. Documentation et snapshots actualisés."
+  "updated_note": "Stepper compact local composé de contrôles Cadence, progression et navigation dans le footer fixe. Desktop et mobile vérifiés ; aucune nouvelle API publique Cadence."
 }

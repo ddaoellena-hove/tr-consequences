@@ -29,3 +29,11 @@ Le choix de propriétés prédéfinies pour les informations générales reste e
 - `workflow.css` : composition et responsive, avec tokens Cadence / extensions Traffic Report.
 
 23 tests unitaires passent, ainsi que le contrôle des tokens et le build Vite. Les cas ajoutés portent sur objets multiples, brouillons vides, périodes disjointes, créneaux récurrents de nuit, messages personnalisés et persistance des nouvelles structures. Contrôle navigateur : ajout de ligne à un tronçon, navigation jusqu’au résumé, blocage de créneau incomplet, retour aux périodes sans perte, application du générique et vérification des canaux, rendu bureau et étroit. La validation finale n’a pas été exercée sur les données personnelles du navigateur ; sa validation et sa persistance sont couvertes séparément par les tests de règles et de sauvegarde.
+
+## Navigation fixe compacte — 29 octobre 2026
+
+Le stepper et la progression sont déplacés de la carte Impacts vers le footer fixe. Sur desktop : cinq icônes Cadence et pastilles d’état, infobulles au survol / focus, puis contexte « Impact n° N · étape/5 · libellé actif ». Les étapes terminées restent accessibles ; les étapes futures restent indisponibles. La progression indique la position dans le parcours de l’impact courant, pas la complétude globale de la déclaration.
+
+Sur mobile : un Dropdown Cadence expose l’étape active et la liste des étapes, avec les mêmes restrictions. Ce menu s’ouvre au-dessus de la barre pour rester visible. Les boutons Brouillon, Précédent et Suivant (ou Valider à la dernière étape) restent accessibles sans scroller ; le statut du brouillon apparaît sous les actions. La progression est bord à bord en haut du footer, sans arrondi. Les notifications sont positionnées au-dessus de la barre sur petit écran.
+
+La composition locale `CompactImpactStepper` utilise les boutons, icônes et Dropdown de Cadence ; elle ne modifie pas l’API Stepper de la bibliothèque. Le contrôle `go` et les validations existantes sont conservés. Ajouter cette variante compacte au design system reste une évolution distincte.
