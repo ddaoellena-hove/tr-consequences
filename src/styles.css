@@ -159,7 +159,7 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
  background:var(--cadence-color-white);
  border:var(--tr-border-width) solid var(--cadence-color-border);
  border-radius:var(--cadence-radius-xl);
- box-shadow:var(--tr-shadow-section);
+ box-shadow:var(--cadence-shadow-section);
  padding-inline:var(--tr-space-8);
 }
 .general.section-preview { margin-bottom:var(--tr-space-32); }

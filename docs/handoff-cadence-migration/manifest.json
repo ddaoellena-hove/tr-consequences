@@ -134,12 +134,12 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "0ff6563c4b17f9ed194552bd3e277b5c799a4590ed5dde046ecead52bd16c68e",
+      "sha256": "fc139adc3749004a97a7610aed1c297a37447cf23a11809b850993d86c80ef8a",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
       "path": "snapshots/traffic-report/src/tokens.css",
-      "sha256": "b6ecec11cc096449850c740260e74f16a795d8471cda4a6652401b8f90f0769c",
+      "sha256": "399c040c4a76461c5a50645a19d2a85865b65108f5e381d82b07d064d87b5e74",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/tokens.css"
     },
     {
@@ -164,7 +164,7 @@
     },
     {
       "path": "snapshots/traffic-report/vendor/cadence-ui/provenance.json",
-      "sha256": "12d5fb472ac6cc7fffd15c1c3be13cff09dc1f8045e12ac8a53c72ba6fd8dd94",
+      "sha256": "919be131430460f0a8a0ccc823fb19b9d047c2088eba4f6bcbc5cb033d6e2ece",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/provenance.json"
     },
     {
@@ -194,7 +194,7 @@
     },
     {
       "path": "snapshots/cadence/src/components/tokens.css",
-      "sha256": "0e2ddd305fe41712bead73c485074f0846b2d6d2afcf1b268057c2bbcd6ede93",
+      "sha256": "2a196670914ba9d320b39f1293bf4bf52445a9d42a5eaea4aee77d84af23731c",
       "source": "/Users/ddao-ellena/hove-cadence-ui/src/components/tokens.css"
     },
     {
@@ -571,5 +571,5 @@
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
   "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
-  "updated_note": "Inclut la fiche PageSection validée : titre extérieur, rayon Cadence xl de 12 px, ombre dédiée et espacements. Snapshots des sources de cette variante actualisés."
+  "updated_note": "Le token --cadence-shadow-section est défini globalement dans Cadence et consommé sans alias local dans Traffic Report. Fiche PageSection et snapshots actualisés."
 }

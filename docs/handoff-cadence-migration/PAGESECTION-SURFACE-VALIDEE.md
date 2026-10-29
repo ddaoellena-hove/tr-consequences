@@ -26,7 +26,7 @@ Le corps conserve les séparateurs internes utiles au formulaire : barre d’imp
 
 | Propriété | Valeur validée | Token utilisé dans Traffic Report | Cible Cadence proposée |
 | --- | --- | --- | --- |
-| Ombre du corps | `0 0 2px 0 rgba(0, 0, 0, 0.10), 0 2px 10px 0 rgba(0, 0, 0, 0.05)` | `--tr-shadow-section` | Nouveau `--cadence-shadow-section` |
+| Ombre du corps | `0 0 2px 0 rgba(0, 0, 0, 0.10), 0 2px 10px 0 rgba(0, 0, 0, 0.05)` | `--cadence-shadow-section` | Token global créé dans Cadence |
 | Rayon du corps | 12 px | `--cadence-radius-xl` | Réutiliser ce token existant |
 | Fond du corps | Blanc | `--cadence-color-white` | Token existant |
 | Bordure du corps | 1 px, couleur de bordure Cadence | `--tr-border-width` + `--cadence-color-border` | Réutiliser les fondations existantes si disponibles |
@@ -38,10 +38,10 @@ Le corps conserve les séparateurs internes utiles au formulaire : barre d’imp
 
 Le rayon est passé de 10 à 12 px lors de la validation. Utiliser directement `--cadence-radius-xl` ; ne pas modifier globalement `--cadence-radius-lg` et ne pas conserver un calcul « lg + 2 ».
 
-L’ombre est différente des ombres Cadence existantes : créer un token sémantique dédié sans changer `--cadence-shadow-sm` ou `--cadence-shadow-md`, utilisés par d’autres composants.
+L’ombre est différente des ombres Cadence existantes : utiliser le token global dédié sans changer `--cadence-shadow-sm` ou `--cadence-shadow-md`, utilisés par d’autres composants.
 
 ```css
-/* Proposition à intégrer au fichier de tokens Cadence. */
+/* Token global défini dans src/components/tokens.css de Cadence. */
 --cadence-shadow-section: 0 0 2px 0 rgba(0, 0, 0, 0.10),
                           0 2px 10px 0 rgba(0, 0, 0, 0.05);
 ```
@@ -59,24 +59,25 @@ Dans Traffic Report, l’espace de 32 px est porté par la marge basse d’Infor
 ## Intégration recommandée dans Cadence
 
 1. Vérifier le composant PageSection et ses usages actuels avant modification.
-2. Ajouter le token d’ombre à la source de vérité des tokens, puis à ses exports générés selon les conventions du dépôt.
+2. Le token global `--cadence-shadow-section` est désormais défini dans `src/components/tokens.css` et documenté dans `GUIDELINES.md` du dépôt Cadence. Il est consommé directement par Traffic Report via sa copie vendor. Inclure ce changement dans la prochaine publication du package pour le distribuer aux autres produits.
 3. Ajouter une variante explicite, par exemple `surface="elevated"`, pour cette anatomie. **Cette valeur est une proposition et n’existe pas dans la version consommée par Traffic Report.** Conserver `surface="card"` et `surface="none"` pour éviter une modification silencieuse des cartes imbriquées existantes.
 4. Appliquer fond, bordure, rayon et ombre au corps uniquement ; laisser la racine transparente et l’en-tête extérieur sans bordure. Préserver l’association `aria-labelledby` entre la section et son titre.
 5. Prévoir la composition avec les actions d’en-tête, une description, un accordéon, des tableaux et des contrôles à menus. Les actions peuvent revenir à la ligne sur petit écran.
 6. Ajouter les exemples et critères ci-dessous à Storybook et aux guidelines. Le nom définitif de la variante doit suivre les conventions du dépôt.
-7. Migrer les quatre usages Traffic Report vers cette variante, puis supprimer les surcharges applicatives et le token d’ombre local au profit du token Cadence.
+7. Migrer les quatre usages Traffic Report vers cette variante, puis supprimer les surcharges applicatives. Le token global d’ombre est déjà consommé directement.
 
 Ne pas déplacer le contenu dans un nouveau repère `section` sans titre : la section nommée doit continuer à englober en-tête et corps. Les titres de formulaire restent en Diatype et conservent leur hiérarchie ; le changement de surface ne doit pas introduire Uxum.
 
 ## État du code Traffic Report
 
-- `src/tokens.css` : `--tr-shadow-section`, seule nouvelle valeur visuelle nécessaire ; rayon Cadence existant réutilisé directement.
+- Cadence `src/components/tokens.css` : nouveau token global `--cadence-shadow-section`, disponible pour tous les produits.
+- Traffic Report `src/styles.css` : consommation directe du token global ; aucune définition ni alias d’ombre `--tr-*`. Le rayon Cadence existant est réutilisé directement.
 - `src/styles.css` : sélecteurs `.section-preview.page-section--card` et enfants directs `.page-section__head` / `.page-section__body`.
 - `src/app.jsx` : opt-in des sections Informations générales et Impacts de la perturbation.
 - `src/LineDiagram.jsx` : opt-in du schéma de conséquence.
 - `src/Dashboard.jsx` : opt-in de la section Perturbations du réseau.
 
-Le nom technique `section-preview` est conservé jusqu’à la migration vers une véritable variante de la bibliothèque. Il ne représente pas une API publique de Cadence. Le dépôt source Cadence et la copie vendor ne sont pas modifiés par cette validation.
+Le nom technique `section-preview` est conservé jusqu’à la migration vers une véritable variante de la bibliothèque. Il ne représente pas une API publique de Cadence. Le token global a été ajouté au dépôt source Cadence et à la copie vendor ciblée. La variante de PageSection elle-même reste à intégrer dans la bibliothèque. Les autres changements déjà présents dans Cadence sont préservés.
 
 ## Critères d’acceptation
 
