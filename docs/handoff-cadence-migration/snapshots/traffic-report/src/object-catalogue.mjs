@@ -44,6 +44,10 @@ export function buildObject({scope,selectedLines=[],directionSelections={},area,
   target:stopPoint?.name||area?.name||(poi?`${poi.name} · ${poi.address}`:network?.name)||course?.name||'',
   from:from>=0&&to>=0?Math.min(from,to):0,to:from>=0&&to>=0?Math.max(from,to):1,
   fromName:first?.name||'',toName:last?.name||'',stationNames:names,
+  lineSections:['section','railSection'].includes(scope)?selectedLines.map(({stops,directions,id,...l})=>{
+   const start=stops.indexOf(first?.name),end=stops.indexOf(last?.name);
+   return {line:l,stations:stops,from:Math.min(start,end),to:Math.max(start,end)};
+  }):[],
   accessIds,accessName:accessIds.map(id=>ACCESSES.find(a=>a.id===id)).filter(Boolean).map(a=>`${a.id} — ${a.name}`).join(', '),
   courseId:course?.id||'',course:course||null,
  };

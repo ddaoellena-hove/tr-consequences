@@ -12,6 +12,7 @@ import { upsertRecord, makeId } from './dashboard-data.mjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import { issue, impactErrors, generalErrors, validDate } from './validation.mjs';
 import { LineDiagram } from './LineDiagram.jsx';
+import {consequenceDiagrams} from './consequence-diagrams.mjs';
 import {
   PrimaryButton,
   GhostButton,
@@ -125,8 +126,7 @@ export default function App() {
   const line = data.line || {code:'12',mode:'bus',name:'Ligne 12'};
   const i = data.impacts[current];
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
-  const diagramObject=i.objects.find(object=>['section','railSection'].includes(object.scope));
-  const diagramImpact=diagramObject?{...i,from:diagramObject.from,to:diagramObject.to}:i;
+  const diagrams=consequenceDiagrams(i,stations,line);
 
 
 
@@ -394,7 +394,7 @@ export default function App() {
         </PageSection>
 
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
-        {step === 1 && SEVERITY_MAP[i.severity] && ((!diagramObject || diagramObject.stationNames&&diagramObject.stationNames.length!==6) ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Consultez le détail des objets dans le résumé.</InlineAlert></div> : issue(i, 0) ? (
+        {step === 1 && SEVERITY_MAP[i.severity] && (diagrams.views.length===0 ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Consultez le détail des objets dans le résumé.</InlineAlert></div> : issue(i, 0) ? (
           <div className="consequence-wrap">
             <InlineAlert type="warning" title="Schéma indisponible">
               Sélectionnez un tronçon dont l’arrêt de fin se situe après l’arrêt de début.
@@ -402,8 +402,9 @@ export default function App() {
           </div>
         ) : (
           <>
-            {i.objects.length>1&&<p className="workflow-muted">Aperçu du premier tronçon sélectionné. La sévérité s’applique à tous les objets de cet impact.</p>}
-            <LineDiagram impact={diagramImpact} sev={sev} stations={diagramObject.stationNames||stations} line={diagramObject.lines?.[0]||line} tweaks={tweaks} />
+            {diagrams.views.length>1&&<p className="workflow-muted">Un schéma par ligne concernée : la sévérité s’applique au tronçon sélectionné sur chacune de ces lignes.</p>}
+            {diagrams.unavailable.length>0&&<p className="workflow-muted">Aperçu indisponible pour : {diagrams.unavailable.join(', ')}. Le détail reste disponible dans le résumé.</p>}
+            {diagrams.views.map(view=><LineDiagram key={view.key} title={diagrams.views.length>1?`Conséquence sur ${view.line.name||`la ligne ${view.line.code}`}`:undefined} impact={{...i,from:view.from,to:view.to}} sev={sev} stations={view.stations} line={view.line} tweaks={tweaks}/>)}
 
             {/* Options d'affichage interactives (Tweaks) */}
             <PageSection title="Options d’affichage" headingLevel={3} className="tweaks-bar" gap={12}>

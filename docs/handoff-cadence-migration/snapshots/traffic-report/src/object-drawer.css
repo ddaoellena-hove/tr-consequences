@@ -1,7 +1,7 @@
 .object-drawer-stack { display:flex; flex-direction:column; gap:var(--tr-space-24); min-width:0; }
 .object-impact-drawer .dropdown, .object-impact-drawer .autocomplete { width:100%; }
-.object-drawer-filter { border:0; border-top:var(--tr-border-width) solid var(--cadence-color-divider); padding:var(--tr-space-20) 0 0; margin:0; min-width:0; }
-.object-drawer-filter legend { padding:0; margin-bottom:var(--tr-space-12); font-weight:var(--tr-font-weight-semibold); }
+.object-drawer-filter { border:0; padding:0; margin:0; min-width:0; }
+.object-drawer-filter legend { padding:0; margin-bottom:var(--tr-space-8); font-weight:var(--tr-font-weight-semibold); }
 .object-drawer-choices { display:flex; flex-direction:column; gap:var(--tr-space-12); }
 .object-choice { display:flex; align-items:flex-start; gap:var(--tr-space-12); }
 .object-choice > .checkbox { flex-shrink:0; }
@@ -33,3 +33,6 @@
  .object-line-badges { row-gap:var(--tr-space-8); }
  .object-impact-drawer .page-section__head { align-items:flex-start; }
 }
+
+.object-filter-title { display:inline-flex; align-items:center; gap:var(--tr-space-8); }
+.object-drawer-filter .mode-filter { gap:var(--tr-space-4); }

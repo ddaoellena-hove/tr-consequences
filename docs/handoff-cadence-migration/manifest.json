@@ -124,12 +124,12 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "231f318b5ea126eddd0e5d957393859346b335665b5aedb938f8cb913963853d",
+      "sha256": "eb1e7ea76655af8c50e5b2e2be475f92c420a08336c931fdb5ba47e65ed7fa12",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
       "path": "snapshots/traffic-report/src/LineDiagram.jsx",
-      "sha256": "632c3ed2783d6e1da8a7a518997516fc7f56fbdc04fadd4c97fdd4804a826e2d",
+      "sha256": "3bc64640fb6f947bd5948c7addef02b45319fbc76e01dab94da10fc38a4b012a",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/LineDiagram.jsx"
     },
     {
@@ -425,12 +425,12 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "0773d10ce5bec30c67876a38eaae5d07fa93345c0d1a6e27c91468433b78e9ea"
+      "sha256": "954abf074d450ad1d63b25894050aa39abe019ae1ef5d1820c77ab41d320d4e4"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ImpactObjects.jsx",
-      "sha256": "fa23b171996672591950ee2385812e94ba69589aace431f24566aeda260010f9"
+      "sha256": "0aae1462240e3f87ce0b7d57ad0a7532cc2de0ac12a4fc0feeea647422541b2c"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactSchedule.jsx",
@@ -485,12 +485,12 @@
     {
       "path": "snapshots/traffic-report/docs/figma-objets-impactes.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/figma-objets-impactes.md",
-      "sha256": "d137fac227b9946722864fcda3337f55bb534ac41d3d9b6be92f791a9875babc"
+      "sha256": "0932b6d9769cf13af261f27d2b2d73fde02c6a8487da71f879391bbdb545ec67"
     },
     {
       "path": "snapshots/traffic-report/src/ObjectImpactDrawer.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ObjectImpactDrawer.jsx",
-      "sha256": "1c6713c51f83bf786fb93a0138de8e119a23dd8d18fd86248ab02392f4974125"
+      "sha256": "de63e5e405e286ee0b5349fd944939da211539b085b1a82989b10d765d691565"
     },
     {
       "path": "snapshots/traffic-report/src/ObjectSelectionCard.jsx",
@@ -500,12 +500,12 @@
     {
       "path": "snapshots/traffic-report/src/object-catalogue.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/object-catalogue.mjs",
-      "sha256": "b05abb4fac6762c5a8747f41d9953d1c2eff1f9336df5d921d8965a5c0b885fa"
+      "sha256": "337bca918a857952e89d6510c3febbdac73a36262297961f01c1b46a89882370"
     },
     {
       "path": "snapshots/traffic-report/src/object-drawer.css",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/object-drawer.css",
-      "sha256": "61dad323a4e115a1c9f2d3573cce1dc0c8f809813139bf601168c7fc3b6faf6f"
+      "sha256": "8f1c79e11a0678a010b2ce9f762a1793c66efc79734edea411e9c6d510471a67"
     },
     {
       "path": "snapshots/traffic-report/tests/object-drawer.test.mjs",
@@ -556,9 +556,20 @@
       "path": "snapshots/traffic-report/vendor/cadence-ui/src/mode-icons.tsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/mode-icons.tsx",
       "sha256": "195e72e7a8c31e407368da6a6c4e9399b5b0406aebec4409f5d44fb96116702b"
+    },
+    {
+      "path": "snapshots/traffic-report/src/consequence-diagrams.mjs",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/consequence-diagrams.mjs",
+      "sha256": "86040dd9bd7c56ab68ed73af9441e6526adfb66281afc69fb30d5bba074d9624"
+    },
+    {
+      "path": "snapshots/traffic-report/tests/consequence-diagrams.test.mjs",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/consequence-diagrams.test.mjs",
+      "sha256": "0b58a30d91470f878a2436af9e30171cc9ed773964f6246733ee47e0c3c98eb5"
     }
   ],
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message."
+  "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
+  "updated_note": "Inclut les schémas par ligne et les ajustements de sélection et animation du panneau, avant commit de publication."
 }

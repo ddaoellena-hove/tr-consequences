@@ -7,10 +7,10 @@ export function ImpactObjects({impact,stations,line,errors,onChange}){
  const [open,setOpen]=useState(false),[version,setVersion]=useState(0),[editing,setEditing]=useState(null);
  const start=object=>{setHasOpened(true);setEditing(object||null);setVersion(v=>v+1);setOpen(true);};
  return <div className="workflow-stack" id="field-objects">
-  {!impact.objects.length&&<EmptyState size="inline" title="Aucun objet impacté" description="Ajoutez un type d’objet pour ouvrir le drawer et préparer votre sélection."/>}
+  {!impact.objects.length&&<EmptyState size="inline" title="Aucun objet impacté" description="Sélectionnez un ou plusieurs objets de votre réseau à associer à cet impact."/>}
   {impact.objects.map(object=><div id={`field-object-${object.id}`} key={object.id}><ObjectSelectionCard object={object} stations={stations} onEdit={()=>start(object)} onRemove={()=>onChange({objects:impact.objects.filter(v=>v.id!==object.id)})}/>{errors[`object-${object.id}`]&&<p className="field-error" role="alert">{errors[`object-${object.id}`]}</p>}</div>)}
   {errors.objects&&<p className="field-error" role="alert">{errors.objects}</p>}
-  <div><GhostButton size="sm" iconStart="plus" label="Ajouter un type d’objet impacté" onClick={()=>start(null)}/></div>
+  <div><GhostButton size="sm" iconStart="plus" label="Ajouter un ou plusieurs objets impactés" onClick={()=>start(null)}/></div>
   <Suspense fallback={<p role="status">Chargement du panneau…</p>}>{hasOpened&&<ObjectImpactDrawer key={version} isOpen={open} onClose={()=>setOpen(false)} impact={impact} stations={stations} line={line} editingObject={editing} onConfirm={objects=>{onChange({objects});setOpen(false);}}/>}</Suspense>
  </div>;
 }

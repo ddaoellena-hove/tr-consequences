@@ -56,3 +56,10 @@ Les URL temporaires Figma ne sont pas utilisées à l’exécution. Les boutons,
 ## Indication de la sélection multiple
 
 Le titre d’ajout est « Ajouter des objets impactés ». Son aide précise qu’il est possible d’ajouter plusieurs objets de types différents, puis de les ajouter ensemble à l’impact. Le bouton de configuration porte « Ajouter à la sélection » ; le pied porte « Ajouter à l’impact (N) ». Le panier « Votre sélection (N objets) » et le message après ajout invitent à poursuivre la recherche. Le mode modification conserve un texte adapté à la modification d’un objet. Vérification navigateur : deux réseaux préparés sans fermeture du drawer, compteur et bouton final à 2, puis annulation sans mutation de l’impact.
+
+## Ajustements du 29 octobre 2026
+
+- Action : « Ajouter un ou plusieurs objets impactés ». L’aide parle de sélection d’objets du réseau, sans utiliser le terme technique « drawer ».
+- Le panneau est monté fermé avant de recevoir l’état ouvert, même après chargement différé ou changement de clé. Cela conserve la transition d’entrée native Cadence et sa préférence de mouvement réduit. Contournement applicatif de l’initialisation `entered = isOpen` du Drawer.
+- Un tronçon commun à plusieurs lignes affiche un schéma de conséquence pour chacune des lignes sélectionnées à l’étape Sévérité. Chaque ligne conserve son ordre d’arrêts et ses indices ; exemple de démonstration : Gare de Lyon — Châtelet, Métro 1 et RER A. Tous les tronçons sont représentés.
+- Le composant actuel accepte six arrêts ; les référentiels incompatibles sont explicitement signalés. Il faudra un tracé de longueur variable pour un référentiel de production.

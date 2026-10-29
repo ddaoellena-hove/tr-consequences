@@ -43,3 +43,7 @@ Dernière extension : [Parcours complet en cinq étapes](snapshots/traffic-repor
 Complément Figma : [Drawer d’ajout d’objets et parcours par type](snapshots/traffic-report/docs/figma-objets-impactes.md). Il remplace la modale de choix de type décrite dans les premiers états du prototype.
 
 Contributions à Cadence : [Brief des besoins en composants et patterns pour un autre LLM](BESOINS-COMPOSANTS-CADENCE.md).
+
+### Schémas multiples et ouverture du panneau
+
+Un aperçu par ligne et par tronçon remplace la limitation au premier tronçon. Voir `src/consequence-diagrams.mjs` et ses tests dans les snapshots. Le bouton annonce la sélection multiple ; l’aide évite le jargon. Le panneau est monté fermé pour conserver l’animation d’entrée Cadence lors du chargement différé. Détails et limite de géométrie : `docs/figma-objets-impactes.md` du projet.
