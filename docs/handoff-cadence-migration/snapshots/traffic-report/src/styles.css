@@ -168,15 +168,15 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 
 /* Persistent impact navigation: progress is flush with the footer's top edge. */
 .declaration-footer { padding:0; }
-.declaration-footer-content { display:flex; align-items:center; justify-content:space-between; gap:var(--tr-space-24); padding:var(--tr-space-16) var(--cadence-page-padding-inline); }
+.declaration-footer-content { display:flex; align-items:center; justify-content:space-between; gap:var(--tr-space-24); padding:var(--tr-space-12) var(--cadence-page-padding-inline); }
 .footer-progress { flex-shrink:0; }
 .footer-step-navigation { display:flex; align-items:center; gap:var(--tr-space-12); min-width:0; flex:1; }
-.footer-stepper { display:flex; align-items:center; gap:var(--tr-space-12); margin:0; padding-block:var(--tr-space-8); padding-inline:0; list-style:none; }
+.footer-stepper { display:flex; align-items:center; gap:var(--tr-space-8); margin:0; padding:0; list-style:none; }
 .footer-stepper-step { position:relative; display:flex; }
 .footer-stepper-step[data-state="current"] .base-button,
 .footer-stepper-step[aria-current="step"] .base-button { background:var(--cadence-color-primary); color:var(--cadence-color-white); }
 .footer-step-state { pointer-events:none; position:absolute; top:0; right:0; width:var(--tr-space-12); height:var(--tr-space-12); display:flex; align-items:center; justify-content:center; border:var(--tr-space-2) solid var(--cadence-color-white); border-radius:var(--cadence-radius-pill); background:var(--cadence-color-icon-muted); color:var(--cadence-color-white); font-size:var(--tr-space-8); font-weight:var(--tr-font-weight-bold); }
-.footer-stepper-step[data-state="completed"] .footer-step-state { background:var(--cadence-status-nominal-fg); width:var(--tr-space-20); height:var(--tr-space-20); top:calc(-1 * var(--tr-space-8)); right:calc(-1 * var(--tr-space-8)); }
+.footer-stepper-step[data-state="completed"] .footer-step-state { background:var(--cadence-status-nominal-fg); }
 .footer-stepper-step[data-state="current"] .footer-step-state { background:var(--cadence-color-accent); }
 .footer-stepper-step[data-state="error"] .footer-step-state { background:var(--cadence-status-critical-fg); }
 .footer-stepper-step[data-state="warning"] .footer-step-state { background:var(--cadence-status-warning-fg); }

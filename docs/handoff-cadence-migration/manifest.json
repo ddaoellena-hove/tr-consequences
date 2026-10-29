@@ -84,7 +84,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "ffc9ebdece143392f24a1574f4cc5971bba3d8a65338c986f303df349f0ebe67",
+      "sha256": "0ece69c695e8bcf80541dc5f40e190bcd650d2d17ad32fd7bbc060964b529117",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -375,7 +375,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "f2d5e51e7665992027892fd520d3c1e482871c9426c18db5c5cc1336d8f50045"
+      "sha256": "32c2208f9de2507640ce74570100a0ffa8fd2dd01d243c5c1be4325543c5aa49"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -520,7 +520,7 @@
     {
       "path": "snapshots/traffic-report/src/CompactImpactStepper.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/CompactImpactStepper.jsx",
-      "sha256": "ac18c24bc5ca79689aae40b3b6f9633437196d3f25ed39295f7f6f4d45c730ae"
+      "sha256": "bbd0c173e9b70a3b52a701f4365b0a530cca8319e1108c40caaca8ece513ae10"
     },
     {
       "path": "snapshots/cadence/src/components/stepper.css",
@@ -565,5 +565,5 @@
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Lisibilité du stepper : pastille de validation 20 px, coche 12 px, espacement et hauteur du footer desktop augmentés."
+  "updated_note": "Retour à la taille initiale des pastilles (12 px), coches (8 px), espacements et footer. Essai d’agrandissement annulé."
 }

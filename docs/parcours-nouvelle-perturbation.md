@@ -58,4 +58,4 @@ Le stepper de déclaration compte six étapes : Informations générales, Objets
 
 La première pastille reflète les champs obligatoires et la saisie de publication en cours. La progression et les compteurs affichés sont sur six étapes ; les indices internes des cinq étapes d’impact et des validations restent inchangés. La création peut toujours être activée après validation des messages (cinquième étape globale), sans visite obligatoire du résumé. Les données des informations générales ne sont pas dupliquées par impact.
 
-Les étapes terminées du stepper desktop ont une pastille de 20 px et une coche de 12 px. Un décalage vers le haut et la droite, un espacement horizontal de 12 px et un padding vertical du stepper de 8 px évitent le recouvrement des icônes. Le footer desktop possède 16 px de padding vertical ; la version mobile conserve son sélecteur d’étapes.
+L’essai d’agrandissement des pastilles est annulé : pastille de 12 px, coche de 8 px et hauteur du footer antérieure rétablies.
