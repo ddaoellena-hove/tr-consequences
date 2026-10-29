@@ -104,7 +104,7 @@ function Bus({ busRef }) {
   );
 }
 
-export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
+export function LineDiagram({ impact, sev, stations, line = {code:'12',mode:'bus'}, tweaks = {} }) {
   const bus1Ref = useRef(null);
   const bus2Ref = useRef(null);
 
@@ -184,11 +184,11 @@ export function LineDiagram({ impact, sev, stations, tweaks = {} }) {
 
   return (
     <PageSection title="Schéma de conséquence" surface="card" gap={0} className="diagram-section"
-      actions={<div className="diagram-identity"><LineBadge code="12" mode="bus" size="sm"/><span className="line-name">Ligne 12</span>
+      actions={<div className="diagram-identity"><LineBadge code={line.code} mode={line.mode} color={line.color} size="sm"/><span className="line-name">{line.name||`Ligne ${line.code}`}</span>
         {sev && <Indicator variant={colorOn ? sev.variant : 'draft'} label={sev.tag}/>}</div>}>
     <div className="diagram-content" data-severity={sev?.id} data-color-code={colorOn}>
       {/* Canevas SVG et Bus animés */}
-      <div className="diagram-scroll cadence-scrollbar" role="img" aria-label={`Ligne 12 : ${stations.join(', ')}. ${sev?.label || 'État nominal'} entre ${stations[fromIndex]} et ${stations[toIndex]}.`}>
+      <div className="diagram-scroll cadence-scrollbar" role="img" aria-label={`Ligne ${line.code} : ${stations.join(', ')}. ${sev?.label || 'État nominal'} entre ${stations[fromIndex]} et ${stations[toIndex]}.`}>
         <div className="diagram-canvas">
           <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="diagram-svg">
             {/* Piste de base (fond) */}

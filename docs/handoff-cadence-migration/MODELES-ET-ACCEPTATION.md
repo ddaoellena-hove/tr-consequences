@@ -101,3 +101,15 @@
 4. Exceptions produit conservées.
 5. Vérifications exécutées avec leurs résultats et limites.
 6. État Git final et consignes de reprise.
+
+## Complément de recette — dashboard
+
+- [ ] Le nom du composant réel est vérifié (TableCard, pas DataCard par analogie visuelle).
+- [ ] Les pictogrammes d’objet couvrent les scopes et disposent d’un fallback explicite ; la couleur et le texte suivent les tokens et l’accessibilité.
+- [ ] Les fonds derrière les rayons n’exposent pas de blanc parasite ; hauteur du header, icône et jonction sont mesurées.
+- [ ] La sévérité reste lisible sans percevoir la couleur et ne s’annonce pas deux fois.
+- [ ] Recherche, tri et filtres sont appliqués avant pagination ; vue par impact et sélection ont une portée explicite.
+- [ ] Consultation, édition, duplication, suppression confirmée, absence de résultat et responsive sont vérifiés selon le périmètre.
+- [ ] Les identifiants locaux ne sont pas présentés comme un référentiel métier serveur.
+
+- [ ] Les infobulles des actions de carte ne répètent pas le titre : Dupliquer, Modifier, Consulter, Supprimer ; les cases restent contextualisées.

@@ -129,3 +129,11 @@ Vérifier les scénarios nominaux et les défauts plausibles : menus dans accord
 Séparer : compilation, tests de règles métier, tests d’intégration, vérification clavier/focus, contrôle visuel et responsive. Aucun de ces contrôles ne remplace tous les autres. Ne pas annoncer une suite end-to-end automatisée si seuls des contrôles navigateur ponctuels ont été réalisés.
 
 Livrer un rapport avec : mapping final, exceptions, contrôles exécutés, limites, état Git, commit/push et destination de publication. L’aperçu local et un déploiement distant ne sont pas présumés synchronisés.
+
+## 9. Migrer un dashboard à cartes riches
+
+Utiliser TableCard + TableHeader lorsque chaque ligne porte plusieurs blocs riches et que le nombre de cartes montées reste limité. Évaluer DataTable selon les usages et le volume. Partager la définition des colonnes entre en-tête et contenu ; prévoir empilement et labels sur écran étroit. Les opérations de recherche, filtre et tri précèdent la pagination. Documenter la portée de chaque action en vue agrégée ou par objet.
+
+Inventorier les assets d’objet fournis, les associer explicitement au modèle et utiliser le slot iconElement disponible. Conserver le sens du pictogramme et le texte adjacent ; appliquer les tokens aux couleurs sans modifier la géométrie inutilement. Vérifier la différence entre icône UI, mode transport et objet métier.
+
+Pour les surfaces imbriquées, inspecter le fond visible derrière les rayons du contenu : un gap nul ne garantit pas une jonction sans défaut. Mesurer hauteur du header et taille d’icône ; préférer le padding à une hauteur fixe lorsque le titre peut passer sur plusieurs lignes. Garder les adaptations dans une classe projet et documenter leur dépendance aux classes internes du DS. Voir [l’exemple Traffic Report](EVOLUTIONS-TABLEAU-DE-BORD.md).

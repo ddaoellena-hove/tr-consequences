@@ -16,7 +16,8 @@ Ordre de lecture :
 3. [Matrice des changements à intégrer](MISE-A-JOUR-GUIDELINES.md).
 4. [Base du guide de migration](GUIDE-MIGRATION-BASE.md).
 5. [Modèles et critères de livraison](MODELES-ET-ACCEPTATION.md).
-6. [Étude de cas complète Traffic Report](snapshots/traffic-report/docs/migration-maquette-retour-experience.md).
+6. [Évolutions du tableau de bord et des cartes](EVOLUTIONS-TABLEAU-DE-BORD.md).
+7. [Étude de cas complète Traffic Report](snapshots/traffic-report/docs/migration-maquette-retour-experience.md).
 
 Les fichiers dans `snapshots/` sont des **références figées**, pas une autorisation de modifier les composants. Ils n’incluent ni identifiants, ni fichiers d’environnement, ni polices commerciales. Le manifeste [manifest.json](manifest.json) en donne les empreintes et les révisions source.
 
@@ -30,3 +31,7 @@ Les fichiers dans `snapshots/` sont des **références figées**, pas une autori
 - Mise à jour ciblée du changelog ou du handoff si les conventions du dépôt le demandent.
 
 Aucune évolution d’API n’est nécessaire pour livrer cette documentation. Les lacunes de composants doivent devenir des propositions séparées et explicitement marquées comme non réalisées.
+
+## Mise à jour du 29 octobre 2026
+
+Le dossier couvre désormais le dashboard et le formulaire. Les copies source Traffic Report ont été actualisées ; des copies des composants Cadence effectivement embarqués complètent les références du checkout DS. Les archives et empreintes ont été régénérées. La passation ne signifie pas que les guidelines du design system ont déjà été modifiées.

@@ -1,3 +1,6 @@
+import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, newImpact, initial } from './traffic-model.mjs';
+import Dashboard from './Dashboard.jsx';
+import { upsertRecord, makeId } from './dashboard-data.mjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import { issue, impactErrors, generalErrors, CAUSES, validDate } from './validation.mjs';
 import { LineDiagram } from './LineDiagram.jsx';
@@ -20,96 +23,6 @@ import {
   DatePicker, SegmentedControl, Badge,
   ErrorSummary, DescriptionList, FieldRow, Toggle, EmptyState, SummaryList,
 } from '@ddaoellena/cadence-ui';
-
-export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
-export const STEP_LABELS = ['Périmètre', 'Sévérité de l’impact', 'Période', 'Message voyageurs', 'Récapitulatif'];
-
-// Modèle officiel des 6 sévérités issu de la maquette de référence
-export const SEVERITIES = [
-  {
-    id: 'bloquante',
-    label: 'Bloquante',
-    color: 'var(--tr-severity-bloquante)',
-    passant: false,
-    tag: 'Tronçon bloquant',
-    variant: 'critical',
-    badge: 'Tronçon bloquant',
-    lead: 'Vous avez impacté un tronçon avec une sévérité « Bloquante ».',
-    conseq: 'Il s’agira donc d’un tronçon bloquant : il ne sera pas emprunté lors d’une recherche d’itinéraire, et une solution de contournement sera proposée aux voyageurs.',
-  },
-  {
-    id: 'interrompu',
-    label: 'Service interrompu',
-    color: 'var(--tr-severity-interrompu)',
-    passant: false,
-    tag: 'Tronçon non passant',
-    variant: 'critical',
-    badge: 'Tronçon non passant',
-    lead: 'Vous avez impacté un tronçon avec une sévérité « Service interrompu ».',
-    conseq: 'Il s’agira donc d’un tronçon non passant : aucune circulation n’est calculée sur ce tronçon pendant la période d’application.',
-  },
-  {
-    id: 'modifie',
-    label: 'Service modifié',
-    color: 'var(--tr-severity-modifie)',
-    passant: true,
-    tag: 'Tronçon passant',
-    variant: 'warning',
-    badge: 'Offre adaptée',
-    lead: 'Vous avez impacté un tronçon avec une sévérité « Service modifié ».',
-    conseq: 'Il s’agira donc d’un tronçon passant : les circulations sont maintenues mais l’offre est adaptée (parcours ou desserte modifiés).',
-  },
-  {
-    id: 'reduit',
-    label: 'Service réduit',
-    color: 'var(--tr-severity-reduit)',
-    passant: true,
-    tag: 'Tronçon passant',
-    variant: 'warning',
-    badge: 'Offre de transport réduite',
-    lead: 'Vous avez impacté un tronçon avec une sévérité « Service réduit ».',
-    conseq: 'Il s’agira donc d’un tronçon passant : les circulations sont maintenues mais la fréquence est réduite sur la période d’application.',
-  },
-  {
-    id: 'perturbe',
-    label: 'Perturbé / Retards',
-    color: 'var(--tr-severity-perturbe)',
-    passant: true,
-    tag: 'Tronçon passant',
-    variant: 'warning',
-    badge: 'Circulation perturbée',
-    lead: 'Vous avez impacté un tronçon avec une sévérité « Perturbé ».',
-    conseq: 'Il s’agira donc d’un tronçon passant : les circulations sont maintenues, des retards sont signalés aux voyageurs sans solution de contournement proposée.',
-  },
-  {
-    id: 'informative',
-    label: 'Informative',
-    color: 'var(--tr-severity-informative)',
-    passant: true,
-    tag: 'Tronçon passant',
-    variant: 'info',
-    badge: 'Information préventive',
-    lead: 'Vous avez impacté un tronçon avec une sévérité « Informative ».',
-    conseq: 'Il s’agira donc d’un tronçon passant : aucun impact sur le calcul d’itinéraire, seul un message d’information (éventuellement préventif) est diffusé aux voyageurs.',
-  },
-];
-
-export const SEVERITY_MAP = Object.fromEntries(SEVERITIES.map((s) => [s.id, s]));
-
-const newImpact = () => ({
-  severity: 'bloquante',
-  from: 2,
-  to: 3,
-  start: '2026-11-02T06:00',
-  end: '2026-11-06T23:00',
-  message: 'En raison de travaux de voirie, la ligne 12 est interrompue entre Université et Hôpital. Merci de votre compréhension.',
-});
-
-const initial = () => ({
-  title: 'Travaux sur la ligne 12',
-  cause: 'Travaux',
-  impacts: [newImpact()],
-});
 
 function loadDraft() {
   try {
@@ -172,6 +85,9 @@ export default function App() {
     media.addEventListener('change', update);
     return () => media.removeEventListener('change', update);
   }, []);
+  const [screen, setScreen] = useState(() => window.location.hash === '#declaration' ? 'form' : 'dashboard');
+  useEffect(() => {document.title = screen === 'dashboard' ? 'Traffic Report — Toutes les perturbations' : 'Traffic Report — Déclaration de perturbation';}, [screen]);
+  useEffect(() => { const update=()=>setScreen(window.location.hash === '#declaration' ? 'form' : 'dashboard'); window.addEventListener('hashchange',update); return()=>window.removeEventListener('hashchange',update); }, []);
   const [restored] = useState(loadDraft);
   const [data, setData] = useState(() => restored || initial());
   const [current, setCurrent] = useState(0);
@@ -204,6 +120,8 @@ export default function App() {
   const [generalVersion, setGeneralVersion] = useState(0);
 
   const generalComplete = Object.keys(generalErrors(data)).length === 0;
+  const stations = data.stations || STATIONS;
+  const line = data.line || {code:'12',mode:'bus',name:'Ligne 12'};
   const i = data.impacts[current];
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
   const startDate = useMemo(() => dateValue(i.start), [i.start]);
@@ -240,7 +158,9 @@ export default function App() {
 
   function save() {
     try {
-      localStorage.setItem('traffic-report-draft', JSON.stringify(data));
+      const saved = upsertRecord(data, 'draft');
+      setData(saved);
+      localStorage.setItem('traffic-report-draft', JSON.stringify(saved));
       setSaveState(
         'Brouillon enregistré sur cet appareil · ' +
           new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
@@ -268,13 +188,32 @@ export default function App() {
         }
       }
     }
+    try { const saved = upsertRecord(data, 'published'); setData(saved); localStorage.setItem('traffic-report-draft', JSON.stringify(saved)); }
+    catch { setError('La déclaration n’a pas pu être enregistrée sur cet appareil.'); return; }
     setCompleted(Object.fromEntries(data.impacts.map((_, n) => [n, [0,1,2,3,4]])));
     setVerified(true); setFieldErrors({}); setError('');
-    notify('Déclaration vérifiée dans le prototype. Aucune diffusion effectuée.');
+    notify('Déclaration enregistrée dans le tableau de bord de démonstration. Aucune diffusion voyageurs.');
   }
 
+  function navigate(destination) {
+    setScreen(destination);
+    const hash = destination === 'form' ? '#declaration' : '#dashboard';
+    if (window.location.hash !== hash) window.location.hash = hash;
+  }
+  function openRecord(record) {
+    setData(structuredClone(record)); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
+    setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
+    setSaveState('Déclaration chargée depuis cet appareil.'); navigate('form');
+  }
+  function createRecord() {
+    setData({...initial(),id:makeId()}); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
+    setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
+    setSaveState('Nouvelle déclaration · modifications non enregistrées.'); navigate('form');
+  }
   function handleNavClick(id) {
     setActiveNav(id);
+    if (id === 'new') {createRecord();return;}
+    if (id === 'dashboard' || id === 'disruptions') { navigate('dashboard'); return; }
     if (id === 'history') {
       setRecord(loadDraft());
       setHistoryOpen(true);
@@ -283,7 +222,7 @@ export default function App() {
     }
   }
 
-  const stationOptions = STATIONS.map((label, n) => ({ id: String(n), label }));
+  const stationOptions = stations.map((label, n) => ({ id: String(n), label }));
 
   const navSections = [
     {
@@ -291,6 +230,7 @@ export default function App() {
       label: 'Perturbations',
       icon: <Icons icon="alert-triangle" size={20} />,
       items: [
+        { id: 'dashboard', label: 'Toutes les perturbations' },
         { id: 'new', label: 'Nouvelle déclaration' },
         { id: 'history', label: 'Mes déclarations' },
       ],
@@ -317,6 +257,8 @@ export default function App() {
     />
   );
 
+  if (screen === 'dashboard') return <Dashboard onCreate={createRecord} onEdit={openRecord} onResume={restored ? () => {const draft=loadDraft();if(draft)openRecord(draft);} : undefined}/>;
+
   return (
     <AppLayout className="traffic-report-app" sidebar={narrow ? null : sidebarElement} contentLabel="Déclaration de perturbation">
       <div className="declaration-content cadence-scrollbar">
@@ -324,15 +266,16 @@ export default function App() {
         breadcrumbs={
           <Breadcrumbs
             items={[
-              { id: 'disruptions', label: 'Perturbations', onClick: () => handleNavClick('history') },
+              { id: 'disruptions', label: 'Perturbations', onClick: () => navigate('dashboard') },
               { id: 'new', label: 'Nouvelle déclaration' },
             ]}
           />
         }
-        title="Nouvelle perturbation prévue"
+        title={data.publication ? data.title || 'Déclaration de perturbation' : 'Nouvelle perturbation prévue'}
         subtitle="Déclaration de perturbation"
         actions={
           <>
+            <GhostButton size="sm" label="Tableau de bord" iconStart="arrow-left" onClick={() => navigate('dashboard')}/>
             {narrow && <GhostButton size="sm" label="Menu" onClick={() => setMobileNavOpen(true)}/>}
             <Badge label="Espace de démonstration"/>
             <Badge label="FR"/>
@@ -413,12 +356,12 @@ export default function App() {
             />
           </nav>
 
-          <ProgressBar value={(step + 1) * 20} aria-label="Progression de la déclaration" />
+          <ProgressBar className="declaration-progress" value={(step + 1) * 20} aria-label="Progression de la déclaration" />
 
           <div className="form-content">
             <PageSection headingLevel={3} gap={20}
               title={['Périmètre de l’impact','Sévérité de l’impact','Période d’application','Message voyageurs','Récapitulatif de l’impact'][step]}
-              description={['Sélectionnez les arrêts délimitant le tronçon de la ligne 12.','Précisez les conséquences de la perturbation sur le service.','Définissez la période durant laquelle cet impact s’applique.','Rédigez le message associé à cet impact.','Vérifiez les informations avant de valider votre déclaration.'][step]}>
+              description={['Sélectionnez les arrêts délimitant le tronçon de la ligne.','Précisez les conséquences de la perturbation sur le service.','Définissez la période durant laquelle cet impact s’applique.','Rédigez le message associé à cet impact.','Vérifiez les informations avant de valider votre déclaration.'][step]}>
 
             {step === 0 && (
               <FieldRow className="fields">
@@ -466,8 +409,8 @@ export default function App() {
 
             {step === 4 && (
               <DescriptionList aria-label="Récapitulatif de l’impact" density="compact" items={[
-                {id:'line',label:'Ligne',value:<LineBadge code="12" mode="bus"/>},
-                {id:'section',label:'Tronçon',value:`${STATIONS[i.from]} → ${STATIONS[i.to]}`},
+                {id:'line',label:'Ligne',value:<LineBadge code={line.code} mode={line.mode} color={line.color}/>},
+                {id:'section',label:'Tronçon',value:`${stations[i.from]} → ${stations[i.to]}`},
                 {id:'severity',label:'Sévérité',value:<Indicator variant={sev.variant} label={sev.label}/>},
                 {id:'start',label:'Début',value:formatDate(i.start)},
                 {id:'end',label:'Fin',value:formatDate(i.end)},
@@ -495,7 +438,7 @@ export default function App() {
           </div>
         ) : (
           <>
-            <LineDiagram impact={i} sev={sev} stations={STATIONS} tweaks={tweaks} />
+            <LineDiagram impact={i} sev={sev} stations={stations} line={line} tweaks={tweaks} />
 
             {/* Options d'affichage interactives (Tweaks) */}
             <PageSection title="Options d’affichage" headingLevel={3} className="tweaks-bar" gap={12}>
@@ -534,7 +477,7 @@ export default function App() {
       <Toaster />
       <Modal isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} title="Navigation">
         <SummaryList aria-label="Navigation principale" items={[
-          {id:'new',title:'Nouvelle déclaration'}, {id:'history',title:'Mes déclarations'}
+          {id:'dashboard',title:'Toutes les perturbations'}, {id:'new',title:'Nouvelle déclaration'}, {id:'history',title:'Mes déclarations'}
         ]} onItemClick={item=>{setMobileNavOpen(false);handleNavClick(item.id);}}/>
         <Dropdown label="Réseau" options={[{id:'idfm',label:'Île-de-France Mobilités'}]} value={network} onChange={setNetwork}/>
         <GhostButton label="Se déconnecter" onClick={()=>{setMobileNavOpen(false);notify('Déconnexion simulée (espace de démonstration).');}}/>

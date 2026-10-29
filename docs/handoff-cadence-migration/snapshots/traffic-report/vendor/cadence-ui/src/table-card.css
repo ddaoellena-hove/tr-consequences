@@ -1,0 +1,100 @@
+/* ── Wrapper ─────────────────────────────────────────────────────────────── */
+.table-card {
+  background-color: var(--cadence-color-surface-alt, #eef1f4);
+  border-radius: var(--cadence-radius-lg, 10px);
+  padding: 2px;
+  width: 100%;
+}
+
+.table-card--selected {
+  background-color: var(--cadence-color-selected-surface, #c8d6e4);
+}
+
+.table-card--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.table-card__header {
+  align-items: center;
+  background: transparent;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 10px 14px;
+}
+
+/* ── Header left (checkbox + icon + title) ───────────────────────────────── */
+.table-card__header-left {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+}
+
+.table-card__checkbox {
+  flex-shrink: 0;
+}
+
+.table-card__icon {
+  align-items: center;
+  color: var(--cadence-color-label, #1a3e45);
+  display: flex;
+  flex-shrink: 0;
+  height: 16px;
+  justify-content: center;
+  width: 16px;
+}
+
+.table-card__icon svg {
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+
+.table-card__title {
+  color: var(--cadence-color-primary, #002830);
+  font-family: var(--cadence-font-sans, "Inter", Helvetica);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Header actions ──────────────────────────────────────────────────────── */
+.table-card__header-actions {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+/* ── Content (body) ──────────────────────────────────────────────────────── */
+.table-card__body {
+  background-color: var(--cadence-color-white, #ffffff);
+  border-radius: var(--cadence-radius-md, 8px);
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Columns ─────────────────────────────────────────────────────────────── */
+.table-card__column {
+  border-right: 1px solid var(--cadence-color-divider, #f0f0f0);
+  flex-shrink: 0;
+  min-width: 0;
+  padding: 16px;
+}
+
+.table-card__column:last-child {
+  border-right: none;
+}
+
+.table-card__column--flex {
+  flex-grow: 1;
+  flex-shrink: 1;
+}

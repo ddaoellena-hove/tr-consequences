@@ -30,3 +30,9 @@ Tests des statuts, périodes, filtres combinés, vues, tri, suppression et persi
 ## Limites
 
 Données fictives et stockage navigateur. Pas de gestion multi-utilisateur, d’authentification métier, de concurrence serveur ni d’API. Les dates utilisent le fuseau local ; elles ne constituent pas encore un contrat de fuseau réseau. La suppression locale ne dispose pas d’un mécanisme de restauration. Le choix de TableCard devra être réévalué pour une liste réelle volumineuse, avec DataTable et pagination serveur si le besoin le justifie.
+
+## Dernières adaptations visuelles
+
+Voir [le complément de passation](handoff-cadence-migration/EVOLUTIONS-TABLEAU-DE-BORD.md) pour le mapping des pictogrammes du ZIP, le header des objets à 44 px avec icône de 24 px, le fond derrière les coins arrondis et la sévérité en pastille avec texte. Ces adaptations restent applicatives, sans modification du paquet Cadence.
+
+Les infobulles des actions icône portent seulement leur verbe (Dupliquer, Modifier, Consulter, Supprimer), via aria-label utilisé par BaseButton. Les cases de sélection restent nommées avec le titre de la perturbation.

@@ -62,3 +62,21 @@ Vérifier les intitulés de rubriques dans le dépôt courant. Les références 
 - Contrat de responsive de FieldRow, aujourd’hui à la charge de l’application inspectée.
 
 Ces points nécessitent une conception, des tests et une validation distincts. Le guide doit rester exact même si aucune de ces évolutions n’est implémentée.
+
+## Complément : dashboard et cartes riches
+
+| Rubrique | Clarification à intégrer | Preuve / portée |
+|---|---|---|
+| Listes | TableCard + TableHeader pour cartes riches ; DataTable selon volume et besoin | Le terme DataCard de la maquette ne correspond pas à une API utilisée |
+| Icônes métier | Séparer objets de perturbation, modes de transport et icônes UI ; définir mapping, fallback et accessibilité | DisruptionObjectIcon, géométrie fournie par le produit ; pas un nouveau composant Cadence |
+| Surfaces imbriquées | Contrôler fond du wrapper derrière les rayons, bordure et absence de gap | Correctif local dashboard-impact ; pas une règle globale sur toutes les PageSection |
+| Densité | Mesurer hauteur résultante : icône 24 + padding vertical 10 × 2 = header 44 | Décision Traffic Report ; conserver la possibilité de wrap |
+| Statuts | Indicator dot avec libellé visible et annonce unique | Couleur seule insuffisante |
+| Progression | Documenter une adaptation d’arrondi locale lorsqu’elle est demandée | declaration-progress ; pas de variante inventée |
+| Tests / données | Filtrer et trier avant pagination ; combinaison des filtres sur le même impact | Règle métier applicative, ni garantie de TableCard ni aptitude au gros volume |
+
+Les exemples et mesures sont détaillés dans [le complément dashboard](EVOLUTIONS-TABLEAU-DE-BORD.md).
+
+### Infobulles des actions de ligne
+
+Sur Traffic Report, utiliser le seul verbe pour les boutons icône : Dupliquer, Modifier, Consulter, Supprimer. Vérifier la source du texte : le BaseButton embarqué reprend aria-label pour son infobulle. Cette décision produit ne constitue pas une nouvelle prop ni une règle universelle pour tous les noms accessibles.

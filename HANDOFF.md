@@ -2,6 +2,10 @@
 
 Ce document fournit tout le contexte technique, fonctionnel et architectural nécessaire à un développeur ou un agent LLM pour reprendre le travail sur ce projet sans perte de contexte.
 
+## Actualisation du 29 octobre 2026
+
+Le projet comprend désormais le tableau de bord et le formulaire. Pour les évolutions récentes et la passation des guidelines, lire [le dossier actualisé](docs/handoff-cadence-migration/README.md) et [le complément dashboard](docs/handoff-cadence-migration/EVOLUTIONS-TABLEAU-DE-BORD.md). Les snapshots et le manifeste y font référence ; les sections historiques ci-dessous ne couvrent pas toutes les évolutions du dashboard.
+
 ---
 
 ## 1. Contexte & Objectif du Projet

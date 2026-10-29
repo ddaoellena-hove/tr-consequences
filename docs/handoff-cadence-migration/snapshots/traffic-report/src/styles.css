@@ -121,3 +121,7 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
  .declaration-footer { padding:var(--tr-space-12) var(--tr-space-16); }
  .declaration-footer .page-actions { gap:var(--tr-space-12); }
 }
+
+/* The declaration progress follows the straight edge of its section. */
+.declaration-progress .progress-bar__track,
+.declaration-progress .progress-bar__fill { border-radius:0; }
