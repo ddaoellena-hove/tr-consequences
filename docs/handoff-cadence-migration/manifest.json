@@ -4,7 +4,7 @@
   "repositories": {
     "traffic_report": {
       "path": "/Users/ddao-ellena/tr-consequences /traffic-report",
-      "head": "bb0fa13df904d5f3fb3a77771b2d7aa9b867682e",
+      "head": "41f013440eb3c05e6ba5f7be6c7e4ea7895a4f9b",
       "branch": "main",
       "status_at_packaging": [
         " M HANDOFF.md",
@@ -100,7 +100,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "b8e9ff8057e42463ffbcaa7133159a9aa6f990d4d183a676190540317cbcbc5b",
+      "sha256": "298ab319f27a0f4698ada7f638c48e05846b01b913841c6d95ec23692482ee1c",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -110,7 +110,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "317f4f1f8afa5191bd3ef68ae4eaf952fd2ed902cda98f723c02231fa76ef2ef",
+      "sha256": "d61bbdcefa3f36e4cf50ea97ad538b4e20aaf87ca825fc93e6111361b24824fb",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -120,7 +120,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/validation.mjs",
-      "sha256": "83382d5147ae50c9089d8a3bf31263ad075e3b0e15aa2f89c36374902d7c4a22",
+      "sha256": "54347b1a97db103b0fffd0d5a3995aa9071a791eac6e790e49718d385ba531a5",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/validation.mjs"
     },
     {
@@ -135,7 +135,7 @@
     },
     {
       "path": "snapshots/traffic-report/tests/validation.test.mjs",
-      "sha256": "257a7c8da878be264acfcb94e7c89d62f10f9d0751aa849053d4c322c5674398",
+      "sha256": "ce6faf21d6aefea2d49a42697002268d325dceb31e7594770a5ee825aeb520fc",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/validation.test.mjs"
     },
     {
@@ -291,7 +291,7 @@
     {
       "path": "snapshots/traffic-report/src/Dashboard.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/Dashboard.jsx",
-      "sha256": "3a53f76f62e5276a18fee0088aa8f1e5f2137ad4f8b07bd392970b5fe97d5efc"
+      "sha256": "b3740e2f57acce4bb463b48da0e872e0cf3e1ce8c785a63d9c628d97fb333b12"
     },
     {
       "path": "snapshots/traffic-report/src/dashboard.css",
@@ -301,12 +301,12 @@
     {
       "path": "snapshots/traffic-report/src/dashboard-data.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/dashboard-data.mjs",
-      "sha256": "2b6684ee9bb22a770fdbe04ffc7ea6ebe85afdf0bd1b41513ed02c13630e67e9"
+      "sha256": "f7578d4d885d3cf2a0b8f13374752ea0d9e978e3ecd5e95d014fbc00a00e924e"
     },
     {
       "path": "snapshots/traffic-report/src/traffic-model.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/traffic-model.mjs",
-      "sha256": "a34c2fb53c1d0ebd192f818af87ed750326637650b5ab8814fd0ba0798b136c5"
+      "sha256": "16f00eea99e26a0f44e44c3cc001a236f820410466e3e06ab7ed6a1ec9386c63"
     },
     {
       "path": "snapshots/traffic-report/src/DisruptionObjectIcon.jsx",
@@ -326,7 +326,7 @@
     {
       "path": "snapshots/traffic-report/tests/dashboard.test.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/dashboard.test.mjs",
-      "sha256": "29a2969e4f5521ac2dc895d561dbc40ca38fcedb15c626e470bd21a0c71ff634"
+      "sha256": "ff69e725e341a84f05b20dbb86361d62471426d4bfc5196191ea07c68e6cc8a4"
     },
     {
       "path": "snapshots/traffic-report/docs/dashboard-cadence.md",
@@ -387,9 +387,19 @@
       "path": "snapshots/traffic-report/vendor/cadence-ui/src/LineBadge.tsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/LineBadge.tsx",
       "sha256": "002ed6d2d24b28c68f0a2617baa9fc9a9aa0dc7984d0740369da3fa11d829473"
+    },
+    {
+      "path": "snapshots/traffic-report/src/GeneralInformation.jsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/GeneralInformation.jsx",
+      "sha256": "f1368cefb72706f4a1297c9d14ebb5fb1bb4e84dbd0901aec699ff64b4e08930"
+    },
+    {
+      "path": "snapshots/traffic-report/src/general-information.mjs",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/general-information.mjs",
+      "sha256": "acf59d6d9e0ce34298d4619c42380b7829c60fc3ac12cc9b9fe01231866956fd"
     }
   ],
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "update_note": "Action tooltips use verbs only. Includes the handoff documentation update pending commit/push with the application change; repository HEAD below is the parent revision, not this future commit."
+  "update_note": "Includes general-information fields, validation, legacy-data compatibility and current working-tree snapshots. HEAD identifies the parent before publication."
 }

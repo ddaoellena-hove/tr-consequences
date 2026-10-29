@@ -1,3 +1,4 @@
+import {withGeneralInformation} from './general-information.mjs';
 import { STATIONS, SEVERITY_MAP, newImpact } from './traffic-model.mjs';
 export const RECORDS_KEY = 'traffic-report-records-v1';
 export const makeId = () => globalThis.crypto?.randomUUID?.() ?? `record-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -44,6 +45,7 @@ export function isRecord(value){return Boolean(value&&typeof value.id==='string'
 export function loadRecords(){try{const text=localStorage.getItem(RECORDS_KEY);if(text!==null){const values=JSON.parse(text);if(Array.isArray(values)&&values.every(isRecord))return values;}}catch{}return demoRecords();}
 export function storeRecords(records){localStorage.setItem(RECORDS_KEY,JSON.stringify(records));}
 export function upsertRecord(data,publication='draft'){
+ data=withGeneralInformation(data);
  const current=loadRecords();const now=new Date().toISOString();
  const item={...data,id:data.id||makeId(),publication,updatedAt:now,stations:data.stations||STATIONS,line:data.line||{code:'12',mode:'bus',name:'Ligne 12'},impacts:data.impacts.map(i=>({...i,id:i.id||makeId(),scope:i.scope||'section',title:i.title||`${(data.stations||STATIONS)[i.from]} → ${(data.stations||STATIONS)[i.to]}`,lines:i.lines||[data.line||{code:'12',mode:'bus',name:'Ligne 12'}],detail:i.detail||''}))};
  storeRecords(current.some(r=>r.id===item.id)?current.map(r=>r.id===item.id?item:r):[item,...current]);return item;

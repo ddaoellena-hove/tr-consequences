@@ -5,7 +5,20 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .general { margin-bottom: var(--tr-space-20); }
 .section-description { color: var(--cadence-color-text-secondary); margin: 0 0 var(--tr-space-20); }
 .general-fields { display:grid; gap:var(--tr-space-20); }
-.general-fields { grid-template-columns:2fr 1fr; max-width:var(--tr-fields-max); }
+.general-fields { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.general-fields > * { min-width:0; }
+.general-fields .dropdown, .general-fields .date-picker, .general-fields .date-picker__field { width:100%; }
+.general-details { padding-block:var(--tr-space-12) var(--tr-space-20); }
+.general-labels { border:0; padding:0; margin:0; min-width:0; }
+.general-labels legend { padding:0; margin-bottom:var(--tr-space-12); font-weight:var(--tr-font-weight-medium); }
+.general-label-options { display:flex; flex-wrap:wrap; gap:var(--tr-space-20); }
+.general-label-option { display:flex; align-items:center; gap:var(--tr-space-8); }
+.general-properties { display:flex; flex-direction:column; gap:var(--tr-space-12); }
+.general-property { display:flex; align-items:flex-end; gap:var(--tr-space-12); }
+.general-property-fields { flex:1; min-width:0; }
+@media (max-width:760px) {
+ .general-property-fields { flex-direction:column; align-items:stretch; }
+}
 .fields { max-width: var(--tr-fields-max); }
 .field { max-width: var(--tr-field-max); }
 .field > .dropdown, .fields > .dropdown, .general-fields > .dropdown { width: 100%; }

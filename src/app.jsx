@@ -1,5 +1,7 @@
 import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, newImpact, initial } from './traffic-model.mjs';
 import Dashboard from './Dashboard.jsx';
+import {GeneralInformation} from './GeneralInformation.jsx';
+import {withGeneralInformation} from './general-information.mjs';
 import { upsertRecord, makeId } from './dashboard-data.mjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import { issue, impactErrors, generalErrors, CAUSES, validDate } from './validation.mjs';
@@ -47,7 +49,7 @@ function loadDraft() {
             ['start', 'end', 'message'].every((k) => typeof i[k] === 'string')
         )
       ) {
-        return s;
+        return withGeneralInformation(s);
       }
     }
   } catch {}
@@ -118,8 +120,9 @@ export default function App() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [generalVersion, setGeneralVersion] = useState(0);
+  const [publicationPending, setPublicationPending] = useState(false);
 
-  const generalComplete = Object.keys(generalErrors(data)).length === 0;
+  const generalComplete = Object.keys(generalErrors(data)).length === 0 && !publicationPending;
   const stations = data.stations || STATIONS;
   const line = data.line || {code:'12',mode:'bus',name:'Ligne 12'};
   const i = data.impacts[current];
@@ -172,7 +175,7 @@ export default function App() {
   }
 
   function validate() {
-    const general = generalErrors(data);
+    const general = {...generalErrors(data), ...(publicationPending ? {publicationStart:'Corrigez et confirmez la date et l’heure de publication saisies.'} : {})};
     if (Object.keys(general).length) {
       setGeneralVersion(v => v + 1);
       return showFieldErrors(general);
@@ -201,12 +204,12 @@ export default function App() {
     if (window.location.hash !== hash) window.location.hash = hash;
   }
   function openRecord(record) {
-    setData(structuredClone(record)); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
+    setData(withGeneralInformation(structuredClone(record))); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
     setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
     setSaveState('Déclaration chargée depuis cet appareil.'); navigate('form');
   }
   function createRecord() {
-    setData({...initial(),id:makeId()}); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
+    setData({...initial(),id:makeId()}); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
     setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
     setSaveState('Nouvelle déclaration · modifications non enregistrées.'); navigate('form');
   }
@@ -292,21 +295,10 @@ export default function App() {
           actions={<Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />}>
         <Accordion key={generalVersion} items={[{
           id:'general', defaultOpen: generalVersion > 0,
-          title: 'Intitulé et cause',
-          content: <><p className="section-description">Les informations générales sont communes à tous les impacts.</p>
-          <div className="general-fields">
-            <div id="field-title"><TextInput
-              label="Intitulé de la perturbation"
-              value={data.title} state={fieldErrors.title ? 'error' : 'enabled'} helperText={fieldErrors.title}
-              onChange={(e) => change({ title: e.target.value })}
-            /></div>
-            <div id="field-cause" role="group" aria-label="Cause" aria-describedby={fieldErrors.cause ? 'error-cause' : undefined}><Dropdown label="Cause"
-              options={CAUSES.map(label => ({id:label,label}))} value={data.cause}
-              onChange={cause => change({cause})}/>
-              {fieldErrors.cause && <p id="error-cause" className="field-error" role="alert">{fieldErrors.cause}</p>}
-            </div>
-          </div>
-</>
+          title: 'Détails de la perturbation',
+          content: <GeneralInformation data={data} errors={fieldErrors} onChange={change}
+            onPublicationPending={setPublicationPending}/>
+
         }]} />
         </PageSection>
 

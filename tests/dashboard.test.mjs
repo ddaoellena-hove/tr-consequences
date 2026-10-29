@@ -35,9 +35,10 @@ test('enregistrer un brouillon puis le modifier conserve une seule identité', a
  const values=new Map([[RECORDS_KEY,'[]']]);
  globalThis.localStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
  try{
-  const saved=upsertRecord({title:'Brouillon test',cause:'Travaux',impacts:[{...impact('i','13'),from:2,to:3}]});
+  const saved=upsertRecord({title:'Brouillon test',cause:'Travaux',reference:'TR-TEST',publicationStart:'2026-11-01T10:30',labels:['Travaux'],properties:[{id:'prop1',name:'Chantier',value:'42'}],impacts:[{...impact('i','13'),from:2,to:3}]});
   assert.ok(saved.id);assert.ok(isRecord(saved));assert.equal(loadRecords().length,1);
   const updated=upsertRecord({...saved,title:'Titre modifié'},'published');
   assert.equal(updated.id,saved.id);assert.equal(loadRecords().length,1);assert.equal(loadRecords()[0].title,'Titre modifié');
+  assert.equal(loadRecords()[0].reference,'TR-TEST');assert.equal(loadRecords()[0].publicationStart,'2026-11-01T10:30');assert.deepEqual(loadRecords()[0].labels,['Travaux']);assert.deepEqual(loadRecords()[0].properties,[{id:'prop1',name:'Chantier',value:'42'}]);
  } finally {delete globalThis.localStorage;}
 });

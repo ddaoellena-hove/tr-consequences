@@ -2,8 +2,12 @@ export const CAUSES = ['Travaux', 'Incident technique', 'Événement'];
 export const validDate = value => typeof value === 'string' && value.trim() !== '' && Number.isFinite(Date.parse(value));
 export function generalErrors(data) {
   return {
-    ...(!data.title.trim() ? { title: 'Renseignez un intitulé pour la perturbation.' } : {}),
+    ...(!data.title?.trim() ? { title: 'Renseignez un intitulé pour la perturbation.' } : {}),
     ...(!CAUSES.includes(data.cause) ? { cause: 'Sélectionnez une cause.' } : {}),
+    ...(!data.reference?.trim() ? {reference:'Renseignez une référence pour la perturbation.'} : {}),
+    ...(!validDate(data.publicationStart) ? {publicationStart:'Renseignez une date et une heure de début de publication valides.'} : {}),
+    ...(data.properties?.some(p=>!p.name.trim()||!p.value.trim()) ? {properties:'Renseignez le nom et la valeur de chaque propriété ou supprimez la ligne.'} : {}),
+    ...(data.properties?.length && new Set(data.properties.map(p=>p.name.trim().toLocaleLowerCase('fr'))).size !== data.properties.length ? {properties:'Chaque propriété doit avoir un nom distinct.'} : {}),
   };
 }
 export function impactErrors(impact, step) {

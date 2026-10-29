@@ -1,3 +1,4 @@
+import {withGeneralInformation} from './general-information.mjs';
 export const STATIONS = ['Gare Centre', 'République', 'Université', 'Hôpital', 'Stade', 'Zénith'];
 export const STEP_LABELS = ['Périmètre', 'Sévérité de l’impact', 'Période', 'Message voyageurs', 'Récapitulatif'];
 
@@ -82,7 +83,7 @@ export const newImpact = () => ({
   message: 'En raison de travaux de voirie, la ligne 12 est interrompue entre Université et Hôpital. Merci de votre compréhension.',
 });
 
-export const initial = () => ({
+export const initial = () => withGeneralInformation({
   title: 'Travaux sur la ligne 12',
   cause: 'Travaux',
   impacts: [newImpact()],
