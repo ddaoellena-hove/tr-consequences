@@ -4,17 +4,12 @@
   "repositories": {
     "traffic_report": {
       "path": "/Users/ddao-ellena/tr-consequences /traffic-report",
-      "head": "c413b2e073f62896b7c9e2b6288b417b38e60337",
+      "head": "57485ec2e81d0f861fef1f9e1d6ef9df31dab0a9",
       "branch": "main",
       "status_at_packaging": [
         " M docs/handoff-cadence-migration/BESOINS-COMPOSANTS-CADENCE.md",
-        " M docs/handoff-cadence-migration/README.md",
-        " M docs/handoff-cadence-migration/snapshots/cadence/GUIDELINES.md",
-        "?? docs/handoff-cadence-migration/snapshots/cadence/src/components/Checkbox.tsx",
-        "?? docs/handoff-cadence-migration/snapshots/cadence/src/components/RichCheckbox.tsx",
-        "?? docs/handoff-cadence-migration/snapshots/cadence/src/components/rich-checkbox.css",
-        "?? docs/handoff-cadence-migration/snapshots/cadence/src/components/stepper.css",
-        "?? docs/handoff-cadence-migration/snapshots/cadence/src/components/use-popover-fit.ts"
+        " M docs/handoff-cadence-migration/CONTEXTE.md",
+        " M docs/handoff-cadence-migration/README.md"
       ]
     },
     "cadence": {
@@ -570,5 +565,5 @@
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Stepper à six étapes incluant les informations générales communes, avec accès à l’accordéon, validation et compteurs adaptés. Indices métier des impacts conservés."
+  "updated_note": "Passation finale : stepper à six étapes, informations générales communes, création après validation des messages, schéma pleine largeur sans options. Référence applicative avant le commit documentaire ; snapshots intégralement actualisés et vérifiés."
 }

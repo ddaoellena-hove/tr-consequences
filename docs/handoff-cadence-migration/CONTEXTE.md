@@ -1,5 +1,9 @@
 # Contexte vérifié
 
+## Mise à jour de référence — 30 octobre 2026
+
+Code applicatif : `57485ec2e81d0f861fef1f9e1d6ef9df31dab0a9` sur `main`. Le parcours actuel comporte six étapes avec les informations générales en tête et une création possible dès validation des messages. Derniers contrôles : 37 tests, tokens et build réussis. Le README, le backlog de composants et le manifeste décrivent cet état. Les sections datées du 29 octobre ci-dessous sont historiques ; leurs nombres de tests et leurs révisions ne représentent pas la dernière livraison. Le checkout Cadence contient des modifications locales non committées, conservées comme telles dans les snapshots.
+
 ## Révisions et états au 29 octobre 2026
 
 ### Traffic Report

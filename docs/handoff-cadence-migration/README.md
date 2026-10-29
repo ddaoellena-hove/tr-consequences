@@ -1,6 +1,6 @@
 # Passation — guidelines Cadence et guide de migration
 
-Préparée le **29 octobre 2026** à partir du projet Traffic Report. Ce dossier est destiné à un autre LLM ou à un développeur chargé de :
+Préparée le **29 octobre 2026**, actualisée le **30 octobre 2026** à partir du projet Traffic Report. Ce dossier est destiné à un autre LLM ou à un développeur chargé de :
 
 1. mettre à jour les guidelines de Hove Cadence à partir des enseignements vérifiés du projet ;
 2. créer un guide réutilisable pour migrer une maquette, une capture ou un prototype HTML vers Cadence.
@@ -61,3 +61,13 @@ La navigation est désormais regroupée dans le footer fixe : stepper compact, c
 Lire [les nouveaux composants et évolutions nécessaires](BESOINS-COMPOSANTS-CADENCE.md) : inventaire classé par type et priorité, critères d’acceptation, références aux adaptations locales et distinction entre fonctionnalités déjà existantes, tokens ajoutés et développements restant à faire. Inclut PageSection, Stepper compact, footer persistant, animation du Drawer et placement des overlays. L’interface de référence ne comporte plus les Options d’affichage.
 
 Pour une mission d’implémentation de Cadence, utiliser ce backlog avec la [fiche PageSection validée](PAGESECTION-SURFACE-VALIDEE.md). Le prompt documentaire d’origine ne demande pas à lui seul d’implémenter tout ce backlog.
+
+## État final du parcours au 30 octobre 2026
+
+- Stepper compact à six étapes : Informations générales (communes), Objets impactés, Sévérité, Périodes / créneaux, Messages et Résumé. Accès direct aux informations générales, état de validation et progression adaptés.
+- « Créer la perturbation » reste visible ; activation après validation des messages de chaque impact et des informations générales, sans passage obligatoire par le résumé. Toute modification concernée invalide la validation correspondante.
+- Navigation Précédent / Suivant dans les sections ; footer avec stepper, progression, statut d’enregistrement et boutons persistants.
+- Schéma pleine largeur dans Impacts, séparateur gris sous la sévérité, alerte sans badge et suppression des Options d’affichage.
+- Fondations globales Cadence et backlog de composants : voir les fiches dédiées. Leur distribution par le package Cadence reste distincte de la livraison de Traffic Report.
+
+Code applicatif de référence : `57485ec2e81d0f861fef1f9e1d6ef9df31dab0a9`. Cette référence précède le commit d’actualisation de la passation. Les snapshots ont été rafraîchis depuis les arbres de travail locaux et leurs empreintes contrôlées. Dernière validation applicative : 37 tests, contrôle des tokens et build réussis ; cette actualisation modifie uniquement la documentation.

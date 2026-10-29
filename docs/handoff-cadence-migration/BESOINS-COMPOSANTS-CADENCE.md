@@ -4,7 +4,7 @@ Actualisé le **30 octobre 2026**. Destinataires : développeur ou LLM intervena
 
 ## Sources et état de référence
 
-- Traffic Report : `c413b2e073f62896b7c9e2b6288b417b38e60337`, poussé sur `main` ; interface sans Options d’affichage.
+- Traffic Report : `57485ec2e81d0f861fef1f9e1d6ef9df31dab0a9`, référence applicative sur `main`, incluse dans le push de cette passation ; interface sans Options d’affichage et stepper à six étapes.
 - Cadence : checkout local `/Users/ddao-ellena/hove-cadence-ui`. Le manifeste du dossier donne sa révision et son état de travail réel. Des modifications préexistantes non committées doivent être préservées.
 - Version effectivement consommée par Traffic Report : sources vendor, dont la provenance est incluse dans les snapshots. Ne pas déduire de `version: 1.0.0` que tous les changements locaux sont publiés sur npm.
 - Lire aussi [la présentation PageSection validée](PAGESECTION-SURFACE-VALIDEE.md), [le parcours actuel](snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md), [le drawer de sélection](snapshots/traffic-report/docs/figma-objets-impactes.md) et les snapshots des sources applicatives.
