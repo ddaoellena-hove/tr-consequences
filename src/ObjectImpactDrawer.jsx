@@ -1,5 +1,5 @@
 import React,{useMemo,useState} from 'react';
-import {Drawer,Dropdown,Autocomplete,ModeFilter,PageSection,Checkbox,GhostButton,PrimaryButton,EmptyState,InlineAlert,Toggle,Modal,TableCard,DescriptionList,Accordion} from '@ddaoellena/cadence-ui';
+import {Drawer,Dropdown,Autocomplete,ModeFilter,PageSection,Checkbox,GhostButton,PrimaryButton,EmptyState,InlineAlert,Toggle,Modal,TableCard,DescriptionList,Accordion,Icons} from '@ddaoellena/cadence-ui';
 import {OBJECT_TYPES,uid,localDay} from './disruption-workflow.mjs';
 import {catalogueFor,NETWORKS,POIS,ACCESSES,MODE_OPTIONS,matchesModes,buildObject,stageObject,mergeObjectSelection,demoCourses} from './object-catalogue.mjs';
 import {DisruptionObjectIcon} from './DisruptionObjectIcon.jsx';
@@ -52,7 +52,7 @@ export function ObjectImpactDrawer({isOpen,onClose,impact,stations,line,editingO
   <div className="object-drawer-stack">
    <Dropdown label="Sélectionnez le type d’objet impacté" placeholder="Type d’objet impacté" value={type} options={OBJECT_TYPES.map(t=>({...t,icon:<DisruptionObjectIcon scope={t.id}/>}))} onChange={changeType}/>
    {type&&<>
-    {type!=='poi'&&<fieldset className="object-drawer-filter"><legend>Filtres par mode de transport</legend><ModeFilter aria-label="Filtrer les objets par mode" modes={MODE_OPTIONS} labels={{train:'Train / Transilien'}} value={modes} allLabel="Tous" onChange={value=>{setModes(value);clearConfiguration();}}/></fieldset>}
+    {type!=='poi'&&<fieldset className="object-drawer-filter"><legend><span className="object-filter-title"><Icons icon="filter-lines" size={16}/>Filtres par mode de transport</span></legend><ModeFilter aria-label="Filtrer les objets par mode" modes={MODE_OPTIONS} labels={{train:'Train / Transilien'}} value={modes} allLabel="Tous" onChange={value=>{setModes(value);clearConfiguration();}}/></fieldset>}
     {type==='network'&&<Autocomplete label="Réseau" placeholder="Rechercher un réseau" value="" options={NETWORKS.filter(n=>!modes.length||n.modes.some(m=>modes.includes(m))).map(n=>({id:n.id,label:n.name}))} onChange={id=>{const network=NETWORKS.find(n=>n.id===id);if(network)put(buildObject({scope:type,network,contextStations:stations}));}}/>}
     {['line','course'].includes(type)&&<Autocomplete label="Rechercher une ligne" placeholder="Nom ou identifiant de ligne" value={lineId} options={filteredLines.map(l=>({id:l.id,label:l.name,description:l.operator,content:<ObjectLineBadges lines={[l]}/>}))} onChange={selectLine}/>}
     {section&&<>{areaAutocomplete('Première gare ou arrêt impacté',firstId,v=>{setFirstId(v);setLastId('');setDirectionSelections({});})}{areaAutocomplete('Dernière gare ou arrêt impacté',lastId,v=>{setLastId(v);const destination=catalogue.areas.find(a=>a.id===v);setDirectionSelections(Object.fromEntries(filteredLines.filter(l=>first&&destination&&first.id!==destination.id&&l.stops.includes(first.name)&&l.stops.includes(destination.name)).map(l=>[l.id,l.directions])));})}
