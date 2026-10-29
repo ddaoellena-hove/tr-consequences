@@ -321,8 +321,7 @@ export default function App() {
                 {data.impacts.length} impact{data.impacts.length > 1 ? 's' : ''}
               </span>
             </div>
-            <PrimaryButton
-              outline
+            <GhostButton
               size="sm"
               label="Ajouter un impact"
               iconStart="plus"
