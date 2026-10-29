@@ -368,16 +368,6 @@ export default function App() {
             {step === 3 && <ImpactMessages key={current} impact={i} errors={fieldErrors} onChange={updateImpact} onPending={(key,value)=>setDatePending(prev=>({...prev,[key]:value}))}/>}
             {step === 4 && <DisruptionSummary data={data} stations={stations} onEdit={(index,target)=>{setCurrent(index);setStep(target);setImpactSteps(prev=>({...prev,[index]:target}));setFieldErrors({});setDatePending({});}}/>}
             </PageSection>
-          </div>
-          <FormActions className="wizard-actions" justify="between">
-            <span>Étape {step+1} sur 5</span>
-            <div>
-              <GhostButton size="sm" label="Précédent" iconStart="arrow-left" disabled={step===0} onClick={()=>go(step-1)}/>
-              {step<4&&<PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={()=>go(step+1)}/>}
-            </div>
-          </FormActions>
-        </PageSection>
-
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
         {step === 1 && SEVERITY_MAP[i.severity] && (diagrams.views.length===0 ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Consultez le détail des objets dans le résumé.</InlineAlert></div> : issue(i, 0) ? (
           <div className="consequence-wrap">
@@ -407,6 +397,17 @@ export default function App() {
             <ConsequenceCard sev={sev} tweaks={tweaks} />
           </>
         ))}
+          </div>
+          <FormActions className="wizard-actions" justify="between">
+            <span>Étape {step+1} sur 5</span>
+            <div>
+              <GhostButton size="sm" label="Précédent" iconStart="arrow-left" disabled={step===0} onClick={()=>go(step-1)}/>
+              {step<4&&<PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={()=>go(step+1)}/>}
+            </div>
+          </FormActions>
+        </PageSection>
+
+
 
         <p className="prototype-note">
           Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs

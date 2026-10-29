@@ -124,12 +124,12 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "32d5572b953f6173a6a6915a23f29af320ec51cdaedc293d7f2e85d86f8c8f5e",
+      "sha256": "668070fc767686b2928522dae317914c580356180aa469bccdebc69b8cdd436f",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
       "path": "snapshots/traffic-report/src/LineDiagram.jsx",
-      "sha256": "0bc48f21224087470babed05c80a278d8143efdd7901dc27e1f7abc4b4cc92a6",
+      "sha256": "cf2417f71eea0fd65997948aa5c2ba54742bbe190aa30374eec9a01f457309a1",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/LineDiagram.jsx"
     },
     {
@@ -425,7 +425,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "259e10a606f46f5f5df61324f8fb8ce925ab55aa72422f9abf4db814a842a55b"
+      "sha256": "3fd58cb652bb77461603b2b4eff095d78752bc09bbe7092ae65fe31738de3ecb"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -576,5 +576,5 @@
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
   "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
-  "updated_note": "Ajustement footer : libellé actif à droite des icônes, statut à gauche des actions ; navigation Précédent / Suivant dans la section Impacts."
+  "updated_note": "Schéma, options et InlineAlert intégrés dans la section Impacts avant sa navigation, uniquement à l’étape Sévérité."
 }
