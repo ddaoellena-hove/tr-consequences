@@ -79,7 +79,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "20c137ebba4e751de2e9d78d17cbda5778c8f6022df69ef1dc63cb90e489c2cb",
+      "sha256": "65c7e900aa5d18447810ed4df1afc4b01cdd9b9f865558862f94c674c9a1b7a2",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -89,7 +89,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "0ece69c695e8bcf80541dc5f40e190bcd650d2d17ad32fd7bbc060964b529117",
+      "sha256": "b6c8fbe67d52714ad8641af842d396d48078f6ea4dcb8b0ed9d606e1bfcbfa97",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -380,7 +380,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "95d67e70a4df52a3182875e222f183eb0ed3f6c9a288b5db81903df3ee4b5417"
+      "sha256": "3884d4a3393810d49df56d07d7dc24b775f8dede1ef132819273190c91903e0c"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -525,7 +525,7 @@
     {
       "path": "snapshots/traffic-report/src/CompactImpactStepper.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/CompactImpactStepper.jsx",
-      "sha256": "a50205be147d985824ce9aecb63b1f27794ea00f375090e170263774e0e7a91e"
+      "sha256": "bbd0c173e9b70a3b52a701f4365b0a530cca8319e1108c40caaca8ece513ae10"
     },
     {
       "path": "snapshots/cadence/src/components/stepper.css",
@@ -556,9 +556,19 @@
       "path": "snapshots/traffic-report/tests/creation-readiness.test.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/creation-readiness.test.mjs",
       "sha256": "cd72a429aadb75b263991467c98f26944ef6d2c0100acb9bc60b14deecb9bb75"
+    },
+    {
+      "path": "snapshots/traffic-report/src/declaration-steps.mjs",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/declaration-steps.mjs",
+      "sha256": "6ae1b398aee6731dcd24e76354a722dc53dad226a2e4d2de0d29001075b72015"
+    },
+    {
+      "path": "snapshots/traffic-report/tests/declaration-steps.test.mjs",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/declaration-steps.test.mjs",
+      "sha256": "bf944e8ec35115561d393568005bfe73a06422a2c3507641c516709ac59886ab"
     }
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Création permanente : activée après validation de Messages pour tous les impacts, sans passage obligatoire par le résumé. Nouvelle garde de validation testée et saisies temporelles prises en compte."
+  "updated_note": "Stepper à six étapes incluant les informations générales communes, avec accès à l’accordéon, validation et compteurs adaptés. Indices métier des impacts conservés."
 }

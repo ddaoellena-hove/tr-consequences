@@ -1,6 +1,7 @@
 import './workflow.css';
 import { STATIONS, STEP_LABELS, SEVERITIES, SEVERITY_MAP, initial, removeFormImpact } from './traffic-model.mjs';
 import Dashboard from './Dashboard.jsx';
+import {declarationSteps} from './declaration-steps.mjs';
 import {CompactImpactStepper} from './CompactImpactStepper.jsx';
 import {ImpactObjects} from './ImpactObjects.jsx';
 import {ImpactSchedule} from './ImpactSchedule.jsx';
@@ -111,6 +112,7 @@ export default function App() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [generalVersion, setGeneralVersion] = useState(0);
+  const [generalActive,setGeneralActive]=useState(()=>Object.keys(generalErrors(data)).length>0);
   const [publicationPending, setPublicationPending] = useState(false);
 
   const generalComplete = Object.keys(generalErrors(data)).length === 0 && !publicationPending;
@@ -121,6 +123,18 @@ export default function App() {
   const diagrams=consequenceDiagrams(i,stations,line);
 
 
+
+  const navigation=declarationSteps({data,impactIndex:current,step,completed,generalActive,publicationPending,fieldErrors});
+  function openGeneral() {
+    setGeneralActive(true);setGeneralVersion(v=>v+1);
+    requestAnimationFrame(()=>{const trigger=document.querySelector('.general .accordion__trigger');trigger?.focus({preventScroll:true});trigger?.scrollIntoView({behavior:'smooth',block:'center'});});
+  }
+  function continueGeneral() {
+    const errors={...generalErrors(data),...(publicationPending?{publicationStart:'Corrigez et confirmez la date de publication.'}:{})};
+    if(Object.keys(errors).length)return showFieldErrors(errors);
+    setFieldErrors({});go(step);
+    requestAnimationFrame(()=>document.querySelector('.impact-head')?.scrollIntoView({behavior:'smooth',block:'center'}));
+  }
 
   function change(update) {
     setData((d) => ({ ...d, ...update }));
@@ -153,7 +167,7 @@ export default function App() {
       description: entries[0][1],
       duration: 6000,
       actions: [{label: 'Corriger', onClick: () => {
-        if (openGeneral) setGeneralVersion(v => v + 1);
+        if (openGeneral) {setGeneralActive(true);setGeneralVersion(v => v + 1);}
         requestAnimationFrame(() => {
           const field = document.getElementById(`field-${entries[0][0]}`);
           if (!field) return;
@@ -166,6 +180,7 @@ export default function App() {
   }
 
   function go(n) {
+    setGeneralActive(false);
     if(n>step){
       for(let target=0;target<n;target++){
         const pending=Object.fromEntries(Object.entries(datePending).filter(([key,value])=>value&&(key==='notification'?target===3:target===2)).map(([key])=>[key,'Corrigez et confirmez la date ou l’heure saisie.']));
@@ -223,11 +238,13 @@ export default function App() {
     if (window.location.hash !== hash) window.location.hash = hash;
   }
   function openRecord(record) {
+    setGeneralActive(true);
     setData(normalizeWorkflow(withGeneralInformation(structuredClone(record)))); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
     setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
     setSaveState('Déclaration chargée depuis cet appareil.'); navigate('form');
   }
   function createRecord() {
+    setGeneralActive(true);
     setData(normalizeWorkflow({...initial(),title:'',cause:'',id:makeId(),impacts:[emptyWorkflowImpact()]})); setGeneralVersion(v=>v+1); setPublicationPending(false); setCurrent(0); setStep(0); setImpactSteps({0:0}); setCompleted({});
     setFieldErrors({}); setDatePending({}); setVerified(false); setError('');
     setSaveState('Nouvelle déclaration · modifications non enregistrées.'); navigate('form');
@@ -308,18 +325,22 @@ export default function App() {
       <div className="page-wrapper">
         {error && <InlineAlert type="error" title="Enregistrement impossible">{error}</InlineAlert>}
         {/* Informations générales */}
+        <div onFocusCapture={()=>setGeneralActive(true)}>
         <PageSection title="Informations générales" surface="card" gap={0} className="general section-preview"
           actions={<Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />}>
         <Accordion key={generalVersion} items={[{
-          id:'general', defaultOpen: generalVersion > 0,
+          id:'general', defaultOpen: generalVersion > 0 || generalActive,
           title: 'Détails de la perturbation',
-          content: <GeneralInformation data={data} errors={fieldErrors} onChange={change}
+          content: <><GeneralInformation data={data} errors={fieldErrors} onChange={change}
             onPublicationPending={setPublicationPending}/>
+            <FormActions className="general-actions" justify="end"><PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={continueGeneral}/></FormActions></>
 
         }]} />
         </PageSection>
+        </div>
 
         {/* Tunnel de déclaration d'impacts */}
+        <div onFocusCapture={()=>setGeneralActive(false)}>
         <PageSection title="Impacts de la perturbation" surface="card" gap={0} className="impact section-preview">
           <div className="impact-head">
             <div>
@@ -387,15 +408,14 @@ export default function App() {
           </>
         )}</div>}
           <FormActions className="wizard-actions" justify="between">
-            <span>Étape {step+1} sur 5</span>
+            <span>Étape {step+2} sur 6</span>
             <div>
-              <GhostButton size="sm" label="Précédent" iconStart="arrow-left" disabled={step===0} onClick={()=>go(step-1)}/>
+              <GhostButton size="sm" label="Précédent" iconStart="arrow-left" onClick={()=>step===0?openGeneral():go(step-1)}/>
               {step<4&&<PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={()=>go(step+1)}/>}
             </div>
           </FormActions>
         </PageSection>
-
-
+        </div>
 
         <p className="prototype-note">
           Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs
@@ -403,13 +423,14 @@ export default function App() {
       </div>
       </div>
       <footer className="declaration-footer" aria-label="Actions de la déclaration">
-        <ProgressBar className="declaration-progress footer-progress" value={(step+1)*20} aria-label={`Position dans le parcours de l’impact n° ${current+1} : étape ${step+1} sur 5`}/>
+        <ProgressBar className="declaration-progress footer-progress" value={(navigation.current+1)/navigation.steps.length*100} aria-label={`Position dans la déclaration : étape ${navigation.current+1} sur ${navigation.steps.length}`}/>
         <div className="declaration-footer-content">
-          <CompactImpactStepper current={step} impactNumber={current+1} compact={narrow}
-            steps={STEP_LABELS.map((label,n)=>({label,
-              state:n===step?(Object.keys(fieldErrors).length?'error':'current'):(completed[current]||[]).includes(n)?(issue(i,n)?'warning':'completed'):'upcoming',
-              available:n<=step||(completed[current]||[]).includes(n)}))}
-            onStepClick={go}/>
+          <CompactImpactStepper current={navigation.current} impactNumber={current+1} compact={narrow}
+            steps={navigation.steps} onStepClick={index=>{
+              if(index===0){openGeneral();return;}
+              go(index-1);
+              if(generalActive)requestAnimationFrame(()=>document.querySelector('.impact-head')?.scrollIntoView({behavior:'smooth',block:'center'}));
+            }}/>
           <div className="footer-action-area">
             <span className="footer-save-state" role="status">{saveState}</span>
             <FormActions className="footer-actions" justify="end">

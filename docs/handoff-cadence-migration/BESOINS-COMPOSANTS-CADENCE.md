@@ -80,7 +80,7 @@ Ajouter une variante compacte et une icône par étape en conservant les états 
 
 Sur mobile, la recette utilise un sélecteur d’étapes avec étape active et compteur. Le contexte « Impact n° N » est fourni par le produit, sans être codé dans Cadence. La progression exprime la position dans le parcours, pas un taux de complétude métier.
 
-**Acceptation :** navigation clavier, `aria-current="step"`, noms accessibles complets, états annoncés, étapes futures indisponibles, pas de contournement de validation, retour à une étape terminée. Tester les cinq libellés longs et le changement d’impact.
+**Acceptation :** navigation clavier, `aria-current="step"`, noms accessibles complets, états annoncés, étapes futures indisponibles, pas de contournement de validation, retour à une étape terminée. Tester les six étapes, les libellés longs et le changement d’impact. Les informations générales forment une première étape commune ; les cinq étapes suivantes sont propres à l’impact sélectionné.
 
 ### E3 — AppLayout et FormActions : footer persistant
 
