@@ -124,7 +124,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "35b1a5ba510a2f763be84c4c5ac75b4ca7ba4fd57ffb70dbcbaa2948e09504cf",
+      "sha256": "32d5572b953f6173a6a6915a23f29af320ec51cdaedc293d7f2e85d86f8c8f5e",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "541f6241a7f65bd2cb4bc14d678d6b6a083c947066232fc5aee0812a6c814276",
+      "sha256": "1d099307c188b32c1ef03ca3d1a5f3f593044f35789c203f86e139ba361a9c30",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -425,7 +425,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "739df035c1c0f932bdd06720c04274af1b14767bf88606ab9583dd9782f22c79"
+      "sha256": "259e10a606f46f5f5df61324f8fb8ce925ab55aa72422f9abf4db814a842a55b"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -576,5 +576,5 @@
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
   "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
-  "updated_note": "Stepper compact local composé de contrôles Cadence, progression et navigation dans le footer fixe. Desktop et mobile vérifiés ; aucune nouvelle API publique Cadence."
+  "updated_note": "Ajustement footer : libellé actif à droite des icônes, statut à gauche des actions ; navigation Précédent / Suivant dans la section Impacts."
 }

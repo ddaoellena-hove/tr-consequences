@@ -174,8 +174,8 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .declaration-footer { padding:0; }
 .declaration-footer-content { display:flex; align-items:center; justify-content:space-between; gap:var(--tr-space-24); padding:var(--tr-space-12) var(--cadence-page-padding-inline); }
 .footer-progress { flex-shrink:0; }
-.footer-step-navigation { min-width:0; flex:1; }
-.footer-stepper { display:flex; align-items:center; gap:var(--tr-space-8); margin:0 0 var(--tr-space-4); padding:0; list-style:none; }
+.footer-step-navigation { display:flex; align-items:center; gap:var(--tr-space-12); min-width:0; flex:1; }
+.footer-stepper { display:flex; align-items:center; gap:var(--tr-space-8); margin:0; padding:0; list-style:none; }
 .footer-stepper-step { position:relative; display:flex; }
 .footer-stepper-step[data-state="current"] .base-button,
 .footer-stepper-step[aria-current="step"] .base-button { background:var(--cadence-color-primary); color:var(--cadence-color-white); }
@@ -186,9 +186,9 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .footer-stepper-step[data-state="warning"] .footer-step-state { background:var(--cadence-status-warning-fg); }
 .footer-step-context { margin:0; color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); }
 .footer-step-context strong { color:var(--cadence-color-primary); font-weight:var(--tr-font-weight-medium); }
-.footer-action-area { display:flex; flex-direction:column; align-items:flex-end; gap:var(--tr-space-4); }
+.footer-action-area { display:flex; align-items:center; justify-content:flex-end; gap:var(--tr-space-12); }
 .footer-actions { flex-wrap:wrap; gap:var(--tr-space-8); }
-.footer-save-state { color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); text-align:right; }
+.footer-save-state { color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); text-align:left; max-width:calc(var(--tr-space-32) * 6); }
 /* Cadence icon tooltips normally open downward; the footer opens them upward. */
 .footer-stepper .base-button-tip__bubble { top:auto; bottom:calc(100% + var(--tr-space-8)); }
 .footer-stepper .tooltip--arrow-top::after { display:none; }

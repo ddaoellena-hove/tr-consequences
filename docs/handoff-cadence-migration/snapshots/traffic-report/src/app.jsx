@@ -369,7 +369,13 @@ export default function App() {
             {step === 4 && <DisruptionSummary data={data} stations={stations} onEdit={(index,target)=>{setCurrent(index);setStep(target);setImpactSteps(prev=>({...prev,[index]:target}));setFieldErrors({});setDatePending({});}}/>}
             </PageSection>
           </div>
-
+          <FormActions className="wizard-actions" justify="between">
+            <span>Étape {step+1} sur 5</span>
+            <div>
+              <GhostButton size="sm" label="Précédent" iconStart="arrow-left" disabled={step===0} onClick={()=>go(step-1)}/>
+              {step<4&&<PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={()=>go(step+1)}/>}
+            </div>
+          </FormActions>
         </PageSection>
 
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
@@ -416,12 +422,11 @@ export default function App() {
               available:n<=step||(completed[current]||[]).includes(n)}))}
             onStepClick={go}/>
           <div className="footer-action-area">
+            <span className="footer-save-state" role="status">{saveState}</span>
             <FormActions className="footer-actions" justify="end">
               <PrimaryButton outline size="sm" iconStart="save-01" label={narrow?'Brouillon':'Enregistrer le brouillon'} onClick={save}/>
-              <GhostButton size="sm" label="Précédent" iconStart="arrow-left" disabled={step===0} onClick={()=>go(step-1)}/>
-              {step<4?<PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={()=>go(step+1)}/>:<PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate}/>}
+              {step===4&&<PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate}/>}
             </FormActions>
-            <span className="footer-save-state" role="status">{saveState}</span>
           </div>
         </div>
       </footer>
