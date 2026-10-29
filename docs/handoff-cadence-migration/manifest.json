@@ -124,7 +124,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "a4fb5a2354613416f83efa3a8dd8503c700329fbc074e3e62a478b2783267e2f",
+      "sha256": "231f318b5ea126eddd0e5d957393859346b335665b5aedb938f8cb913963853d",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "756947ee5e56af93dfc87528d5e26d22dbe0b3c84e6f6a8aa1853e78be6f949a",
+      "sha256": "da3c63594126c9d384aca108371f717679b60e77e0e7acb21abb939ef948e49f",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -560,5 +560,5 @@
   ],
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "update_note": "Figma object journey: transactional Cadence Drawer, search/mode filters, ten object types, structured selections, imported reference assets and tests. Working-tree snapshot before publication."
+  "update_note": "Progressive validation uses a toast and local field errors; no automatic focus on a top-of-page ErrorSummary. Explicit Correct action navigates to the field."
 }

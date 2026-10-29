@@ -63,3 +63,9 @@ Le dernier code a été publié sur le Site privé avec succès. Au point de ré
 Les boutons icône de chaque TableCard affichent uniquement le verbe : **Dupliquer**, **Modifier**, **Consulter**, **Supprimer**. Le titre de la perturbation n’est plus répété dans l’infobulle. Dans l’API Cadence embarquée, BaseButton génère cette infobulle à partir du nom accessible `aria-label` ; les quatre noms portent donc ces seuls verbes. La case de sélection conserve son libellé contextualisé. Aucun comportement d’action ni composant du design system n’a été changé.
 
 Cette densité de libellé est une décision Traffic Report. Ne pas inventer une prop tooltip distincte absente de cette version du composant.
+
+## Validation progressive sans retour automatique en haut
+
+À la demande de l’utilisateur, le formulaire n’affiche plus ErrorSummary en tête de page pour les oublis de champs. Son focus automatique provoquait un retour en haut, loin des actions de l’étape. Le feedback utilise désormais un toast Cadence warning temporaire, accompagné des messages locaux persistants. L’action « Corriger » du toast ouvre si nécessaire les informations générales puis amène volontairement au premier champ concerné. Le toast est placé au-dessus du pied d’actions persistant.
+
+Cette décision concerne le parcours Traffic Report ; elle ne supprime pas la pertinence d’ErrorSummary pour d’autres formulaires ni le besoin d’API de validation accessibles dans Cadence. Contrôle navigateur : scrollTop avant/après erreur identique (859,5), focus conservé sur Suivant, absence du résumé en tête, erreur locale et annonce du toast présentes. Les 28 tests, tokens et build passent.

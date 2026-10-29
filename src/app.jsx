@@ -27,7 +27,7 @@ import {
   Breadcrumbs,
   Accordion, PageSection, FormActions, ProgressBar, Modal, Toaster, toast,
   SegmentedControl, Badge,
-  ErrorSummary, Toggle, EmptyState, SummaryList,
+  Toggle, EmptyState, SummaryList,
 } from '@ddaoellena/cadence-ui';
 
 function loadDraft() {
@@ -97,7 +97,6 @@ export default function App() {
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
   const [datePending, setDatePending] = useState({});
-  const [summaryVersion, setSummaryVersion] = useState(0);
   const [impactSteps, setImpactSteps] = useState({0: 0});
   const [completed, setCompleted] = useState({});
   const [saveState, setSaveState] = useState(
@@ -146,9 +145,26 @@ export default function App() {
     setCompleted(prev => ({...prev, [current]: (prev[current] || []).filter(n => n < editedStep)}));
   }
 
-  function showFieldErrors(errors) {
+  function showFieldErrors(errors, openGeneral = false) {
     setFieldErrors(errors);
-    setSummaryVersion(v => v + 1);
+    const entries = Object.entries(errors);
+    if (!entries.length) return;
+    toast({
+      type: 'warning',
+      title: entries.length === 1 ? 'Un champ est à compléter' : `${entries.length} champs sont à compléter`,
+      description: entries[0][1],
+      duration: 6000,
+      actions: [{label: 'Corriger', onClick: () => {
+        if (openGeneral) setGeneralVersion(v => v + 1);
+        requestAnimationFrame(() => {
+          const field = document.getElementById(`field-${entries[0][0]}`);
+          if (!field) return;
+          const control = field.querySelector('input:not(:disabled), textarea:not(:disabled), button:not(:disabled), [tabindex="0"]');
+          control?.focus({preventScroll: true});
+          field.scrollIntoView({behavior: 'smooth', block: 'center'});
+        });
+      }}],
+    });
   }
 
   function go(n) {
@@ -182,8 +198,7 @@ export default function App() {
   function validate() {
     const general = {...generalErrors(data), ...(publicationPending ? {publicationStart:'Corrigez et confirmez la date et l’heure de publication saisies.'} : {})};
     if (Object.keys(general).length) {
-      setGeneralVersion(v => v + 1);
-      return showFieldErrors(general);
+      return showFieldErrors(general, true);
     }
     for (let n = 0; n < data.impacts.length; n++) {
       for (const st of [0, 1, 2, 3]) {
@@ -293,7 +308,6 @@ export default function App() {
       />
 
       <div className="page-wrapper">
-        <ErrorSummary key={summaryVersion} errors={Object.entries(fieldErrors).map(([field,message]) => ({id:field, message, target:`field-${field}`}))} />
         {error && <InlineAlert type="error" title="Enregistrement impossible">{error}</InlineAlert>}
         {/* Informations générales */}
         <PageSection title="Informations générales" surface="card" gap={0} className="general"
@@ -437,7 +451,7 @@ export default function App() {
         }}}>
         <p>Le périmètre, la sévérité, la période et le message de cet impact seront retirés du formulaire. Les autres impacts seront conservés.</p>
       </Modal>
-      <Toaster />
+      <Toaster className="declaration-toaster" />
       <Modal isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} title="Navigation">
         <SummaryList aria-label="Navigation principale" items={[
           {id:'dashboard',title:'Toutes les perturbations'}, {id:'new',title:'Nouvelle déclaration'}, {id:'history',title:'Mes déclarations'}

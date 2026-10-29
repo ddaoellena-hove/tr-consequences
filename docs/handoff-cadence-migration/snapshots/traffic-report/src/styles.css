@@ -138,3 +138,6 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 /* The declaration progress follows the straight edge of its section. */
 .declaration-progress .progress-bar__track,
 .declaration-progress .progress-bar__fill { border-radius:0; }
+
+/* Keep feedback above the persistent declaration actions. */
+.declaration-toaster { bottom:calc(var(--tr-space-32) * 4); }
