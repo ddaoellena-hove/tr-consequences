@@ -142,7 +142,7 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 /* Keep feedback above the persistent declaration actions. */
 .declaration-toaster { bottom:calc(var(--tr-space-32) * 4); }
 
-/* Local PageSection exploration: heading outside a padded, elevated body.
+/* Validated PageSection presentation: heading outside a padded, elevated body.
    Only page-level sections opt in; nested data cards retain their anatomy. */
 .section-preview.page-section--card {
  background:transparent;
@@ -158,8 +158,8 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .section-preview.page-section--card > .page-section__body {
  background:var(--cadence-color-white);
  border:var(--tr-border-width) solid var(--cadence-color-border);
- border-radius:var(--tr-section-preview-radius);
- box-shadow:var(--tr-section-preview-shadow);
+ border-radius:var(--cadence-radius-xl);
+ box-shadow:var(--tr-shadow-section);
  padding-inline:var(--tr-space-8);
 }
 .general.section-preview { margin-bottom:var(--tr-space-32); }

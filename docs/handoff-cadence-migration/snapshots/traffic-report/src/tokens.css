@@ -2,6 +2,8 @@
    Do not present these as official Cadence tokens. Severity colors preserve the
    existing product model; text uses Cadence's accessible semantic foregrounds. */
 :root {
+ /* Validated PageSection shadow; local until integration into Cadence. */
+ --tr-shadow-section:0 0 2px 0 rgba(0,0,0,0.10), 0 2px 10px 0 rgba(0,0,0,0.05);
  --tr-fields-max:720px; --tr-field-max:720px;
  --tr-form-min-height:175px;
  --tr-dot-size:9px; --tr-border-width:1px; --tr-line-width:3px;

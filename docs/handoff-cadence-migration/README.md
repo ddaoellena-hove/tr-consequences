@@ -47,3 +47,7 @@ Contributions à Cadence : [Brief des besoins en composants et patterns pour un 
 ### Schémas multiples et ouverture du panneau
 
 Un aperçu par ligne et par tronçon remplace la limitation au premier tronçon. Voir `src/consequence-diagrams.mjs` et ses tests dans les snapshots. Le bouton annonce la sélection multiple ; l’aide évite le jargon. Le panneau est monté fermé pour conserver l’animation d’entrée Cadence lors du chargement différé. Détails et limite de géométrie : `docs/figma-objets-impactes.md` du projet.
+
+## PageSection : présentation validée
+
+Voir [PageSection — surface validée](PAGESECTION-SURFACE-VALIDEE.md) pour l’anatomie, les tokens, les espacements et la proposition d’intégration dans Cadence. Cette fiche décrit une évolution de composant à réaliser dans une mission distincte de la mise à jour documentaire.

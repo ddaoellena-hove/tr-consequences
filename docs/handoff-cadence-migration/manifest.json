@@ -124,22 +124,22 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "eb1e7ea76655af8c50e5b2e2be475f92c420a08336c931fdb5ba47e65ed7fa12",
+      "sha256": "12f89e6f3b1ccd76b6276600cb37ad5162ecfadafef9d93fca940496f967f22c",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
       "path": "snapshots/traffic-report/src/LineDiagram.jsx",
-      "sha256": "3bc64640fb6f947bd5948c7addef02b45319fbc76e01dab94da10fc38a4b012a",
+      "sha256": "0bc48f21224087470babed05c80a278d8143efdd7901dc27e1f7abc4b4cc92a6",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/LineDiagram.jsx"
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "da3c63594126c9d384aca108371f717679b60e77e0e7acb21abb939ef948e49f",
+      "sha256": "0ff6563c4b17f9ed194552bd3e277b5c799a4590ed5dde046ecead52bd16c68e",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
       "path": "snapshots/traffic-report/src/tokens.css",
-      "sha256": "399c040c4a76461c5a50645a19d2a85865b65108f5e381d82b07d064d87b5e74",
+      "sha256": "b6ecec11cc096449850c740260e74f16a795d8471cda4a6652401b8f90f0769c",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/tokens.css"
     },
     {
@@ -315,7 +315,7 @@
     {
       "path": "snapshots/traffic-report/src/Dashboard.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/Dashboard.jsx",
-      "sha256": "18047f8469db6cc4d43ded2376d2c3ce35663c4456ab602b93a282b245d48610"
+      "sha256": "248d8e29611872a4cc2dd43b7dde866b67244d5d04060d317711e786310fb1db"
     },
     {
       "path": "snapshots/traffic-report/src/dashboard.css",
@@ -571,5 +571,5 @@
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
   "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message.",
-  "updated_note": "Inclut les schémas par ligne et les ajustements de sélection et animation du panneau, avant commit de publication."
+  "updated_note": "Inclut la fiche PageSection validée : titre extérieur, rayon Cadence xl de 12 px, ombre dédiée et espacements. Snapshots des sources de cette variante actualisés."
 }
