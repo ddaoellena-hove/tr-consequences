@@ -36,7 +36,7 @@ export function ObjectImpactDrawer({isOpen,onClose,impact,stations,line,editingO
   const replacingId=editingStaged||editingObject?.id;
   const candidate={...object,id:replacingId||uid()};
   const base=basket.filter(o=>o.id!==replacingId),next=stageObject(base,candidate);
-  setBasket(next);clearConfiguration();setNotice(next.length===base.length?'Cet objet est déjà dans la sélection.':'Objet ajouté à la sélection temporaire.');
+  setBasket(next);clearConfiguration();setNotice(next.length===base.length?'Cet objet est déjà dans la sélection.':'Objet ajouté. Vous pouvez en sélectionner d’autres avant de confirmer.');
  }
  function addConfiguration(){if(!selectionValid)return;put(buildObject({scope:type,selectedLines:type==='course'?[chosenLine]:selectedLines,directionSelections,area,first,last,accessIds,course,contextStations:stations}));}
  function editStaged(object){
@@ -46,9 +46,9 @@ export function ObjectImpactDrawer({isOpen,onClose,impact,stations,line,editingO
  }
  const areaAutocomplete=(label,value,onChange,options=areaOptions)=><Autocomplete label={label} placeholder="Nom ou identifiant de l’arrêt" value={value} options={options.map(a=>({id:a.id,label:a.name,description:'Catalogue de démonstration',content:<ObjectLineBadges lines={a.lines.filter(l=>matchesModes(modes,l))}/>}))} onChange={v=>onChange(v||'')}/>;
  const toggleAccess=(id,checked)=>setAccessIds(prev=>checked?[...new Set([...prev,id])]:prev.filter(v=>v!==id));
- return <><Drawer isOpen={isOpen} onClose={onClose} title={editingObject?'Modifier l’objet d’impact':'Nouvel objet d’impact'} subtitle="Recherchez les objets, préparez votre sélection puis confirmez." width="lg" className="object-impact-drawer"
+ return <><Drawer isOpen={isOpen} onClose={onClose} title={editingObject?'Modifier l’objet d’impact':'Ajouter des objets impactés'} subtitle={editingObject?'Modifiez l’objet dans votre sélection, puis confirmez.':'Vous pouvez ajouter plusieurs objets, de types différents, à cet impact. Préparez votre sélection puis ajoutez-la en une seule fois.'} width="lg" className="object-impact-drawer"
    onSubmit={event=>{event.preventDefault();if(basket.length)onConfirm(mergeObjectSelection(impact.objects,basket,editingObject?.id));}}
-   primaryAction={{label:editingObject?'Confirmer':`Ajouter${basket.length?` (${basket.length})`:''}`,disabled:!basket.length}} secondaryAction={{label:'Annuler',onClick:onClose}}>
+   primaryAction={{label:editingObject?'Confirmer':`Ajouter à l’impact${basket.length?` (${basket.length})`:''}`,disabled:!basket.length}} secondaryAction={{label:'Annuler',onClick:onClose}}>
   <div className="object-drawer-stack">
    <Dropdown label="Sélectionnez le type d’objet impacté" placeholder="Type d’objet impacté" value={type} options={OBJECT_TYPES.map(t=>({...t,icon:<DisruptionObjectIcon scope={t.id}/>}))} onChange={changeType}/>
    {type&&<>
@@ -80,9 +80,9 @@ export function ObjectImpactDrawer({isOpen,onClose,impact,stations,line,editingO
       <WorkflowDate label="Jour de circulation" withTime={false} value={`${courseDate}T00:00`} onChange={value=>{setCourseDate(value);setCourse(null);setCourseChoice('');}} onPending={setCourseDatePending}/>
       <div><GhostButton size="sm" label="Choisir une course" disabled={!courseDirection||courseDatePending} onClick={()=>setCourseOpen(true)}/></div>
       {course&&<DescriptionList items={[{id:'course',label:'Course choisie',value:course.name},{id:'start',label:'Départ',value:new Date(course.start).toLocaleString('fr-FR')},{id:'end',label:'Arrivée',value:new Date(course.end).toLocaleString('fr-FR')}]}/>}</>}
-     <div className="workflow-actions"><GhostButton size="sm" iconStart="plus" label={editingStaged?'Mettre à jour la sélection':type==='line'?'Ajouter la ligne':type==='stop'?'Ajouter la déviation':type==='access'?'Ajouter les entrées/sorties':type==='course'?'Ajouter la course':'Ajouter le tronçon'} disabled={!selectionValid} onClick={addConfiguration}/><GhostButton size="sm" label="Réinitialiser" onClick={clearConfiguration}/></div>
+     <div className="workflow-actions"><GhostButton size="sm" iconStart="plus" label={editingStaged?'Mettre à jour la sélection':'Ajouter à la sélection'} disabled={!selectionValid} onClick={addConfiguration}/><GhostButton size="sm" label="Réinitialiser" onClick={clearConfiguration}/></div>
     </div></PageSection>}
-    <PageSection title={`Objets sélectionnés (${basket.length})`} headingLevel={3} gap={12} className="object-drawer-basket">
+    <PageSection title={`Votre sélection (${basket.length} objet${basket.length>1?'s':''})`} description={editingObject?'Confirmez pour appliquer vos modifications.':'Continuez à rechercher des objets : ils seront ajoutés ensemble à l’impact lors de la confirmation.'} headingLevel={3} gap={12} className="object-drawer-basket">
      {!basket.length?<EmptyState size="inline" title="Aucun objet sélectionné" illustration={<img src="/figma/object-empty.svg" alt=""/>}/>:basket.map(o=><ObjectSelectionCard key={o.id} object={o} stations={stations} onEdit={()=>editStaged(o)} onRemove={()=>{setBasket(prev=>prev.filter(v=>v.id!==o.id));if(editingStaged===o.id)clearConfiguration();}}/>)}
     </PageSection>
    </>}

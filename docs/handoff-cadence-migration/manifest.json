@@ -485,12 +485,12 @@
     {
       "path": "snapshots/traffic-report/docs/figma-objets-impactes.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/figma-objets-impactes.md",
-      "sha256": "f7746495ccbe9ab41f16998b81b843485f781cdcea0c2988ec5d2ffc330b49b6"
+      "sha256": "d137fac227b9946722864fcda3337f55bb534ac41d3d9b6be92f791a9875babc"
     },
     {
       "path": "snapshots/traffic-report/src/ObjectImpactDrawer.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ObjectImpactDrawer.jsx",
-      "sha256": "5a410c45fda6259e6f3d0b37fbbeeebd69899b8e9c08289d72f138e4338ae3dc"
+      "sha256": "1c6713c51f83bf786fb93a0138de8e119a23dd8d18fd86248ab02392f4974125"
     },
     {
       "path": "snapshots/traffic-report/src/ObjectSelectionCard.jsx",
@@ -560,5 +560,5 @@
   ],
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "update_note": "Progressive validation uses a toast and local field errors; no automatic focus on a top-of-page ErrorSummary. Explicit Correct action navigates to the field."
+  "update_note": "Drawer explicitly explains multi-object selection; distinct staging and final confirmation labels, selection count and continuation message."
 }
