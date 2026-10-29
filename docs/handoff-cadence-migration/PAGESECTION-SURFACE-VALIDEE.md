@@ -30,11 +30,11 @@ Le corps conserve les séparateurs internes utiles au formulaire : barre d’imp
 | Rayon du corps | 12 px | `--cadence-radius-xl` | Réutiliser ce token existant |
 | Fond du corps | Blanc | `--cadence-color-white` | Token existant |
 | Bordure du corps | 1 px, couleur de bordure Cadence | `--tr-border-width` + `--cadence-color-border` | Réutiliser les fondations existantes si disponibles |
-| Marge horizontale de la section | 8 px de chaque côté dans son parent | `--tr-space-8` | Espacement de composition de page |
-| Padding horizontal de l’en-tête | 8 px | `--tr-space-8` | Espacement de composant |
-| Espace entre en-tête et boîte | 12 px | `--tr-space-12` | Espacement de composant |
-| Padding horizontal du corps | 8 px ajoutés au contenu existant | `--tr-space-8` | Espacement de composant |
-| Espace entre sections principales | 32 px | `--tr-space-32` | Espacement de composition de page |
+| Marge horizontale de la section | 8 px de chaque côté dans son parent | `--cadence-section-inset-inline` | Token global créé |
+| Padding horizontal de l’en-tête | 8 px | `--cadence-section-padding-inline` | Token global créé |
+| Espace entre en-tête et boîte | 12 px | `--cadence-section-heading-gap` | Token global créé |
+| Padding horizontal du corps | 8 px ajoutés au contenu existant | `--cadence-section-padding-inline` | Token global créé |
+| Espace entre sections principales | 32 px | `--cadence-section-gap` | Token global créé |
 
 Le rayon est passé de 10 à 12 px lors de la validation. Utiliser directement `--cadence-radius-xl` ; ne pas modifier globalement `--cadence-radius-lg` et ne pas conserver un calcul « lg + 2 ».
 
@@ -46,7 +46,7 @@ L’ombre est différente des ombres Cadence existantes : utiliser le token glob
                           0 2px 10px 0 rgba(0, 0, 0, 0.05);
 ```
 
-Les espacements `--tr-space-*` sont des extensions locales, pas des tokens officiels Cadence. Au moment de l’intégration, vérifier le catalogue de fondations à jour et réutiliser son échelle d’espacement. Ajouter les valeurs absentes à la source de tokens prévue par le dépôt, sans multiplier des valeurs littérales dans les composants.
+Les rôles de composition de page et de section disposent désormais des tokens globaux listés ci-dessous. Les `--tr-space-*` restent des extensions locales pour les autres espacements du prototype. Utiliser les tokens de rôle dans les composants concernés, sans multiplier des valeurs littérales.
 
 ## Distinguer padding du composant et padding du contenu
 
@@ -93,3 +93,18 @@ Le nom technique `section-preview` est conservé jusqu’à la migration vers un
 - Aucune valeur inline ajoutée aux usages ; contrôle des tokens et build passent.
 
 Vérifications réalisées dans Traffic Report : rendu desktop et mobile de la première version, puis styles calculés de la version finale (rayon 12 px et ombre exacte), contrôle des tokens et build. Les tests de non-régression de Cadence restent à réaliser lors de l’intégration de la variante.
+
+## Tokens globaux de composition ajoutés
+
+Ces tokens sont définis dans les fondations Cadence, documentés dans ses guidelines et consommés directement par Traffic Report (déclaration et tableau de bord).
+
+- `--cadence-page-padding-inline` : 32px — Padding latéral du contenu de page sur grand écran.
+- `--cadence-page-padding-inline-compact` : 16px — Padding latéral du contenu de page sur petit écran.
+- `--cadence-section-inset-inline` : 8px — Retrait latéral supplémentaire des sections dans le contenu de page.
+- `--cadence-section-padding-inline` : 8px — Padding latéral de l’en-tête extérieur et du corps de section.
+- `--cadence-section-heading-gap` : 12px — Espace entre l’en-tête extérieur et la surface de section.
+- `--cadence-section-gap` : 32px — Espace entre deux sections principales ; appliquer une seule fois.
+
+Les paddings de page et le retrait de section s’additionnent : bord de page → bord de boîte = 40 px sur desktop (32 + 8), 24 px sur mobile (16 + 8). Le padding interne du corps est distinct. Les tokens de page `compact` sont choisis par la composition responsive du produit (760 px dans Traffic Report), pas par une media query embarquée dans le token.
+
+Utiliser `--cadence-section-gap` une seule fois entre deux sections, via un `gap` du parent ou une marge sur un seul voisin. Ces tokens expriment un rôle ; ils ne remplacent pas tous les espacements métier de même valeur numérique. Les anciens `--tr-space-*` restent des extensions locales pour les autres usages.

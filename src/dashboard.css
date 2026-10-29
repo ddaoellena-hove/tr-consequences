@@ -1,5 +1,5 @@
 /* Dashboard composition uses Cadence controls and surfaces. */
-.dashboard-scroll { flex:1; min-height:0; overflow:auto; padding:var(--tr-space-24) var(--tr-space-32); }
+.dashboard-scroll { flex:1; min-height:0; overflow:auto; padding:var(--tr-space-24) var(--cadence-page-padding-inline); }
 .dashboard-panel { margin-top:var(--tr-space-20); }
 .dashboard-view-bar { display:flex; align-items:center; justify-content:space-between; gap:var(--tr-space-24); flex-wrap:wrap; padding:var(--tr-space-20) var(--tr-space-24); border-bottom:var(--tr-border-width) solid var(--cadence-color-divider); }
 .dashboard-tabs { max-width:100%; overflow-x:auto; }
@@ -47,7 +47,7 @@
  .dashboard-mobile-label { display:block; color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); }
 }
 @media (max-width:760px) {
- .dashboard-scroll { padding:var(--tr-space-20) var(--tr-space-16); }
+ .dashboard-scroll { padding:var(--tr-space-20) var(--cadence-page-padding-inline-compact); }
  .dashboard-view-bar, .dashboard-filters { padding:var(--tr-space-16); }
  .dashboard-result-toolbar { padding:var(--tr-space-12) var(--tr-space-16) 0; }
  .dashboard-results { padding:var(--tr-space-12); }
