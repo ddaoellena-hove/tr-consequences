@@ -158,7 +158,7 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .section-preview.page-section--card > .page-section__body {
  background:var(--cadence-color-white);
  border:var(--tr-border-width) solid var(--cadence-color-border);
- border-radius:var(--cadence-radius-lg);
+ border-radius:var(--tr-section-preview-radius);
  box-shadow:var(--tr-section-preview-shadow);
  padding-inline:var(--tr-space-8);
 }
