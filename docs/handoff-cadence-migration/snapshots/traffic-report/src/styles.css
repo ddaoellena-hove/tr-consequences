@@ -166,3 +166,6 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .diagram-section.section-preview { margin-top:var(--cadence-section-gap); }
 .general.section-preview > .page-section__body > .accordion { border-top:0; }
 .general.section-preview > .page-section__body > .accordion > .accordion__item:last-child { border-bottom:0; }
+
+/* Full-width progress and separators; form children own their padding. */
+.impact.section-preview.page-section--card > .page-section__body { padding-inline:0; }

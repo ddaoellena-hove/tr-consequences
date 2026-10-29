@@ -50,7 +50,7 @@ Les rôles de composition de page et de section disposent désormais des tokens 
 
 ## Distinguer padding du composant et padding du contenu
 
-Les 8 px sur les côtés du corps s’ajoutent aux paddings déjà portés par ses enfants. Dans l’implémentation validée, la barre d’impact garde 24 px de padding latéral, le formulaire 32 px sur desktop et 16 px sur mobile, le déclencheur d’accordéon 20 px. La marge de page reste gérée par le layout.
+Les 8 px sur les côtés du corps s’ajoutent aux paddings déjà portés par ses enfants, sauf pour la section Impacts : son corps est bord à bord (`padding-inline: 0`) pour que la barre de progression et les séparateurs atteignent les bords de la surface. Ses enfants gardent leurs propres paddings. Dans l’implémentation validée, la barre d’impact garde 24 px de padding latéral, le formulaire 32 px sur desktop et 16 px sur mobile, le déclencheur d’accordéon 20 px. La marge de page reste gérée par le layout.
 
 Ne pas recopier automatiquement ces paddings métier dans PageSection : une section de tableau et une section de formulaire n’ont pas la même composition. Documenter explicitement l’addition des espacements pour éviter un double padding involontaire.
 
@@ -108,3 +108,5 @@ Ces tokens sont définis dans les fondations Cadence, documentés dans ses guide
 Les paddings de page et le retrait de section s’additionnent : bord de page → bord de boîte = 40 px sur desktop (32 + 8), 24 px sur mobile (16 + 8). Le padding interne du corps est distinct. Les tokens de page `compact` sont choisis par la composition responsive du produit (760 px dans Traffic Report), pas par une media query embarquée dans le token.
 
 Utiliser `--cadence-section-gap` une seule fois entre deux sections, via un `gap` du parent ou une marge sur un seul voisin. Ces tokens expriment un rôle ; ils ne remplacent pas tous les espacements métier de même valeur numérique. Les anciens `--tr-space-*` restent des extensions locales pour les autres usages.
+
+Pour la future variante Cadence, prévoir un corps sans padding en option pour les progressions, tableaux et séparateurs bord à bord. Ne pas compenser avec des marges négatives ni masquer les débordements des dropdowns.
