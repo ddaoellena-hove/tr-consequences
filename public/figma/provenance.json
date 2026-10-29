@@ -1,0 +1,17 @@
+{
+  "file_key": "T7ETD7UaaWUHsvaedeXSVk",
+  "assets": [
+    {
+      "file": "object-empty.svg",
+      "node": "1973:1824",
+      "asset_id": "2f9fbd3e-e04e-4404-b7c1-bc06f6e406cd",
+      "sha256": "4bbddf2afcf31804a99d91946ff66f4d7bd4251ae8e87f1f174953a7718a1591"
+    },
+    {
+      "file": "access-basemap.png",
+      "node": "5810:19205",
+      "asset_id": "35024e87-1591-4e0e-9604-42c6fa0abcee",
+      "sha256": "9f026a10f62433740970aa5cb1356e86559dcec8ab2bb3750682f4cbb8a58efb"
+    }
+  ]
+}

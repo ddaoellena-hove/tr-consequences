@@ -4,55 +4,63 @@
   "repositories": {
     "traffic_report": {
       "path": "/Users/ddao-ellena/tr-consequences /traffic-report",
-      "head": "e95b515ff1881b2e4878696fd748612eccab85be",
+      "head": "c1a05c6a04cb9eb9b84501d95d992f2bc203e19f",
       "branch": "main",
       "status_at_packaging": [
-        " D dist/assets/index-3hM_Ahm2.js",
-        " D dist/assets/index-B3daFdt3.css",
+        " D dist/assets/index-Bfj82zFv.js",
+        " D dist/assets/index-h-L37hku.css",
         " M dist/index.html",
         " M docs/handoff-cadence-migration/README.md",
         " M docs/handoff-cadence-migration/snapshots/traffic-report/scripts/import-cadence.py",
         " M docs/handoff-cadence-migration/snapshots/traffic-report/src/Dashboard.jsx",
-        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/GeneralInformation.jsx",
+        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/DisruptionObjectIcon.jsx",
+        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/ImpactObjects.jsx",
+        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/ImpactSchedule.jsx",
         " M docs/handoff-cadence-migration/snapshots/traffic-report/src/app.jsx",
         " M docs/handoff-cadence-migration/snapshots/traffic-report/src/dashboard-data.mjs",
-        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/styles.css",
-        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/traffic-model.mjs",
-        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/validation.mjs",
+        " M docs/handoff-cadence-migration/snapshots/traffic-report/src/disruption-workflow.mjs",
         " M docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/provenance.json",
         " M scripts/import-cadence.py",
         " M src/Dashboard.jsx",
+        " M src/DisruptionObjectIcon.jsx",
+        " M src/ImpactObjects.jsx",
+        " M src/ImpactSchedule.jsx",
         " M src/app.jsx",
         " M src/dashboard-data.mjs",
-        " M src/traffic-model.mjs",
-        " M src/validation.mjs",
+        " M src/disruption-workflow.mjs",
         " M vendor/cadence-ui/provenance.json",
         " M vendor/cadence-ui/src/index.ts",
-        "?? dist/assets/index-BUeL25u6.js",
-        "?? dist/assets/index-h-L37hku.css",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/DisruptionSummary.jsx",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/ImpactMessages.jsx",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/ImpactObjects.jsx",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/ImpactSchedule.jsx",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/disruption-workflow.mjs",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/workflow.css",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/tests/disruption-workflow.test.mjs",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/tests/impact-form.test.mjs",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/TimePicker.tsx",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/time-picker-utils.ts",
-        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/time-picker.css",
-        "?? docs/parcours-nouvelle-perturbation.md",
-        "?? src/DisruptionSummary.jsx",
-        "?? src/ImpactMessages.jsx",
-        "?? src/ImpactObjects.jsx",
-        "?? src/ImpactSchedule.jsx",
-        "?? src/disruption-workflow.mjs",
-        "?? src/workflow.css",
-        "?? tests/disruption-workflow.test.mjs",
-        "?? vendor/cadence-ui/src/TimePicker.tsx",
-        "?? vendor/cadence-ui/src/time-picker-utils.ts",
-        "?? vendor/cadence-ui/src/time-picker.css"
+        "?? dist/assets/ObjectImpactDrawer-C-lWxj8K.js",
+        "?? dist/assets/ObjectImpactDrawer-CbQqTb3c.css",
+        "?? dist/assets/index-0N_6Ztmu.css",
+        "?? dist/assets/index-BUtfw1Gk.js",
+        "?? dist/figma/",
+        "?? docs/figma-objets-impactes.md",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/docs/figma-objets-impactes.md",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/public/",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/ObjectImpactDrawer.jsx",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/ObjectSelectionCard.jsx",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/object-catalogue.mjs",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/src/object-drawer.css",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/tests/object-drawer.test.mjs",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/Autocomplete.tsx",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/ModeFilter.tsx",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/ModeIcon.tsx",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/autocomplete.css",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/mode-filter.css",
+        "?? docs/handoff-cadence-migration/snapshots/traffic-report/vendor/cadence-ui/src/mode-icons.tsx",
+        "?? public/",
+        "?? src/ObjectImpactDrawer.jsx",
+        "?? src/ObjectSelectionCard.jsx",
+        "?? src/object-catalogue.mjs",
+        "?? src/object-drawer.css",
+        "?? tests/object-drawer.test.mjs",
+        "?? vendor/cadence-ui/src/Autocomplete.tsx",
+        "?? vendor/cadence-ui/src/ModeFilter.tsx",
+        "?? vendor/cadence-ui/src/ModeIcon.tsx",
+        "?? vendor/cadence-ui/src/autocomplete.css",
+        "?? vendor/cadence-ui/src/mode-filter.css",
+        "?? vendor/cadence-ui/src/mode-icons.tsx"
       ]
     },
     "cadence": {
@@ -116,7 +124,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "3d9a8e91cda8ca3ef67056d48298850c258710080fecd83aa3f878236c6d2ff6",
+      "sha256": "a4fb5a2354613416f83efa3a8dd8503c700329fbc074e3e62a478b2783267e2f",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -146,7 +154,7 @@
     },
     {
       "path": "snapshots/traffic-report/scripts/import-cadence.py",
-      "sha256": "f4d30c150791462ba2e4c366d38e12c9ea7fe9cbe010f72663c8e9f0f1c85ca3",
+      "sha256": "f78e72434573b2ba7eccf50c5155fdf2f5ef4f87b42296d6efe2b8ed80468db6",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/scripts/import-cadence.py"
     },
     {
@@ -156,7 +164,7 @@
     },
     {
       "path": "snapshots/traffic-report/vendor/cadence-ui/provenance.json",
-      "sha256": "d0e71a8ab9f1e4eb87e68db470b823465e7578deb7f5789233af4cddec196436",
+      "sha256": "12d5fb472ac6cc7fffd15c1c3be13cff09dc1f8045e12ac8a53c72ba6fd8dd94",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/provenance.json"
     },
     {
@@ -307,7 +315,7 @@
     {
       "path": "snapshots/traffic-report/src/Dashboard.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/Dashboard.jsx",
-      "sha256": "dd1d9610c40656dba4fcffd14f03eb25763b85a180d0abf610c43f0f184244be"
+      "sha256": "18047f8469db6cc4d43ded2376d2c3ce35663c4456ab602b93a282b245d48610"
     },
     {
       "path": "snapshots/traffic-report/src/dashboard.css",
@@ -317,7 +325,7 @@
     {
       "path": "snapshots/traffic-report/src/dashboard-data.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/dashboard-data.mjs",
-      "sha256": "a771f05aca21bc427240f9b4e4c71d5b0332bbf98c707db95277c3260c5b2ffa"
+      "sha256": "18d5f8ded6989b9e95556051505ea17657df8dc06ed6c1bb5cea6b6d53c3ef08"
     },
     {
       "path": "snapshots/traffic-report/src/traffic-model.mjs",
@@ -327,7 +335,7 @@
     {
       "path": "snapshots/traffic-report/src/DisruptionObjectIcon.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/DisruptionObjectIcon.jsx",
-      "sha256": "020ab0e76ebab8320eb7cd72deca4c76b69b34d0857cd1ddaf9732d96bcf9373"
+      "sha256": "a068342e7c903c20fdc4af6945e6ac64c1f227987acb7cbc5bd4823158dc2f77"
     },
     {
       "path": "snapshots/traffic-report/src/disruption-icon-paths.mjs",
@@ -422,12 +430,12 @@
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ImpactObjects.jsx",
-      "sha256": "b614bf2c91d8920b11bfc0794704656158acf88e42c45906bb276cb7ebc02c67"
+      "sha256": "fa23b171996672591950ee2385812e94ba69589aace431f24566aeda260010f9"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactSchedule.jsx",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ImpactSchedule.jsx",
-      "sha256": "d38ce6237c93bf5ae616b65e7bd317cc5b5ba40e57a3527275df89bf1e293591"
+      "sha256": "e517bc9612cf5cefb817948f66ddfbf025e9be6e1ffc2fe14d2b112ebcd581f3"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactMessages.jsx",
@@ -442,7 +450,7 @@
     {
       "path": "snapshots/traffic-report/src/disruption-workflow.mjs",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/disruption-workflow.mjs",
-      "sha256": "8cb8b69d657dcc7c187da30ac10409f1421c99cf6c5e13b83afabdbb77d0fdc3"
+      "sha256": "78b4bce057bb0a2c7e5741605965c26309b8d20a6ebb20bbf799faf8dcb7e787"
     },
     {
       "path": "snapshots/traffic-report/src/workflow.css",
@@ -473,9 +481,84 @@
       "path": "snapshots/traffic-report/vendor/cadence-ui/src/time-picker-utils.ts",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/time-picker-utils.ts",
       "sha256": "1dbb0d555a5336c79899d710bb82903f997934362e36602a9909496fb1eb281b"
+    },
+    {
+      "path": "snapshots/traffic-report/docs/figma-objets-impactes.md",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/figma-objets-impactes.md",
+      "sha256": "f7746495ccbe9ab41f16998b81b843485f781cdcea0c2988ec5d2ffc330b49b6"
+    },
+    {
+      "path": "snapshots/traffic-report/src/ObjectImpactDrawer.jsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ObjectImpactDrawer.jsx",
+      "sha256": "5a410c45fda6259e6f3d0b37fbbeeebd69899b8e9c08289d72f138e4338ae3dc"
+    },
+    {
+      "path": "snapshots/traffic-report/src/ObjectSelectionCard.jsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/ObjectSelectionCard.jsx",
+      "sha256": "a3e1475a1aa946e3551673637a5fbff274784b9e84341fba77b00196eef58364"
+    },
+    {
+      "path": "snapshots/traffic-report/src/object-catalogue.mjs",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/object-catalogue.mjs",
+      "sha256": "b05abb4fac6762c5a8747f41d9953d1c2eff1f9336df5d921d8965a5c0b885fa"
+    },
+    {
+      "path": "snapshots/traffic-report/src/object-drawer.css",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/object-drawer.css",
+      "sha256": "61dad323a4e115a1c9f2d3573cce1dc0c8f809813139bf601168c7fc3b6faf6f"
+    },
+    {
+      "path": "snapshots/traffic-report/tests/object-drawer.test.mjs",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/tests/object-drawer.test.mjs",
+      "sha256": "712a21e53fc8cb641fce386cda820d4b446ee5fcbd7480bb9a409c321fdef967"
+    },
+    {
+      "path": "snapshots/traffic-report/public/figma/object-empty.svg",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/public/figma/object-empty.svg",
+      "sha256": "4bbddf2afcf31804a99d91946ff66f4d7bd4251ae8e87f1f174953a7718a1591"
+    },
+    {
+      "path": "snapshots/traffic-report/public/figma/access-basemap.png",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/public/figma/access-basemap.png",
+      "sha256": "9f026a10f62433740970aa5cb1356e86559dcec8ab2bb3750682f4cbb8a58efb"
+    },
+    {
+      "path": "snapshots/traffic-report/public/figma/provenance.json",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/public/figma/provenance.json",
+      "sha256": "1f5899758d51fc3417926781b4ba8f0db7f0a0f2905a6902b7119abb51c3d60e"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/Autocomplete.tsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/Autocomplete.tsx",
+      "sha256": "91383172d9886e3bc7ba78d339152f44fd104d2b986642e3b8307694a044e638"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/autocomplete.css",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/autocomplete.css",
+      "sha256": "58f3b777b25ac04f6de9f5de48a0c2e209d15183d9c607a322b60079c3866ba7"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/ModeFilter.tsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/ModeFilter.tsx",
+      "sha256": "676867f4a6a1fa5abb9180b33d6bbe6e5e3868abfb97988af497a524fb3bed09"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/mode-filter.css",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/mode-filter.css",
+      "sha256": "bf9fb13f770f0c14e5eeea4a8973929dd15b3b4ca18dabf9f0cd69343685c229"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/ModeIcon.tsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/ModeIcon.tsx",
+      "sha256": "56bd2d42bd8a72a044e44a19d3e74fb91acd7ac2452f825563fe8a8fb6456a35"
+    },
+    {
+      "path": "snapshots/traffic-report/vendor/cadence-ui/src/mode-icons.tsx",
+      "source": "/Users/ddao-ellena/tr-consequences /traffic-report/vendor/cadence-ui/src/mode-icons.tsx",
+      "sha256": "195e72e7a8c31e407368da6a6c4e9399b5b0406aebec4409f5d44fb96116702b"
     }
   ],
   "updated_on": "2026-10-29",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "update_note": "Five-step workflow, recurring slots, per-channel messages, global summary; working-tree snapshots before publication."
+  "update_note": "Figma object journey: transactional Cadence Drawer, search/mode filters, ten object types, structured selections, imported reference assets and tests. Working-tree snapshot before publication."
 }

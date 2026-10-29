@@ -39,3 +39,5 @@ Le dossier couvre désormais le dashboard et le formulaire. Les copies source Tr
 Dernier complément : [Champs des informations générales](INFORMATIONS-GENERALES.md).
 
 Dernière extension : [Parcours complet en cinq étapes](snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md). Cette référence complète les états historiques précédents.
+
+Complément Figma : [Drawer d’ajout d’objets et parcours par type](snapshots/traffic-report/docs/figma-objets-impactes.md). Il remplace la modale de choix de type décrite dans les premiers états du prototype.

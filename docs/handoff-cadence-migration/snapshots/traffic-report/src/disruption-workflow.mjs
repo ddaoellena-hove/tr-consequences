@@ -1,5 +1,5 @@
 // Prototype catalogues; replace these IDs with a transport referential at API integration.
-export const OBJECT_TYPES=[{id:'line',label:'Ligne'},{id:'section',label:'Tronçon'},{id:'stop',label:'Arrêt / déviation'},{id:'access',label:'Entrée / sortie'},{id:'poi',label:'Point d’intérêt'},{id:'network',label:'Réseau'},{id:'course',label:'Course'}];
+export const OBJECT_TYPES=[{id:'line',label:'Ligne'},{id:'section',label:'Tronçon'},{id:'stop',label:'Déviation'},{id:'stopPoint',label:'Arrêt'},{id:'stopArea',label:'Zone d’arrêt'},{id:'railSection',label:'Tronçon train / Transilien'},{id:'access',label:'Entrée / sortie'},{id:'poi',label:'Point d’intérêt'},{id:'network',label:'Réseau'},{id:'course',label:'Course'}];
 export const CHANNELS=[{id:'email',label:'E-mail'},{id:'engine',label:'Moteur de recherche'},{id:'facebook',label:'Facebook'},{id:'x',label:'Twitter / X'}];
 export const DAYS=[{id:1,label:'Lundi'},{id:2,label:'Mardi'},{id:3,label:'Mercredi'},{id:4,label:'Jeudi'},{id:5,label:'Vendredi'},{id:6,label:'Samedi'},{id:0,label:'Dimanche'}];
 export const uid=()=>globalThis.crypto?.randomUUID?.()??`${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -37,14 +37,16 @@ export function impactIntervals(impact,now=Date.now()){
  });
 }
 export function objectTitle(object,stations){
- if(object.scope==='section')return `${object.lineName} · ${stations[object.from]||'Début à choisir'} → ${stations[object.to]||'Fin à choisir'}`;
+ if(['section','railSection'].includes(object.scope))return `${object.lineName} · ${object.fromName||object.stationNames?.[object.from]||stations[object.from]||'Début à choisir'} → ${object.toName||object.stationNames?.[object.to]||stations[object.to]||'Fin à choisir'}`;
  if(object.scope==='access')return `${object.target||'Arrêt à renseigner'}${object.accessName?` · ${object.accessName}`:''}`;
  if(object.scope==='line')return `${object.lineName} · ${object.direction||'Toutes les directions'}`;
  return object.target||'Objet à renseigner';
 }
 export function projectImpact(impact,stations){
  const intervals=impactIntervals(impact),first=impact.objects?.[0];
- return {...impact,...(first?{scope:first.scope,title:objectTitle(first,stations),from:first.from??impact.from,to:first.to??impact.to}:{}),
+ const objectLines=(impact.objects||[]).flatMap(o=>o.lines||[]);
+ const lines=[...new Map(objectLines.map(l=>[`${l.mode}:${l.code}`,l])).values()];
+ return {...impact,...(impact.objects?.some(o=>Array.isArray(o.lines))||impact.objects?.length===0?{lines}:{}),...(first?{scope:first.scope,title:objectTitle(first,stations),from:first.from??impact.from,to:first.to??impact.to}:{}),
   start:intervals.length?new Date(Math.min(...intervals.map(p=>p.start))).toISOString():'',end:intervals.length?new Date(Math.max(...intervals.map(p=>p.end))).toISOString():'',
   message:impact.messageMode==='custom'?(impact.channelMessages?.[impact.channels?.[0]]?.body||''):impact.genericMessage??impact.message,
  };
@@ -54,7 +56,7 @@ export function workflowErrors(impact,step){
  if(step===0){
   if(!impact.objects?.length)errors.objects='Ajoutez au moins un objet impacté.';
   for(const [index,o] of (impact.objects||[]).entries()){
-   if(!OBJECT_TYPES.some(t=>t.id===o.scope)||(['line','section'].includes(o.scope)&&!o.lineName?.trim())||o.scope==='section'&&(!Number.isInteger(o.from)||!Number.isInteger(o.to)||o.from<0||o.to>5||o.from>=o.to)||!['line','section'].includes(o.scope)&&!o.target?.trim()||o.scope==='access'&&!o.accessName?.trim())errors[`object-${o.id}`]=`Complétez l’objet ${index+1} et vérifiez son périmètre.`;
+   if(!OBJECT_TYPES.some(t=>t.id===o.scope)||(['line','section','railSection'].includes(o.scope)&&!o.lineName?.trim())||['section','railSection'].includes(o.scope)&&(!Number.isInteger(o.from)||!Number.isInteger(o.to)||o.from<0||o.to>5||o.from>=o.to)||!['line','section','railSection'].includes(o.scope)&&!o.target?.trim()||o.scope==='access'&&!o.accessName?.trim())errors[`object-${o.id}`]=`Complétez l’objet ${index+1} et vérifiez son périmètre.`;
   }
  }
  if(step===1&&!['bloquante','interrompu','modifie','reduit','perturbe','informative'].includes(impact.severity))errors.severity='Sélectionnez une sévérité.';

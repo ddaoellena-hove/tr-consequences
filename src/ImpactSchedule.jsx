@@ -3,7 +3,16 @@ import {PageSection,DatePicker,TimePicker,FieldRow,SegmentedControl,GhostButton,
 import {emptyPeriod,emptySlot,DAYS,localDay} from './disruption-workflow.mjs';
 export function WorkflowDate({value,label,withTime=true,onChange,onPending}){
  const date=useMemo(()=>value&&Number.isFinite(Date.parse(value))?new Date(value):null,[value]);
- return <div className="workflow-date" onChangeCapture={()=>onPending?.(true)}><DatePicker label={label} withTime={withTime} value={date} onChange={d=>{onPending?.(false);onChange(withTime?d.toISOString():localDay(d));}}/></div>;
+ return <div className="workflow-date" onChangeCapture={()=>onPending?.(true)} onBlurCapture={event=>{
+  // DatePicker does not emit onChange when a corrected value equals its prop.
+  const root=event.currentTarget;
+  queueMicrotask(()=>{
+   if(!date)return;
+   const expected=[date.getDate(),date.getMonth()+1,date.getFullYear(),...(withTime?[date.getHours(),date.getMinutes()]:[])];
+   const inputs=[...root.querySelectorAll('input')];
+   if(inputs.length===expected.length&&inputs.every((input,index)=>input.value.trim()!==''&&Number(input.value)===expected[index]))onPending?.(false);
+  });
+ }}><DatePicker label={label} withTime={withTime} value={date} onChange={d=>{onPending?.(false);onChange(withTime?d.toISOString():localDay(d));}}/></div>;
 }
 export function ImpactSchedule({impact,errors,onChange,onPending}){
  const slots=impact.scheduleMode==='slots';

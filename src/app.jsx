@@ -126,7 +126,7 @@ export default function App() {
   const line = data.line || {code:'12',mode:'bus',name:'Ligne 12'};
   const i = data.impacts[current];
   const sev = SEVERITY_MAP[i.severity] || SEVERITIES[0];
-  const diagramObject=i.objects.find(object=>object.scope==='section');
+  const diagramObject=i.objects.find(object=>['section','railSection'].includes(object.scope));
   const diagramImpact=diagramObject?{...i,from:diagramObject.from,to:diagramObject.to}:i;
 
 
@@ -380,7 +380,7 @@ export default function App() {
         </PageSection>
 
         {/* Schéma de conséquence dynamique avec bus animé & Card de conséquence */}
-        {step === 1 && SEVERITY_MAP[i.severity] && (!diagramObject ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Le schéma animé est disponible pour un tronçon.</InlineAlert></div> : issue(i, 0) ? (
+        {step === 1 && SEVERITY_MAP[i.severity] && ((!diagramObject || diagramObject.stationNames&&diagramObject.stationNames.length!==6) ? <div className="consequence-wrap"><InlineAlert type="information" title="Conséquence sur les objets sélectionnés">La sévérité « {sev.label} » s’applique à tous les objets de cet impact. Consultez le détail des objets dans le résumé.</InlineAlert></div> : issue(i, 0) ? (
           <div className="consequence-wrap">
             <InlineAlert type="warning" title="Schéma indisponible">
               Sélectionnez un tronçon dont l’arrêt de fin se situe après l’arrêt de début.
@@ -389,7 +389,7 @@ export default function App() {
         ) : (
           <>
             {i.objects.length>1&&<p className="workflow-muted">Aperçu du premier tronçon sélectionné. La sévérité s’applique à tous les objets de cet impact.</p>}
-            <LineDiagram impact={diagramImpact} sev={sev} stations={stations} line={line} tweaks={tweaks} />
+            <LineDiagram impact={diagramImpact} sev={sev} stations={diagramObject.stationNames||stations} line={diagramObject.lines?.[0]||line} tweaks={tweaks} />
 
             {/* Options d'affichage interactives (Tweaks) */}
             <PageSection title="Options d’affichage" headingLevel={3} className="tweaks-bar" gap={12}>

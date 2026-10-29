@@ -58,7 +58,7 @@ export function statusOf(record,now=Date.now()){
  if(intervals.some(p=>p.start<=now&&now<p.end))return 'active';
  return intervals.some(p=>p.start>now)?'upcoming':intervals.length?'past':'active';
 }
-export const SCOPE_LABELS={line:'Ligne',stop:'Arrêt / déviation',section:'Tronçon',access:'Entrée / sortie',poi:'Point d’intérêt',network:'Réseau',course:'Course'};
+export const SCOPE_LABELS={line:'Ligne',stop:'Déviation',stopPoint:'Arrêt',stopArea:'Zone d’arrêt',railSection:'Tronçon train / Transilien',section:'Tronçon',access:'Entrée / sortie',poi:'Point d’intérêt',network:'Réseau',course:'Course'};
 export const severityRank={bloquante:0,interrompu:1,modifie:2,reduit:3,perturbe:4,informative:5};
 export function dominantSeverity(impacts){return [...impacts].sort((a,b)=>(severityRank[a.severity]??6)-(severityRank[b.severity]??6))[0]?.severity??'';}
 export function dashboardRows(records,{tab='active',view='disruption',query='',line='all',severity='all',cause='all',scope='all',sort='updatedAt',direction='desc'}={},now=Date.now()){
