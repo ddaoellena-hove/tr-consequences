@@ -55,3 +55,9 @@ Voir [PageSection — surface validée](PAGESECTION-SURFACE-VALIDEE.md) pour l�
 ## Navigation du formulaire
 
 La navigation est désormais regroupée dans le footer fixe : stepper compact, contexte de l’impact à sa droite, progression en haut et actions d’enregistrement à droite, précédées de leur statut. Précédent / Suivant restent dans la section Impacts. Sur mobile, liste des étapes dans un Dropdown ouvrant vers le haut. Voir le snapshot de `docs/parcours-nouvelle-perturbation.md` et `src/CompactImpactStepper.jsx`. Cette composition locale reste à formaliser comme variante Cadence si elle est retenue.
+
+## Actualisation du 30 octobre 2026 — backlog Cadence
+
+Lire [les nouveaux composants et évolutions nécessaires](BESOINS-COMPOSANTS-CADENCE.md) : inventaire classé par type et priorité, critères d’acceptation, références aux adaptations locales et distinction entre fonctionnalités déjà existantes, tokens ajoutés et développements restant à faire. Inclut PageSection, Stepper compact, footer persistant, animation du Drawer et placement des overlays. L’interface de référence ne comporte plus les Options d’affichage.
+
+Pour une mission d’implémentation de Cadence, utiliser ce backlog avec la [fiche PageSection validée](PAGESECTION-SURFACE-VALIDEE.md). Le prompt documentaire d’origine ne demande pas à lui seul d’implémenter tout ce backlog.

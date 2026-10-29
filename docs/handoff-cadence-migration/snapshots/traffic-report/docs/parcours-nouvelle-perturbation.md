@@ -45,3 +45,9 @@ Le schéma ne possède plus de carte imbriquée : sa section nue occupe toute la
 ## Simplification du 30 octobre 2026
 
 La partie Options d’affichage est supprimée. Le schéma utilise une configuration fixe : couleurs et labels visibles, badge dans son en-tête, animation active à vitesse normale. L’alerte de conséquence reste sans badge. Les mentions antérieures des contrôles d’affichage décrivent l’historique du prototype.
+
+## Création disponible après les messages — 30 octobre 2026
+
+Le bouton « Créer la perturbation » est toujours présent dans le footer. Il reste désactivé tant que les informations générales sont incomplètes, qu’une date est en cours de saisie ou qu’un impact n’a pas ses étapes 0 à 3 valides et validées. « Vérifier les messages » valide la quatrième étape et permet la création depuis Messages ; « Suivant » effectue également les contrôles avant le résumé. Le résumé n’est pas un prérequis de création.
+
+Modifier un impact invalide la validation de l’étape concernée et des étapes suivantes. Commencer à modifier une date invalide également la validation temporelle ou celle des messages, pour éviter qu’un changement d’impact contourne une saisie non confirmée. Le bouton se désactive après création et se réévalue lors des modifications. Les données et validations de tous les impacts sont contrôlées, pas uniquement celles de l’impact courant.

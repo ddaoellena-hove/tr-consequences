@@ -212,6 +212,13 @@ Les couleurs, polices, rayons, ombres et couches (z-index) sont centralisés dan
 | `--cadence-color-active-overlay` | `rgba(0, 40, 48, 0.12)` | Appui d'un élément sans fond |
 | `--cadence-color-danger-hover-overlay` | `rgba(218, 30, 40, 0.06)` | Survol d'un `GhostButton tone="danger"` |
 | `--cadence-color-danger-active-overlay` | `rgba(218, 30, 40, 0.12)` | Appui d'un `GhostButton tone="danger"` |
+| `--cadence-page-padding-inline` | 32px | Padding latéral du contenu de page sur grand écran |
+| `--cadence-page-padding-inline-compact` | 16px | Padding latéral du contenu de page sur petit écran |
+| `--cadence-section-inset-inline` | 8px | Retrait latéral supplémentaire des sections dans le contenu de page |
+| `--cadence-section-padding-inline` | 8px | Padding latéral de l’en-tête extérieur et du corps de section |
+| `--cadence-section-heading-gap` | 12px | Espace entre l’en-tête extérieur et la surface de section |
+| `--cadence-section-gap` | 32px | Espace entre deux sections principales ; appliquer une seule fois |
+| `--cadence-shadow-section` | `0 0 2px 0 rgba(0, 0, 0, 0.10), 0 2px 10px 0 rgba(0, 0, 0, 0.05)` | Ombre au repos des sections de page, commune à tous les produits Cadence |
 | `--cadence-shadow-sm` | ombre 1–3px | Champs au repos |
 | `--cadence-shadow-md` | ombre diffuse 12px | Champs au survol |
 | `--cadence-shadow-lg` | ombre portée 10–15px | Menus déroulants |

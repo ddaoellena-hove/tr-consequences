@@ -3,7 +3,7 @@ import {TextInput,TextArea,Dropdown,Checkbox,SegmentedControl,GhostButton,Primar
 import {CHANNELS,workflowErrors} from './disruption-workflow.mjs';
 import {WorkflowDate} from './ImpactSchedule.jsx';
 const LANGUAGE_OPTIONS=[{id:'en',label:'Anglais'},{id:'es',label:'Espagnol'}];
-export function ImpactMessages({impact,errors,onChange,onPending}){
+export function ImpactMessages({impact,errors,onChange,onPending,pendingNotification=false,onValidation}){
  const [mask,setMask]=useState('none'),[translationsOpen,setTranslationsOpen]=useState(false),[translationTarget,setTranslationTarget]=useState('generic'),[language,setLanguage]=useState('en'),[check,setCheck]=useState(null);
  const single=impact.messageMode==='single';
  const edit=patch=>{setCheck(null);onChange(patch);};
@@ -29,7 +29,7 @@ export function ImpactMessages({impact,errors,onChange,onPending}){
   <div id="field-notification"><WorkflowDate label="Date et heure de notification (facultatif)" value={impact.notificationAt} onChange={notificationAt=>edit({notificationAt})} onPending={v=>onPending('notification',v)}/>{impact.notificationAt&&<GhostButton size="sm" label="Retirer la notification" onClick={()=>{onPending('notification',false);edit({notificationAt:''});}}/>}{errors.notification&&<p className="field-error" role="alert">{errors.notification}</p>}<p className="workflow-muted">Date conservée dans le brouillon ; aucun message n’est envoyé par ce prototype.</p></div>
   <div id="field-translations">{errors.translations&&<p className="field-error" role="alert">{errors.translations}</p>}</div>
   <PageSection title="3. Vérifiez les messages pour chaque canal" headingLevel={4} gap={12}>
-   <div><GhostButton size="sm" iconStart="check" label="Vérifier les messages" onClick={()=>setCheck(workflowErrors(impact,3))}/></div>
+   <div><GhostButton size="sm" iconStart="check" label="Vérifier les messages" onClick={()=>{const result={...workflowErrors(impact,3),...(pendingNotification?{notification:'Corrigez et confirmez la date et l’heure de notification.'}:{})};setCheck(result);onValidation?.(Object.keys(result).length===0);}}/></div>
    {check&&(Object.keys(check).length?<InlineAlert type="error" title="Messages à compléter">{Object.values(check).join(' ')}</InlineAlert>:<InlineAlert type="success" title="Messages vérifiés">Les messages des canaux sélectionnés sont renseignés. Cette vérification est locale.</InlineAlert>)}
   </PageSection>
   <Modal isOpen={translationsOpen} onClose={()=>setTranslationsOpen(false)} title={translationTarget==='generic'?'Traductions du message générique':`Traductions · ${CHANNELS.find(c=>c.id===translationTarget)?.label||''}`} footer={<GhostButton label="Fermer" onClick={()=>setTranslationsOpen(false)}/>}>

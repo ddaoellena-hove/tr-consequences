@@ -11,7 +11,7 @@ import {GeneralInformation} from './GeneralInformation.jsx';
 import {withGeneralInformation} from './general-information.mjs';
 import { upsertRecord, makeId } from './dashboard-data.mjs';
 import React, { useState, useEffect, useMemo } from 'react';
-import { issue, impactErrors, generalErrors, validDate } from './validation.mjs';
+import { issue, impactErrors, generalErrors, validDate, canCreateDisruption } from './validation.mjs';
 import { LineDiagram } from './LineDiagram.jsx';
 import {consequenceDiagrams} from './consequence-diagrams.mjs';
 import {
@@ -130,6 +130,12 @@ export default function App() {
     setSaveState('Modifications non enregistrées');
   }
 
+  const creationReady=!verified&&canCreateDisruption(data,completed,{publicationPending,datePending});
+  function updateDatePending(key,value) {
+    setDatePending(prev=>({...prev,[key]:value}));
+    if(value){const editedStep=key==='notification'?3:2;setCompleted(prev=>({...prev,[current]:(prev[current]||[]).filter(n=>n<editedStep)}));}
+  }
+
   function updateImpact(patch) {
     if ('start' in patch || 'end' in patch) setDatePending(prev => ({...prev, ...('start' in patch ? {start:false} : {}), ...('end' in patch ? {end:false} : {})}));
     change({ impacts: data.impacts.map((item, n) => (n === current ? projectImpact({ ...item, ...patch },stations) : item)) });
@@ -188,6 +194,7 @@ export default function App() {
   }
 
   function validate() {
+    if(!creationReady)return;
     const general = {...generalErrors(data), ...(publicationPending ? {publicationStart:'Corrigez et confirmez la date et l’heure de publication saisies.'} : {})};
     if (Object.keys(general).length) {
       return showFieldErrors(general, true);
@@ -356,8 +363,9 @@ export default function App() {
 
             {step === 0 && <ImpactObjects impact={i} stations={stations} line={line} errors={fieldErrors} onChange={updateImpact}/>}
             {step === 1 && <div className="field" id="field-severity"><SeverityField value={i.severity} onChange={severity=>updateImpact({severity})}/>{fieldErrors.severity&&<p className="field-error" role="alert">{fieldErrors.severity}</p>}</div>}
-            {step === 2 && <ImpactSchedule impact={i} errors={fieldErrors} onChange={updateImpact} onPending={(key,value)=>setDatePending(prev=>({...prev,[key]:value}))}/>}
-            {step === 3 && <ImpactMessages key={current} impact={i} errors={fieldErrors} onChange={updateImpact} onPending={(key,value)=>setDatePending(prev=>({...prev,[key]:value}))}/>}
+            {step === 2 && <ImpactSchedule impact={i} errors={fieldErrors} onChange={updateImpact} onPending={updateDatePending}/>}
+            {step === 3 && <ImpactMessages key={current} impact={i} errors={fieldErrors} onChange={updateImpact} onPending={updateDatePending}
+              pendingNotification={Boolean(datePending.notification)} onValidation={valid=>setCompleted(prev=>({...prev,[current]:valid?[...new Set([...(prev[current]||[]),3])]:(prev[current]||[]).filter(n=>n!==3)}))}/>}
             {step === 4 && <DisruptionSummary data={data} stations={stations} onEdit={(index,target)=>{setCurrent(index);setStep(target);setImpactSteps(prev=>({...prev,[index]:target}));setFieldErrors({});setDatePending({});}}/>}
             </PageSection>
           </div>
@@ -406,7 +414,7 @@ export default function App() {
             <span className="footer-save-state" role="status">{saveState}</span>
             <FormActions className="footer-actions" justify="end">
               <PrimaryButton outline size="sm" iconStart="save-01" label={narrow?'Brouillon':'Enregistrer le brouillon'} onClick={save}/>
-              {step===4&&<PrimaryButton size="sm" label="Valider la déclaration" iconEnd="check" onClick={validate}/>}
+              <PrimaryButton size="sm" label="Créer la perturbation" iconEnd="check" disabled={!creationReady} onClick={validate}/>
             </FormActions>
           </div>
         </div>

@@ -1,252 +1,183 @@
-# Brief de contribution — compléter Hove Cadence UI
+# Compléter Cadence — backlog de contribution issu de Traffic Report
 
-Ce brief est destiné à un développeur ou un LLM chargé de compléter Cadence à partir des besoins observés pendant le développement de Traffic Report. Il décrit des propositions à concevoir, pas des composants ou des API déjà disponibles.
+Actualisé le **30 octobre 2026**. Destinataires : développeur ou LLM intervenant dans Hove Cadence UI. Les noms d’API ci-dessous sont des propositions sauf mention explicite d’existence.
 
-## Contexte et références
+## Sources et état de référence
 
-- Dépôt cible : `/Users/ddao-ellena/hove-cadence-ui`.
-- Projet de référence : `/Users/ddao-ellena/tr-consequences /traffic-report` — attention à l’espace finale dans `tr-consequences `.
-- Passation : `docs/handoff-cadence-migration/` dans Traffic Report.
-- Référence applicative : commit `e91b7166dd9a7eda0df67f3927e54a84e1abd806`, poussé sur `main`.
-- Documentation du parcours : [Parcours complet](snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md) et [Adaptation du parcours Figma](snapshots/traffic-report/docs/figma-objets-impactes.md).
+- Traffic Report : `c413b2e073f62896b7c9e2b6288b417b38e60337`, poussé sur `main` ; interface sans Options d’affichage.
+- Cadence : checkout local `/Users/ddao-ellena/hove-cadence-ui`. Le manifeste du dossier donne sa révision et son état de travail réel. Des modifications préexistantes non committées doivent être préservées.
+- Version effectivement consommée par Traffic Report : sources vendor, dont la provenance est incluse dans les snapshots. Ne pas déduire de `version: 1.0.0` que tous les changements locaux sont publiés sur npm.
+- Lire aussi [la présentation PageSection validée](PAGESECTION-SURFACE-VALIDEE.md), [le parcours actuel](snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md), [le drawer de sélection](snapshots/traffic-report/docs/figma-objets-impactes.md) et les snapshots des sources applicatives.
 
-Avant toute modification, lire les instructions du dépôt cible, ses guidelines, les composants existants et ce dossier. Inspecter l’état Git et préserver tous les travaux préexistants. Vérifier les API dans la version courante : les constats portent sur la version utilisée par Traffic Report.
+**Priorités :** P1 = consolider les fondations et patterns déjà utilisés ; P2 = extension réutilisable ; P3 = bibliothèque métier distincte. Une proposition ne constitue pas une autorisation de tout implémenter en une seule modification.
 
-La base existante a permis de composer le parcours avec Drawer, Autocomplete, ModeFilter, PageSection et TableCard. Les besoins portent surtout sur les formulaires complexes et les patterns réutilisables. Réutiliser ces briques avant de créer de nouveaux composants.
+## Inventaire décisionnel
 
-## 1. Validation homogène des champs — P1
+| Réf. | Besoin | Type de contribution | Priorité |
+| --- | --- | --- | --- |
+| N1 | FormField : libellé, aide, erreur et associations accessibles | Nouveau composant de composition | P1 |
+| N2 | Primitive partagée de positionnement d’overlay | Nouvelle infrastructure interne | P1 |
+| N3 | Éditeur de texte riche | Nouveau composant | P2 |
+| N4 | Groupes de champs répétables | Nouveau composant de composition | P2 |
+| E1 | PageSection avec titre extérieur et corps avec ombre | Évolution de PageSection | P1 |
+| E2 | Stepper compact avec icônes et états | Évolution de Stepper | P1 |
+| E3 | Zone d’actions persistantes et progression | Évolution d’AppLayout + recette FormActions | P1 |
+| E4 | Entrée animée au montage du panneau | Correction de Drawer | P1 |
+| E5 | Placement en haut/bas et gestion du clipping | Évolution des overlays existants, fondée sur N2 | P1 |
+| E6 | Contrat de saisie et confirmation temporelle | Évolution de DatePicker / TimePicker | P1 |
+| E7 | Contrat de validation des champs | Évolution des contrôles, fondée sur N1 | P1 |
+| E8 | Case avec libellé compact et description | Évolution de Checkbox ou recette existante | P2 |
+| R1 | Sélection transactionnelle multiple | Recette Drawer / Autocomplete / TableCard | P2 |
+| R2 | Périodes continues et créneaux récurrents | Recette de planification | P2 |
+| R3 | Messages par canal et traductions | Recette de formulaire | P2 |
+| M1 | Objets de transport et schéma de conséquence | Bibliothèque métier Hove, hors noyau générique | P3 |
 
-### Problème observé
+## Nouveaux composants et infrastructure
 
-TextInput, Dropdown, Autocomplete et DatePicker n’exposent pas tous le même contrat de validation. Traffic Report ajoute des enveloppes, des messages et des associations accessibles dans l’application.
+### N1 — FormField
 
-### Besoin
+Le projet ajoute des enveloppes et des paragraphes d’erreur autour des contrôles. Créer une composition commune pour libellé, indication obligatoire, aide et erreur, avec identifiants stables et associations accessibles. Ne pas doubler les libellés déjà générés par TextInput ou TimePicker ; définir comment un contrôle fournit ou reçoit les identifiants du champ.
 
-Définir un contrat cohérent pour :
+**Acceptation :** un formulaire mixte annonce correctement les aides et erreurs ; cliquer le libellé atteint le contrôle ; le focus peut être demandé explicitement depuis un résumé d’erreurs ou une action de toast. La validation et la décision de scroller restent au produit.
 
-- Libellé, aide et caractère obligatoire.
-- Erreur provenant du formulaire ou du serveur.
-- États désactivé et lecture seule, selon le contrôle.
-- Associations `aria-describedby`, `aria-invalid` et identifiants stables.
-- Accès au contrôle par une ref pour le focus depuis ErrorSummary.
+### N2 — Positionnement partagé des overlays
 
-Évaluer un composant **FormField** commun, sans doubler les libellés déjà rendus par les contrôles. Les noms de props doivent être conçus en tenant compte des API existantes.
+Créer une primitive interne réutilisable pour ancrage, choix haut/bas, décalage horizontal, dimension disponible et repositionnement au scroll/redimensionnement. Évaluer un portail pour sortir des ancêtres qui coupent le contenu, avec une stratégie compatible avec les zones inertes et les couches imbriquées.
 
-### Acceptation
+**Constat vérifié :** `usePopoverFit` ne corrige actuellement que le débordement horizontal. Dans le footer, Dropdown et les infobulles ont nécessité des surcharges CSS pour s’ouvrir vers le haut. Un simple z-index ne corrige pas le clipping.
 
-Les champs d’un formulaire mixte affichent et annoncent les erreurs de manière cohérente. ErrorSummary peut déplacer le focus vers chaque contrôle.
+**Acceptation :** le placement reste visible près des quatre bords de la fenêtre, dans un conteneur défilant, un Accordion, un Drawer et une Modal. Les overlays imbriqués gardent un ordre de fermeture et un focus cohérents.
 
-## 2. Contrat de saisie et de confirmation des dates — P1
+### N3 — RichTextEditor
 
-### Problème observé
+La maquette de communication utilise du texte enrichi ; le prototype emploie TextArea avec du texte simple. Créer un éditeur accessible : paragraphes, gras, italique, listes, liens, annuler/rétablir, compteur, aide/erreur, lecture seule et désactivation.
 
-DatePicker transmet principalement une valeur confirmée. L’application doit aussi savoir si l’utilisateur est en train de saisir une date invalide ou non confirmée.
+Définir le format stocké, sa sérialisation, le rendu en lecture, le traitement du collage, l’assainissement des liens/contenus et la conversion vers du texte simple. Ne pas introduire du HTML non contrôlé dans le produit. Les fonctionnalités avancées de la maquette restent à arbitrer.
 
-### Besoin
+**Acceptation :** édition clavier et toolbar accessibles ; enregistrement/rechargement sans perte ; contenu lisible sans éditeur ; sortie texte simple disponible pour les canaux qui l’exigent.
 
-Distinguer explicitement :
+### N4 — RepeatableFieldGroup (nom proposé)
 
-- Valeur confirmée.
-- Saisie en cours.
-- Saisie invalide.
-- Confirmation, annulation et effacement.
+Factoriser les blocs répétables : identifiant stable, titre et numérotation, ajout/suppression, limites min/max, erreurs par bloc, focus après ajout et après suppression. Utiliser PageSection et les boutons existants ; laisser les valeurs et règles métier au formulaire.
 
-Concevoir les événements nécessaires sans imposer leurs noms avant étude de l’API actuelle.
+**Acceptation :** retirer le deuxième groupe ne transfère ni valeurs ni erreurs au troisième ; la numérotation n’est jamais l’identité ; les limites sont annoncées et respectées au clavier.
 
-### Cas indispensables
+## Évolutions des composants existants
 
-- Une saisie invalide ne permet pas de valider silencieusement l’ancienne valeur.
-- Corriger une date pour revenir à sa valeur initiale ne laisse pas le formulaire bloqué.
-- Un rendu du parent ne réinitialise pas la saisie.
-- Effacer une valeur facultative est possible.
-- DatePicker et TimePicker suivent des conventions compatibles.
+### E1 — PageSection : variante avec titre extérieur
 
-### Acceptation
+C’est la présentation validée dans le projet. Le titre, sa description éventuelle et ses actions restent à l’extérieur de la boîte. Seul le corps porte fond, bordure, rayon `--cadence-radius-xl` (12 px) et `--cadence-shadow-section`. Réutiliser les tokens globaux de composition documentés dans la [fiche dédiée](PAGESECTION-SURFACE-VALIDEE.md).
 
-Aucune inspection du DOM ni capture d’événements autour du composant n’est nécessaire pour connaître son état de saisie.
+Ajouter une variante explicite, par exemple `surface="elevated"`, **non disponible actuellement**. Conserver les variantes `none` et `card`. Prévoir un corps avec padding ou bord à bord : la section Impacts utilise un corps sans padding global, ses enfants gérant leurs propres espacements. Ne pas appliquer l’ombre aux cartes métier imbriquées ni au schéma de conséquence.
 
-## 3. Positionnement partagé des overlays — P1
+**Acceptation :** en-tête extérieur, actions responsive, section nommée par son titre, aucun clipping des menus ; composition accordéon/tableau/formulaire ; anciennes variantes inchangées. Les propriétés de gap et de padding doivent être explicites et ne pas s’additionner involontairement.
 
-### Problème observé
+### E2 — Stepper : variante compacte
 
-Des menus ont été coupés par les cartes, accordéons et zones défilantes. Augmenter le `z-index` ne résout pas le clipping d’un ancêtre.
+Le Stepper actuel expose orientation et états mais pas d’icône par étape ni de densité compacte. La composition locale `CompactImpactStepper.jsx` utilise GhostButton, Icons et Dropdown.
 
-### Besoin
+Ajouter une variante compacte et une icône par étape en conservant les états `current`, `completed`, `upcoming`, `warning`, `error`. Prévoir l’indication de disponibilité d’une étape ; les règles de validation restent dans le produit. Conserver le libellé actif visible à droite des icônes sur desktop et fournir les libellés complets au survol/focus. Ne pas distinguer les états uniquement par couleur.
 
-Étudier une infrastructure commune pour Dropdown, Autocomplete et les sélecteurs temporels :
+Sur mobile, la recette utilise un sélecteur d’étapes avec étape active et compteur. Le contexte « Impact n° N » est fourni par le produit, sans être codé dans Cadence. La progression exprime la position dans le parcours, pas un taux de complétude métier.
 
-- Portail lorsque nécessaire.
-- Positionnement selon l’espace disponible.
-- Repositionnement pendant le scroll et le redimensionnement.
-- Largeur du menu cohérente avec le déclencheur.
-- Gestion des overlays imbriqués dans Drawer et Modal.
-- Ordre de fermeture avec Échap.
-- Maintien du focus et compatibilité avec les zones inertes.
+**Acceptation :** navigation clavier, `aria-current="step"`, noms accessibles complets, états annoncés, étapes futures indisponibles, pas de contournement de validation, retour à une étape terminée. Tester les cinq libellés longs et le changement d’impact.
 
-### Acceptation
+### E3 — AppLayout et FormActions : footer persistant
 
-Les menus restent utilisables dans une carte, un Accordion ouvert, un Drawer et une Modal, sans correctif global d’`overflow` dans l’application.
+AppLayout n’expose pas de zone footer dédiée ; le produit transforme localement `.app-layout__scroll` en colonne non défilante avec un corps défilant et un footer frère. Prévoir un emplacement footer hors du scroll, suivant naturellement la largeur disponible avec la Sidebar. FormActions reste la composition des boutons, pas un second moteur de layout de page.
 
-## 4. Éditeur de texte riche — P1
+La recette Traffic Report contient : ProgressBar bord à bord en haut du footer, stepper à gauche, libellé actif à sa droite, statut d’enregistrement à gauche des boutons d’enregistrement/validation. **Créer la perturbation est toujours visible et désactivé jusqu’à validation des messages de tous les impacts ; le résumé n’est pas requis. Précédent / Suivant sont dans la section Impacts**, pas dans le footer : ne pas réintroduire l’essai précédent.
 
-### Problème observé
+**Acceptation :** aucun calcul manuel de largeur de Sidebar ; dernier champ accessible ; footer flexible sur mobile ; menus visibles au-dessus du footer ; toasts placés sans recouvrir les actions, y compris lorsque la hauteur du footer change. Éviter un décalage de toast figé qui serait faux avec des traductions longues.
 
-La maquette de communication prévoit du texte enrichi. La version intégrée de Cadence ne fournit pas cet éditeur ; Traffic Report utilise TextArea.
+### E4 — Drawer : animation au premier montage
 
-### Besoin
+La version observée initialise `mounted` et `entered` à `isOpen`. Lorsqu’un composant est monté directement ouvert, notamment après lazy loading ou changement de clé, l’animation d’entrée est sautée. Traffic Report monte le Drawer fermé puis lui transmet l’état ouvert via un effet.
 
-Concevoir un éditeur accessible comprenant au minimum :
+Corriger le cycle d’entrée dans Drawer lui-même, puis retirer ce contournement de `ObjectImpactDrawer.jsx`. Préserver la sortie animée, le focus, les portails, Échap et la préférence de mouvement réduit.
 
-- Paragraphes et retours à la ligne.
-- Gras, italique et listes.
-- Liens.
-- Annuler/rétablir.
-- Compteur et limites de contenu.
-- Aide, erreurs, lecture seule et désactivation.
-- Navigation clavier de la barre d’outils.
+**Acceptation :** animation au premier montage avec `isOpen=true`, après chargement différé, à la réouverture et au changement d’objet ; fermeture pendant l’entrée sans panneau orphelin ; absence de mouvement sous `prefers-reduced-motion`.
 
-Définir un format de contenu stable, sa sérialisation, le rendu en lecture et la gestion du contenu collé. Prévoir une conversion en texte simple pour les canaux qui l’exigent.
+### E5 — Dropdown, Autocomplete, DatePicker, TimePicker et Tooltip
 
-### Acceptation
+Consommer N2 progressivement. Prévoir un placement automatique et un placement au-dessus lorsque la composition l’exige. L’infobulle d’un bouton situé en bas d’écran doit rester visible au focus, sans surcharge de ses classes internes dans le produit. Préserver les API de sélection, les associations ARIA et le comportement des overlays imbriqués.
 
-Le contenu peut être enregistré, rechargé et affiché sans perte. Les commandes ne dépendent pas uniquement de la souris. Les fonctionnalités avancées de la maquette doivent être arbitrées séparément.
+**Acceptation :** supprimer les corrections applicatives du type `top:auto; bottom:...` et les contournements d’overflow une fois le comportement couvert par Cadence ; tester le sélecteur d’étapes dans un footer mobile.
 
-## 5. Pattern de sélection transactionnelle dans un Drawer — P2
+### E6 — DatePicker et TimePicker : contrat de saisie
 
-### Problème observé
+DatePicker fournit actuellement une valeur `Date` confirmée via `onChange` et conserve des erreurs internes ; TimePicker dispose déjà d’un contrat d’erreur/aide et d’une ref. Ne pas créer un nouveau DateTimePicker : DatePicker couvre déjà `withTime`.
 
-Le composant Drawer existe. La logique recherche → configuration → sélection temporaire → confirmation a été assemblée dans Traffic Report.
+Exposer l’état de saisie en cours/invalide, la confirmation, l’annulation et l’effacement facultatif. Harmoniser avec TimePicker sans imposer les mêmes types de valeur. Une saisie invalide ne doit pas permettre de soumettre silencieusement une ancienne valeur confirmée.
 
-### Besoin
+**Acceptation :** saisir invalide puis corriger à la valeur initiale débloque le formulaire ; un rendu parent ne réinitialise pas la saisie ; valeur facultative effaçable. Retirer l’inspection DOM et les captures d’événements actuellement nécessaires dans `WorkflowDate`.
 
-Créer une recette ou un pattern réutilisable couvrant :
+### E7 — Validation et focus des contrôles
 
-- Recherche et filtres.
-- Configuration d’un résultat.
-- Ajout à une sélection temporaire.
-- Consultation, modification et retrait des éléments préparés.
-- Déduplication selon une identité fournie par le produit.
-- Confirmation globale.
-- Annulation sans modification des données initiales.
-- États vide, chargement, erreur et aucun résultat.
+TextInput expose déjà un état d’erreur, une aide et une ref ; TimePicker a déjà `error`, `helperText` et une ref. Dropdown et Autocomplete n’ont pas le même contrat de validation ; DatePicker possède des erreurs internes. Compléter les manques, sans dupliquer les capacités existantes.
 
-### Acceptation
+Harmoniser caractère obligatoire, erreur externe, aide, identifiants, `aria-invalid`, `aria-describedby`, focus demandé par ref et lecture seule lorsqu’elle a un sens pour le contrôle. Définir la compatibilité avec N1 et conserver les usages existants.
 
-Fermer ou annuler laisse les données initiales intactes. Confirmer applique la sélection une seule fois. La logique fonctionne avec des objets génériques, sans dépendance au transport.
+**Acceptation :** même comportement accessible dans un formulaire mixte, sans sélecteur DOM applicatif pour atteindre les champs. Un toast de validation n’impose pas de retour en haut ; seule l’action explicite « Corriger » déplace le focus. Toaster, InlineAlert et ErrorSummary existent déjà.
 
-## 6. Groupes de champs répétables — P2
+### E8 — Checkbox avec libellé
 
-### Problème observé
+Checkbox est actuellement une case sans libellé visible composé. Examiner RichCheckbox avant de créer quoi que ce soit : ses cartes riches ne remplacent pas nécessairement une ligne compacte de directions ou de jours.
 
-Les périodes, propriétés et blocs de communication répètent la même structure d’ajout et de suppression.
+Ajouter une variante ou documenter une composition avec libellé cliquable, description optionnelle, aide/erreur et contenu complémentaire (badge de ligne). Préserver les états coché/indéterminé/désactivé et éviter une annonce dupliquée.
 
-### Besoin
+**Acceptation :** cliquer le texte active la case ; usage clavier et nom accessible corrects ; une liste dense reste compacte.
 
-Évaluer une composition réutilisable avec :
+## Recettes à documenter, plutôt que nouveaux contrôles
 
-- Identifiants stables.
-- Titre et numérotation d’affichage.
-- Actions Ajouter et Supprimer.
-- Nombre minimal ou maximal configurable.
-- Erreurs par groupe.
-- Focus sur le nouveau groupe après ajout.
-- Focus pertinent après suppression.
+### R1 — Sélection transactionnelle multiple
 
-### Acceptation
+Composer Drawer, Autocomplete, ModeFilter et TableCard : rechercher → configurer → ajouter à une sélection temporaire → modifier/retirer → confirmer en une fois. Le produit fournit l’identité de déduplication. Afficher explicitement la possibilité d’ajouter plusieurs objets et le nombre sélectionné ; l’aide ne doit pas utiliser le terme « drawer ».
 
-Supprimer un groupe ne transfère pas ses valeurs, erreurs ou états aux autres. La numérotation ne sert pas d’identité métier. La validation métier reste dans l’application.
+**Acceptation :** annulation sans modifier la donnée initiale, confirmation une seule fois, édition et suppression cohérentes, états vide/chargement/erreur/aucun résultat. Autocomplete possède déjà `multiple`, la recherche contrôlée et un état de chargement : ne pas créer un MultiSelect pour les redécouvrir.
 
-## 7. Pattern de planification — P2
+### R2 — Planification
 
-### Besoin
+Composer DatePicker, TimePicker, choix de jours et groupes répétables : périodes continues ou créneaux récurrents, plages de dates, nuit se terminant le lendemain, résumé lisible. Documenter conservation des valeurs au changement de mode, chevauchements, bornes et heures égales. Les conventions de fuseau et les changements d’heure doivent être explicites dans le produit.
 
-Composer les contrôles temporels existants pour gérer :
+**Acceptation :** périodes inversées, absence de jour applicable, nuit et changement d’heure ; logique testable hors du rendu. Ne pas figer les règles propres aux perturbations dans le noyau Cadence.
 
-- Une ou plusieurs périodes continues.
-- Des créneaux récurrents sur une plage de dates.
-- Les jours de semaine.
-- Les heures de début et de fin.
-- Les créneaux se terminant le lendemain.
-- L’ajout et la suppression des règles.
-- Un résumé lisible de la planification.
+### R3 — Communication par canal et traductions
 
-Définir explicitement les conventions : bornes inclusives/exclusives, heures égales, chevauchements et conservation des saisies lors d’un changement de mode.
+Composer sélection de canaux, message commun ou personnalisé, application d’un modèle et formulaires de traduction. Réutiliser N3 pour le contenu enrichi lorsqu’il sera disponible. Le choix des canaux, la traduction automatique, la synthèse vocale et l’envoi effectif relèvent d’intégrations produit, pas du design system.
 
-Documenter la responsabilité du produit pour les fuseaux et changements d’heure.
+**Acceptation :** conserver les saisies de chaque canal lors des changements de mode ; erreurs par canal ; aucune action visuelle ne prétend effectuer une diffusion non branchée.
 
-### Acceptation
+## Métier transport — M1
 
-Les exemples couvrent périodes inversées, absence de jour applicable, créneau de nuit et changement d’heure. La logique temporelle est testable indépendamment du rendu.
+Évaluer une bibliothèque Hove partagée distincte : sélection de lignes/directions, arrêt/zone d’arrêt, tronçons, accès, courses, carte récapitulative et schéma de conséquence.
 
-## 8. Layout de formulaire avec actions persistantes — P2
+Le schéma actuel est local, animé, limité à six arrêts et à un catalogue de démonstration. Pour une version réutilisable : nombre variable d’arrêts, ordre propre à chaque ligne, bornes identifiées, plusieurs lignes et tronçons, états passant/non passant, espace disponible, alternative textuelle accessible et préférence de mouvement réduit. Ne pas inventer les tracés manquants. Les Options d’affichage ont été supprimées de l’interface ; leur recréation n’est pas un besoin validé.
 
-### Problème observé
+La recherche serveur, les référentiels réels, la cartographie et les horaires nécessitent des adaptateurs produit. Les pictogrammes métier importés ne deviennent pas automatiquement des icônes génériques Cadence. `iconElement` de PageSection existe déjà.
 
-FormActions existe, mais le footer persistant du formulaire nécessite une composition locale autour d’AppLayout.
+## Tokens : déjà ajoutés dans les sources locales, publication à prévoir
 
-### Besoin
+Ne pas recréer de tokens locaux `--tr-*` pour ces valeurs :
 
-Étudier un emplacement dédié ou un pattern officiel comprenant :
+| Token global | Valeur |
+| --- | --- |
+| `--cadence-shadow-section` | `0 0 2px 0 rgba(0, 0, 0, 0.10), 0 2px 10px 0 rgba(0, 0, 0, 0.05)` |
+| `--cadence-page-padding-inline` | 32 px |
+| `--cadence-page-padding-inline-compact` | 16 px |
+| `--cadence-section-inset-inline` | 8 px |
+| `--cadence-section-padding-inline` | 8 px |
+| `--cadence-section-heading-gap` | 12 px |
+| `--cadence-section-gap` | 32 px |
 
-- Corps défilant.
-- Actions hors du scroll.
-- Largeur suivant le contenu lorsque la Sidebar change.
-- Retour à la ligne sur mobile.
-- Accès au dernier champ sans recouvrement.
-- Coexistence avec les menus et calendriers ouverts.
+Le rayon de 12 px réutilise `--cadence-radius-xl`. Ces tokens sont définis dans le checkout Cadence et dans la copie vendor consommée par Traffic Report, et documentés dans les guidelines locales. Leur présence ne prouve pas une publication npm. Préserver les autres modifications du checkout ; intégrer et distribuer ces fondations dans une contribution ciblée avant de migrer d’autres produits.
 
-### Acceptation
+## Livraison et ordre de travail
 
-Aucun calcul applicatif de position fondé sur la largeur de la Sidebar n’est nécessaire.
+1. Vérifier l’inventaire actuel du dépôt cible et les changements non committés ; les snapshots sont des preuves datées, pas des instructions exécutables ni une application autonome.
+2. Consolider tokens, N1/E7 et N2/E5 ; corriger E4 et E6. Traiter E1, E2 et E3 comme des évolutions rétrocompatibles distinctes.
+3. Ajouter N3/N4, puis les recettes R1–R3. Évaluer M1 dans un chantier métier séparé.
+4. Pour chaque contribution : API documentée, stories (états, libellés longs, clavier, responsive), tests de comportement nécessaires, guidelines, migration des usages et retrait des contournements locaux devenus inutiles.
+5. Publier le package selon le processus du dépôt, puis mettre à jour et tester les produits consommateurs. Ne pas affirmer que l’intégration est faite tant que leurs dépendances et usages n’ont pas été migrés.
 
-## 9. Checkbox avec libellé et description — P2
-
-### Problème observé
-
-Les listes de directions, jours et accès nécessitent des assemblages Checkbox + texte.
-
-### Besoin
-
-Compléter l’API existante ou proposer une composition officielle avec :
-
-- Libellé associé.
-- Description facultative.
-- Zone de libellé cliquable.
-- États coché, indéterminé et désactivé.
-- Erreur et aide accessibles.
-- Contenu complémentaire, par exemple un badge de ligne.
-
-Examiner Checkbox et RichCheckbox avant de créer une nouvelle variante.
-
-### Acceptation
-
-Cliquer le texte active la case, le clavier fonctionne et le nom accessible n’est pas annoncé deux fois.
-
-## 10. Patterns métier transport — bibliothèque Hove partagée
-
-Ces besoins doivent être évalués séparément des composants génériques de Cadence :
-
-- Sélection de lignes et directions.
-- Distinction arrêt précis / zone d’arrêt.
-- Sélection de tronçons et consultation des arrêts intermédiaires.
-- Sélection d’entrées/sorties.
-- Choix de courses et consultation des horaires.
-- Carte récapitulative d’un objet impacté.
-- Convention d’utilisation des pictogrammes d’objet, des modes et des badges de ligne.
-
-Prévoir des adaptateurs de données et des identifiants stables. Ne pas intégrer les données de démonstration de Traffic Report comme référentiel officiel.
-
-La cartographie, les horaires réels, la recherche serveur et l’envoi des messages restent des intégrations produit.
-
-## Contraintes et livrables
-
-- Distinguer **composant**, **évolution d’API**, **pattern documenté** et **intégration métier**.
-- Préserver les usages existants ; documenter toute rupture.
-- Utiliser les tokens et conventions typographiques Cadence.
-- Ajouter des stories couvrant les états, le clavier et le responsive.
-- Ajouter des tests de comportement pertinents.
-- Mettre à jour les guidelines et la documentation d’API.
-- Fournir les exemples de migration depuis les adaptations locales de Traffic Report.
-- Ne pas présenter ces propositions comme déjà réalisées.
-
-**Ordre recommandé :** validation des champs → contrat des dates → overlays → éditeur riche → patterns de composition.
+Les noms `FormField`, `RepeatableFieldGroup` et `surface="elevated"` restent proposés. Les seuls ajouts communs effectivement réalisés dans ce chantier sont les tokens globaux ci-dessus ; les composants/variantes décrits ici restent à développer.

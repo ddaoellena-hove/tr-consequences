@@ -26,3 +26,9 @@ export function impactErrors(impact, step) {
   return {};
 }
 export const issue = (impact, step) => Object.values(impactErrors(impact, step))[0] || '';
+
+// A populated draft is not yet validated: each impact must have passed messages.
+export function canCreateDisruption(data,completed,{publicationPending=false,datePending={}}={}) {
+ if(publicationPending||Object.values(datePending).some(Boolean)||Object.keys(generalErrors(data)).length||!data.impacts?.length)return false;
+ return data.impacts.every((impact,index)=>[0,1,2,3].every(step=>(completed[index]||[]).includes(step)&&!issue(impact,step)));
+}
