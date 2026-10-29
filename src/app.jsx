@@ -356,7 +356,7 @@ export default function App() {
             />
           </nav>
 
-          <ProgressBar value={(step + 1) * 20} aria-label="Progression de la déclaration" />
+          <ProgressBar className="declaration-progress" value={(step + 1) * 20} aria-label="Progression de la déclaration" />
 
           <div className="form-content">
             <PageSection headingLevel={3} gap={20}
