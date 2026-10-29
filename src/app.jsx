@@ -310,7 +310,7 @@ export default function App() {
       <div className="page-wrapper">
         {error && <InlineAlert type="error" title="Enregistrement impossible">{error}</InlineAlert>}
         {/* Informations générales */}
-        <PageSection title="Informations générales" surface="card" gap={0} className="general"
+        <PageSection title="Informations générales" surface="card" gap={0} className="general section-preview"
           actions={<Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />}>
         <Accordion key={generalVersion} items={[{
           id:'general', defaultOpen: generalVersion > 0,
@@ -322,7 +322,7 @@ export default function App() {
         </PageSection>
 
         {/* Tunnel de déclaration d'impacts */}
-        <PageSection title="Impacts de la perturbation" surface="card" gap={0} className="impact">
+        <PageSection title="Impacts de la perturbation" surface="card" gap={0} className="impact section-preview">
           <div className="impact-head">
             <div>
               <Dropdown

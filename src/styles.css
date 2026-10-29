@@ -141,3 +141,28 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 
 /* Keep feedback above the persistent declaration actions. */
 .declaration-toaster { bottom:calc(var(--tr-space-32) * 4); }
+
+/* Local PageSection exploration: heading outside a padded, elevated body.
+   Only page-level sections opt in; nested data cards retain their anatomy. */
+.section-preview.page-section--card {
+ background:transparent;
+ border:0;
+ border-radius:0;
+ overflow:visible;
+ margin-inline:var(--tr-space-8);
+}
+.section-preview.page-section--card > .page-section__head {
+ padding:0 var(--tr-space-8) var(--tr-space-12);
+ border:0;
+}
+.section-preview.page-section--card > .page-section__body {
+ background:var(--cadence-color-white);
+ border:var(--tr-border-width) solid var(--cadence-color-border);
+ border-radius:var(--cadence-radius-lg);
+ box-shadow:var(--tr-section-preview-shadow);
+ padding-inline:var(--tr-space-8);
+}
+.general.section-preview { margin-bottom:var(--tr-space-32); }
+.diagram-section.section-preview { margin-top:var(--tr-space-32); }
+.general.section-preview > .page-section__body > .accordion { border-top:0; }
+.general.section-preview > .page-section__body > .accordion > .accordion__item:last-child { border-bottom:0; }
