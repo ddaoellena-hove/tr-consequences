@@ -129,12 +129,6 @@ export default function App() {
     setGeneralActive(true);setGeneralVersion(v=>v+1);
     requestAnimationFrame(()=>{const trigger=document.querySelector('.general .accordion__trigger');trigger?.focus({preventScroll:true});trigger?.scrollIntoView({behavior:'smooth',block:'center'});});
   }
-  function continueGeneral() {
-    const errors={...generalErrors(data),...(publicationPending?{publicationStart:'Corrigez et confirmez la date de publication.'}:{})};
-    if(Object.keys(errors).length)return showFieldErrors(errors);
-    setFieldErrors({});go(step);
-    requestAnimationFrame(()=>document.querySelector('.impact-head')?.scrollIntoView({behavior:'smooth',block:'center'}));
-  }
 
   function change(update) {
     setData((d) => ({ ...d, ...update }));
@@ -331,9 +325,8 @@ export default function App() {
         <Accordion key={generalVersion} items={[{
           id:'general', defaultOpen: generalVersion > 0 || generalActive,
           title: 'Détails de la perturbation',
-          content: <><GeneralInformation data={data} errors={fieldErrors} onChange={change}
+          content: <GeneralInformation data={data} errors={fieldErrors} onChange={change}
             onPublicationPending={setPublicationPending}/>
-            <FormActions className="general-actions" justify="end"><PrimaryButton size="sm" label="Suivant" iconEnd="arrow-right" onClick={continueGeneral}/></FormActions></>
 
         }]} />
         </PageSection>

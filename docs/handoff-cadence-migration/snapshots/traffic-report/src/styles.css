@@ -219,5 +219,3 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
  .impact-consequences > .consequence-wrap,
  .impact-consequences > .workflow-muted { margin-inline:var(--tr-space-16); }
 }
-
-.general-actions { padding-block:var(--tr-space-12); }

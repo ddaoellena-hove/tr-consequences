@@ -74,7 +74,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/app.jsx",
-      "sha256": "65c7e900aa5d18447810ed4df1afc4b01cdd9b9f865558862f94c674c9a1b7a2",
+      "sha256": "73733df0b1404466443facd849a909e3264584ea06f21c201e2979ffdee596d7",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/app.jsx"
     },
     {
@@ -84,7 +84,7 @@
     },
     {
       "path": "snapshots/traffic-report/src/styles.css",
-      "sha256": "b6c8fbe67d52714ad8641af842d396d48078f6ea4dcb8b0ed9d606e1bfcbfa97",
+      "sha256": "0ece69c695e8bcf80541dc5f40e190bcd650d2d17ad32fd7bbc060964b529117",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/src/styles.css"
     },
     {
@@ -375,7 +375,7 @@
     {
       "path": "snapshots/traffic-report/docs/parcours-nouvelle-perturbation.md",
       "source": "/Users/ddao-ellena/tr-consequences /traffic-report/docs/parcours-nouvelle-perturbation.md",
-      "sha256": "3884d4a3393810d49df56d07d7dc24b775f8dede1ef132819273190c91903e0c"
+      "sha256": "8840fd99f9dc368329132536051c37422fc9b8c9e7a4645dd269665a9d01080e"
     },
     {
       "path": "snapshots/traffic-report/src/ImpactObjects.jsx",
@@ -565,5 +565,5 @@
   ],
   "updated_on": "2026-10-30",
   "snapshot_policy": "Copies of the current working trees at update time, including existing uncommitted Cadence changes. Vendored API snapshots identify the version actually used by Traffic Report. This is a reference selection, not a standalone runnable application.",
-  "updated_note": "Passation finale : stepper à six étapes, informations générales communes, création après validation des messages, schéma pleine largeur sans options. Référence applicative avant le commit documentaire ; snapshots intégralement actualisés et vérifiés."
+  "updated_note": "Suppression du bouton Suivant dans Informations générales ; accès aux objets impactés par le stepper. Validation globale inchangée."
 }
