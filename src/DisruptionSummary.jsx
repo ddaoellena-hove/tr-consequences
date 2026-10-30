@@ -5,7 +5,7 @@ import {SEVERITY_MAP} from './traffic-model.mjs';
 const format=value=>value&&Number.isFinite(Date.parse(value))?new Date(value).toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'}):'À renseigner';
 export function DisruptionSummary({data,stations,onEdit}){
  return <div className="workflow-stack">
-  <PageSection title="Informations générales" headingLevel={4} gap={12}><DescriptionList items={[
+  <PageSection surface="none" title="Informations générales" headingLevel={4} gap={12}><DescriptionList items={[
    {id:'name',label:'Nom',value:data.title||'À renseigner'},{id:'reference',label:'Référence',value:data.reference},{id:'cause',label:'Cause',value:data.cause},{id:'publish',label:'Début de publication',value:format(data.publicationStart)},{id:'labels',label:'Étiquettes',value:data.labels.join(', ')||'Aucune'},{id:'properties',label:'Propriétés',value:data.properties.map(p=>`${p.name} : ${p.value}`).join(' · ')||'Aucune'},
   ]}/></PageSection>
   {data.impacts.map((impact,index)=>{const severity=SEVERITY_MAP[impact.severity];const incomplete=[0,1,2,3].some(step=>Object.keys(workflowErrors(impact,step)).length);return <PageSection key={impact.id||index} title={`Impact n° ${index+1}`} headingLevel={4} surface="card" gap={0} actions={<Indicator variant={incomplete?'draft':'nominal'} label={incomplete?'À compléter':'Renseigné'}/> }>

@@ -409,7 +409,7 @@ export default function App() {
           </div>
 
           <div className="form-content">
-            <PageSection headingLevel={3} gap={20}
+            <PageSection surface="none" headingLevel={3} gap={20}
               title={STEP_LABELS[step]}
               description={['Ajoutez les objets du réseau concernés par cet impact.','Précisez les conséquences de la perturbation sur le service.','Choisissez des périodes continues ou des créneaux récurrents.','Choisissez les canaux et préparez leurs messages.','Vérifiez l’ensemble des impacts avant de valider la perturbation.'][step]}>
 

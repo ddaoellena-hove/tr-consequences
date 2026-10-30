@@ -7,7 +7,7 @@ import {makeId} from './dashboard-data.mjs';
 export function GeneralInformation({data, errors, onChange, onPublicationPending}) {
  const publicationDate=validDate(data.publicationStart)?new Date(data.publicationStart):null;
  const updateProperty=(id,patch)=>onChange({properties:data.properties.map(p=>p.id===id?{...p,...patch}:p)});
- return <PageSection title="Déclarer une nouvelle perturbation prévue" headingLevel={3} gap={20}
+ return <PageSection surface="none" title="Déclarer une nouvelle perturbation prévue" headingLevel={3} gap={20}
    description="Les informations générales sont communes à tous les impacts." className="general-details">
   <div className="general-fields">
    <div id="field-title"><TextInput label="Nom" placeholder="Nom de la perturbation" value={data.title}
@@ -24,7 +24,7 @@ export function GeneralInformation({data, errors, onChange, onPublicationPending
     <span aria-hidden="true">{label}</span>
    </div>)}
   </div></fieldset>
-  <PageSection title="Propriétés" headingLevel={4} gap={12}>
+  <PageSection surface="none" title="Propriétés" headingLevel={4} gap={12}>
    <div id="field-properties" role="group" aria-label="Propriétés" aria-describedby={errors.properties?'error-properties':undefined} className="general-properties">
     {data.properties.map((property,index)=><div className="general-property" key={property.id}>
      <FieldRow gap={12} className="general-property-fields">
