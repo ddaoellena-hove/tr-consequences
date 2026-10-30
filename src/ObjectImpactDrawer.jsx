@@ -1,4 +1,4 @@
-import React,{useEffect,useMemo,useState} from 'react';
+import React,{useMemo,useState} from 'react';
 import {Drawer,Dropdown,Autocomplete,ModeFilter,PageSection,Checkbox,GhostButton,PrimaryButton,EmptyState,InlineAlert,Toggle,Modal,TableCard,DescriptionList,Accordion,Icons} from '@ddaoellena/cadence-ui';
 import {OBJECT_TYPES,uid,localDay} from './disruption-workflow.mjs';
 import {catalogueFor,NETWORKS,POIS,ACCESSES,MODE_OPTIONS,matchesModes,buildObject,stageObject,mergeObjectSelection,demoCourses} from './object-catalogue.mjs';
@@ -9,10 +9,6 @@ import './object-drawer.css';
 const time=value=>new Date(value).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
 const Choice=({label,checked,onChange,children})=><div className="object-choice"><Checkbox aria-label={label} state={checked?'checked':'unchecked'} onChange={onChange}/><div>{children||label}</div></div>;
 export function ObjectImpactDrawer({isOpen,onClose,impact,stations,line,editingObject,onConfirm}){
- // Mount Cadence's Drawer closed first, including after lazy loading or editing.
- // Its initial isOpen=true state skips the built-in entrance transition.
- const [visible,setVisible]=useState(false);
- useEffect(()=>{setVisible(isOpen);},[isOpen]);
  const catalogue=useMemo(()=>catalogueFor(line,stations),[line,stations]);
  const [type,setType]=useState(editingObject?.scope||''),[modes,setModes]=useState([]),[basket,setBasket]=useState(editingObject?[structuredClone(editingObject)]:[]);
  const [lineId,setLineId]=useState(editingObject?.lineIds?.[0]||catalogue.lines.find(l=>l.name===editingObject?.lineName)?.id||'');
@@ -50,7 +46,7 @@ export function ObjectImpactDrawer({isOpen,onClose,impact,stations,line,editingO
  }
  const areaAutocomplete=(label,value,onChange,options=areaOptions)=><Autocomplete label={label} placeholder="Nom ou identifiant de l’arrêt" value={value} options={options.map(a=>({id:a.id,label:a.name,description:'Catalogue de démonstration',content:<ObjectLineBadges lines={a.lines.filter(l=>matchesModes(modes,l))}/>}))} onChange={v=>onChange(v||'')}/>;
  const toggleAccess=(id,checked)=>setAccessIds(prev=>checked?[...new Set([...prev,id])]:prev.filter(v=>v!==id));
- return <><Drawer isOpen={visible} onClose={onClose} title={editingObject?'Modifier l’objet d’impact':'Ajouter des objets impactés'} subtitle={editingObject?'Modifiez l’objet dans votre sélection, puis confirmez.':'Vous pouvez ajouter plusieurs objets, de types différents, à cet impact. Préparez votre sélection puis ajoutez-la en une seule fois.'} width="lg" className="object-impact-drawer"
+ return <><Drawer isOpen={isOpen} onClose={onClose} title={editingObject?'Modifier l’objet d’impact':'Ajouter des objets impactés'} subtitle={editingObject?'Modifiez l’objet dans votre sélection, puis confirmez.':'Vous pouvez ajouter plusieurs objets, de types différents, à cet impact. Préparez votre sélection puis ajoutez-la en une seule fois.'} width="lg" className="object-impact-drawer"
    onSubmit={event=>{event.preventDefault();if(basket.length)onConfirm(mergeObjectSelection(impact.objects,basket,editingObject?.id));}}
    primaryAction={{label:editingObject?'Confirmer':`Ajouter à l’impact${basket.length?` (${basket.length})`:''}`,disabled:!basket.length}} secondaryAction={{label:'Annuler',onClick:onClose}}>
   <div className="object-drawer-stack">

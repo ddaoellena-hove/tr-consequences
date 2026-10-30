@@ -1,11 +1,11 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {PageSection, TextInput, Dropdown, DatePicker, Checkbox, GhostButton, FieldRow} from '@ddaoellena/cadence-ui';
 import {CAUSES, validDate} from './validation.mjs';
 import {LABEL_OPTIONS} from './general-information.mjs';
 import {makeId} from './dashboard-data.mjs';
 
 export function GeneralInformation({data, errors, onChange, onPublicationPending}) {
- const publicationDate=useMemo(()=>validDate(data.publicationStart)?new Date(data.publicationStart):null,[data.publicationStart]);
+ const publicationDate=validDate(data.publicationStart)?new Date(data.publicationStart):null;
  const updateProperty=(id,patch)=>onChange({properties:data.properties.map(p=>p.id===id?{...p,...patch}:p)});
  return <PageSection title="Déclarer une nouvelle perturbation prévue" headingLevel={3} gap={20}
    description="Les informations générales sont communes à tous les impacts." className="general-details">
@@ -14,17 +14,9 @@ export function GeneralInformation({data, errors, onChange, onPublicationPending
     state={errors.title?'error':'enabled'} helperText={errors.title} onChange={e=>onChange({title:e.target.value})}/></div>
    <div id="field-reference"><TextInput label="Référence de la perturbation" value={data.reference}
     state={errors.reference?'error':'enabled'} helperText={errors.reference} onChange={e=>onChange({reference:e.target.value})}/></div>
-   <div id="field-cause" role="group" aria-label="Cause" aria-describedby={errors.cause?'error-cause':undefined}>
-    <Dropdown label="Cause" options={CAUSES.map(label=>({id:label,label}))} value={data.cause} onChange={cause=>onChange({cause})}/>
-    {errors.cause&&<p id="error-cause" className="field-error" role="alert">{errors.cause}</p>}
-   </div>
-   <div id="field-publicationStart" role="group" aria-label="Début de publication"
-    aria-describedby={errors.publicationStart?'error-publicationStart':undefined} onChangeCapture={()=>onPublicationPending(true)}>
-    <DatePicker label="Date et heure de début de publication" withTime value={publicationDate} onChange={date=>{
-     onPublicationPending(false); onChange({publicationStart:date.toISOString()});
-    }}/>
-    {errors.publicationStart&&<p id="error-publicationStart" className="field-error" role="alert">{errors.publicationStart}</p>}
-   </div>
+   <div id="field-cause"><Dropdown label="Cause" options={CAUSES.map(label=>({id:label,label}))} value={data.cause} error={errors.cause} onChange={cause=>onChange({cause})}/></div>
+   <div id="field-publicationStart"><DatePicker label="Date et heure de début de publication" withTime value={publicationDate} error={errors.publicationStart}
+    onInputStateChange={state=>onPublicationPending(state!=='confirmed')} onChange={date=>onChange({publicationStart:date.toISOString()})}/></div>
   </div>
   <fieldset className="general-labels"><legend>Étiquettes</legend><div className="general-label-options">
    {LABEL_OPTIONS.map(label=><div className="general-label-option" key={label}>

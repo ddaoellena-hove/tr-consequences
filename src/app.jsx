@@ -66,8 +66,8 @@ function loadDraft() {
 
 
 // The domain model remains product-specific; presentation uses Cadence.
-function SeverityField({ value, onChange }) {
-  return <Dropdown label="Sévérité" value={value} onChange={onChange}
+function SeverityField({ value, error, onChange }) {
+  return <Dropdown label="Sévérité" value={value} error={error} onChange={onChange}
     options={SEVERITIES.map(s => ({ id: s.id, divider: s.id === 'modifie',
       label: `${s.label} · ${s.passant ? 'passant' : 'non passant'}`,
       icon: <span className="severity-dot" data-severity={s.id} aria-hidden="true" />
@@ -310,9 +310,29 @@ export default function App() {
 
   if (screen === 'dashboard') return <Dashboard initialTab={dashboardTab} onCreate={createRecord} onEdit={openRecord} onResume={restored ? () => {const draft=loadDraft();if(draft)openRecord(draft);} : undefined}/>;
 
+  const declarationFooter = (
+    <footer className="declaration-footer" aria-label="Actions de la déclaration">
+      <ProgressBar className="declaration-progress footer-progress" value={(navigation.current+1)/navigation.steps.length*100} aria-label={`Position dans la déclaration : étape ${navigation.current+1} sur ${navigation.steps.length}`}/>
+      <div className="declaration-footer-content">
+        <CompactImpactStepper current={navigation.current} impactNumber={current+1} compact={narrow}
+          steps={navigation.steps} onStepClick={index=>{
+            if(index===0){openGeneral();return;}
+            go(index-1);
+            if(generalActive)requestAnimationFrame(()=>document.querySelector('.impact-head')?.scrollIntoView({behavior:'smooth',block:'center'}));
+          }}/>
+        <div className="footer-action-area">
+          <span className="footer-save-state" role="status">{saveState}</span>
+          <FormActions className="footer-actions" justify="end">
+            <PrimaryButton outline size="sm" iconStart="save-01" label={narrow?'Brouillon':'Enregistrer le brouillon'} onClick={save}/>
+            <PrimaryButton size="sm" label="Créer la perturbation" iconEnd="check" disabled={!creationReady} onClick={validate}/>
+          </FormActions>
+        </div>
+      </div>
+    </footer>
+  );
+
   return (
-    <AppLayout className="traffic-report-app" sidebar={narrow ? null : sidebarElement} contentLabel="Déclaration de perturbation">
-      <div className="declaration-content cadence-scrollbar">
+    <AppLayout className="traffic-report-app" sidebar={narrow ? null : sidebarElement} contentLabel="Déclaration de perturbation" footer={declarationFooter} footerPadding="none">
       <PageHeader sticky={!narrow}
         breadcrumbs={
           <Breadcrumbs
@@ -338,7 +358,7 @@ export default function App() {
         {error && <InlineAlert type="error" title="Enregistrement impossible">{error}</InlineAlert>}
         {/* Informations générales */}
         <div onFocusCapture={()=>{if(!generalComplete)setGeneralActive(true);}}>
-        <PageSection title="Informations générales" surface="card" gap={0} className="general section-preview"
+        <PageSection title="Informations générales" surface="elevated" gap={0} className="general"
           actions={<Indicator variant={generalComplete ? 'nominal' : 'draft'} label={generalComplete ? 'Remplie' : 'À compléter'} />}>
         <Accordion key={generalVersion} items={[{
           id:'general', defaultOpen: generalVersion > 0 || generalActive,
@@ -352,7 +372,7 @@ export default function App() {
 
         {/* Tunnel de déclaration d'impacts */}
         <div onFocusCapture={()=>setGeneralActive(false)}>
-        <PageSection title="Impacts de la perturbation" surface="card" gap={0} className="impact section-preview">
+        <PageSection title="Impacts de la perturbation" surface="elevated" bodyPadding="none" gap={0} className="impact">
           <div className="impact-head">
             <div>
               <Dropdown
@@ -394,7 +414,7 @@ export default function App() {
               description={['Ajoutez les objets du réseau concernés par cet impact.','Précisez les conséquences de la perturbation sur le service.','Choisissez des périodes continues ou des créneaux récurrents.','Choisissez les canaux et préparez leurs messages.','Vérifiez l’ensemble des impacts avant de valider la perturbation.'][step]}>
 
             {step === 0 && <ImpactObjects impact={i} stations={stations} line={line} errors={fieldErrors} onChange={updateImpact}/>}
-            {step === 1 && <div className="field" id="field-severity"><SeverityField value={i.severity} onChange={severity=>updateImpact({severity})}/>{fieldErrors.severity&&<p className="field-error" role="alert">{fieldErrors.severity}</p>}</div>}
+            {step === 1 && <div className="field" id="field-severity"><SeverityField value={i.severity} error={fieldErrors.severity} onChange={severity=>updateImpact({severity})}/></div>}
             {step === 2 && <ImpactSchedule impact={i} errors={fieldErrors} onChange={updateImpact} onPending={updateDatePending}/>}
             {step === 3 && <ImpactMessages key={current} impact={i} errors={fieldErrors} onChange={updateImpact} onPending={updateDatePending}
               pendingNotification={Boolean(datePending.notification)} onValidation={valid=>setCompleted(prev=>({...prev,[current]:valid?[...new Set([...(prev[current]||[]),3])]:(prev[current]||[]).filter(n=>n!==3)}))}/>}
@@ -432,25 +452,6 @@ export default function App() {
           Prototype interactif · données de démonstration · aucune diffusion vers les voyageurs
         </p>
       </div>
-      </div>
-      <footer className="declaration-footer" aria-label="Actions de la déclaration">
-        <ProgressBar className="declaration-progress footer-progress" value={(navigation.current+1)/navigation.steps.length*100} aria-label={`Position dans la déclaration : étape ${navigation.current+1} sur ${navigation.steps.length}`}/>
-        <div className="declaration-footer-content">
-          <CompactImpactStepper current={navigation.current} impactNumber={current+1} compact={narrow}
-            steps={navigation.steps} onStepClick={index=>{
-              if(index===0){openGeneral();return;}
-              go(index-1);
-              if(generalActive)requestAnimationFrame(()=>document.querySelector('.impact-head')?.scrollIntoView({behavior:'smooth',block:'center'}));
-            }}/>
-          <div className="footer-action-area">
-            <span className="footer-save-state" role="status">{saveState}</span>
-            <FormActions className="footer-actions" justify="end">
-              <PrimaryButton outline size="sm" iconStart="save-01" label={narrow?'Brouillon':'Enregistrer le brouillon'} onClick={save}/>
-              <PrimaryButton size="sm" label="Créer la perturbation" iconEnd="check" disabled={!creationReady} onClick={validate}/>
-            </FormActions>
-          </div>
-        </div>
-      </footer>
 
       <Modal isOpen={impactToDelete !== null} onClose={()=>setImpactToDelete(null)} size="small"
         title={`Supprimer l’impact n° ${(impactToDelete ?? 0) + 1} ?`}
@@ -466,7 +467,7 @@ export default function App() {
         }}}>
         <p>Le périmètre, la sévérité, la période et le message de cet impact seront retirés du formulaire. Les autres impacts seront conservés.</p>
       </Modal>
-      <Toaster className="declaration-toaster" />
+      <Toaster />
       <Modal isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} title="Navigation">
         <SummaryList aria-label="Navigation principale" items={[
           {id:'dashboard',title:'Toutes les perturbations'}, {id:'new',title:'Nouvelle déclaration'}, {id:'history',title:'Mes déclarations'}

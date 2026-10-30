@@ -6,6 +6,12 @@ Ce document fournit tout le contexte technique, fonctionnel et architectural né
 
 Le projet comprend désormais le tableau de bord et le formulaire. Pour les évolutions récentes et la passation des guidelines, lire [le dossier actualisé](docs/handoff-cadence-migration/README.md) et [le complément dashboard](docs/handoff-cadence-migration/EVOLUTIONS-TABLEAU-DE-BORD.md). Les snapshots et le manifeste y font référence ; les sections historiques ci-dessous ne couvrent pas toutes les évolutions du dashboard.
 
+## Actualisation du 30 octobre 2026
+
+`vendor/cadence-ui` est synchronisé sur `hove-cadence-ui@cb11f6e`. Les contournements listés par l’étude de cas Cadence sont retirés : `AppLayout footer`, `PageSection surface="elevated"`, `Dropdown placement`, `error` sur `Dropdown` et `DatePicker`, `onInputStateChange`, entrée du `Drawer`, repli de `FieldRow` et débordement d’`Accordion`.
+
+Restent des choix produit : `CompactImpactStepper` utilise `Stepper density="compact"` sur grand écran mais garde le `Dropdown` à 760 px et moins, et les messages restent en `TextArea` (`RichTextEditor` changerait le stockage). `Checkbox label` et `RepeatableFieldGroup` ne sont pas encore adoptés.
+
 ---
 
 ## 1. Contexte & Objectif du Projet

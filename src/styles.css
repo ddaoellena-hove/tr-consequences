@@ -2,7 +2,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cadence-color-primary); font: var(--cadence-font-size-body)/var(--tr-line-height-body) var(--cadence-font-sans); }
 .page-wrapper { margin: 0 auto; width: 100%; }
-.general { margin-bottom: var(--tr-space-20); }
+.general { margin-bottom: var(--cadence-section-gap); }
 .section-description { color: var(--cadence-color-text-secondary); margin: 0 0 var(--tr-space-20); }
 .general-fields { display:grid; gap:var(--tr-space-20); }
 .general-fields { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -16,9 +16,6 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .general-properties { display:flex; flex-direction:column; gap:var(--tr-space-12); }
 .general-property { display:flex; align-items:flex-end; gap:var(--tr-space-12); }
 .general-property-fields { flex:1; min-width:0; }
-@media (max-width:760px) {
- .general-property-fields { flex-direction:column; align-items:stretch; }
-}
 .fields { max-width: var(--tr-fields-max); }
 .field { max-width: var(--tr-field-max); }
 .field > .dropdown, .fields > .dropdown, .general-fields > .dropdown { width: 100%; }
@@ -98,9 +95,6 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 .diagram-annotation { letter-spacing:var(--tr-tracking-annotation); }
 .severity-dot { background:var(--tr-impact-color); }
 
-/* Menus in the impact form must extend beyond the card's rounded surface. */
-.impact.page-section--card, .general.page-section--card { overflow: visible; }
-
 /* Align the general-information disclosure with the PageSection heading. */
 .general .accordion__trigger {
   padding: var(--tr-space-16) var(--tr-space-20);
@@ -108,90 +102,37 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
 }
 .general .accordion__content { padding-inline: var(--tr-space-20); }
 
-/* The open disclosure must allow anchored controls to escape its content box. */
-.general .accordion__item--open .accordion__content { overflow:visible; }
 .field-error { color:var(--cadence-color-danger-text); font-size:var(--cadence-font-size-small); margin:var(--tr-space-8) 0 0; }
-@media (max-width: 1024px) {
- .fields { flex-direction:column; align-items:stretch; }
- .fields > * { width:100%; }
-}
 @media (max-width:760px) {
  .diagram-identity, .diagram-legend { flex-wrap:wrap; }
 }
 
 .traffic-report-app { background:var(--cadence-product-traffic-report); }
 
-/* Drawer-style form layout: only the content scrolls, actions stay in the frame. */
-.traffic-report-app .app-layout__scroll { display:flex; flex-direction:column; overflow:hidden; padding:0; }
-.declaration-content { flex:1; min-height:0; min-width:0; overflow:auto; padding:var(--tr-space-24) var(--cadence-page-padding-inline); }
-.declaration-footer { flex-shrink:0; background:var(--cadence-color-white); border-top:var(--tr-border-width) solid var(--cadence-color-border); padding:var(--tr-space-16) var(--cadence-page-padding-inline); }
-@media (max-width:760px) {
- .declaration-content { padding:var(--tr-space-20) var(--cadence-page-padding-inline-compact); }
- .declaration-footer { padding:var(--tr-space-12) var(--cadence-page-padding-inline-compact); }
- .declaration-footer .page-actions { gap:var(--tr-space-12); }
-}
-
 /* The declaration progress follows the straight edge of its section. */
 .declaration-progress .progress-bar__track,
 .declaration-progress .progress-bar__fill { border-radius:0; }
 
-/* Keep feedback above the persistent declaration actions. */
-.declaration-toaster { bottom:calc(var(--tr-space-32) * 4); }
-
-/* Validated PageSection presentation: heading outside a padded, elevated body.
-   Only page-level sections opt in; nested data cards retain their anatomy. */
-.section-preview.page-section--card {
- background:transparent;
- border:0;
- border-radius:0;
- overflow:visible;
- margin-inline:var(--cadence-section-inset-inline);
+/* AppLayout's scroll area keeps a desktop padding: use the compact one on small screens. */
+@media (max-width:760px) {
+ .traffic-report-app .app-layout__scroll { padding:var(--tr-space-20) var(--cadence-page-padding-inline-compact); }
 }
-.section-preview.page-section--card > .page-section__head {
- padding:0 var(--cadence-section-padding-inline) var(--cadence-section-heading-gap);
- border:0;
-}
-.section-preview.page-section--card > .page-section__body {
- background:var(--cadence-color-white);
- border:var(--tr-border-width) solid var(--cadence-color-border);
- border-radius:var(--cadence-radius-xl);
- box-shadow:var(--cadence-shadow-section);
- padding-inline:var(--cadence-section-padding-inline);
-}
-.general.section-preview { margin-bottom:var(--cadence-section-gap); }
-.diagram-section.section-preview { margin-top:var(--cadence-section-gap); }
-.general.section-preview > .page-section__body > .accordion { border-top:0; }
-.general.section-preview > .page-section__body > .accordion > .accordion__item:last-child { border-bottom:0; }
-
-/* Full-width progress and separators; form children own their padding. */
-.impact.section-preview.page-section--card > .page-section__body { padding-inline:0; }
 
 /* Persistent impact navigation: progress is flush with the footer's top edge. */
-.declaration-footer { padding:0; }
 .declaration-footer-content { display:flex; align-items:center; justify-content:space-between; gap:var(--tr-space-24); padding:var(--tr-space-12) var(--cadence-page-padding-inline); }
 .footer-progress { flex-shrink:0; }
 .footer-step-navigation { display:flex; align-items:center; gap:var(--tr-space-12); min-width:0; flex:1; }
-.footer-stepper { display:flex; align-items:center; gap:var(--tr-space-8); margin:0; padding:0; list-style:none; }
-.footer-stepper-step { position:relative; display:flex; }
-.footer-stepper-step[data-state="current"] .base-button,
-.footer-stepper-step[aria-current="step"] .base-button { background:var(--cadence-color-primary); color:var(--cadence-color-white); }
-.footer-step-state { pointer-events:none; position:absolute; top:0; right:0; width:var(--tr-space-12); height:var(--tr-space-12); display:flex; align-items:center; justify-content:center; border:var(--tr-space-2) solid var(--cadence-color-white); border-radius:var(--cadence-radius-pill); background:var(--cadence-color-icon-muted); color:var(--cadence-color-white); font-size:var(--tr-space-8); font-weight:var(--tr-font-weight-bold); }
-.footer-stepper-step[data-state="completed"] .footer-step-state { background:var(--cadence-status-nominal-fg); }
-.footer-stepper-step[data-state="current"] .footer-step-state { background:var(--cadence-color-accent); }
-.footer-stepper-step[data-state="error"] .footer-step-state { background:var(--cadence-status-critical-fg); }
-.footer-stepper-step[data-state="warning"] .footer-step-state { background:var(--cadence-status-warning-fg); }
+/* Keep the step label beside the icons: the footer height must not change between steps. */
+.footer-step-navigation .stepper-compact { flex-wrap:nowrap; }
+.footer-step-navigation .stepper--compact { flex-shrink:0; }
 .footer-step-context { margin:0; color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); }
 .footer-step-context strong { color:var(--cadence-color-primary); font-weight:var(--tr-font-weight-medium); }
 .footer-action-area { display:flex; align-items:center; justify-content:flex-end; gap:var(--tr-space-12); }
 .footer-actions { flex-wrap:wrap; gap:var(--tr-space-8); }
 .footer-save-state { color:var(--cadence-color-text-secondary); font-size:var(--cadence-font-size-caption); text-align:left; max-width:calc(var(--tr-space-32) * 6); }
-/* Cadence icon tooltips normally open downward; the footer opens them upward. */
-.footer-stepper .base-button-tip__bubble { top:auto; bottom:calc(100% + var(--tr-space-8)); }
-.footer-stepper .tooltip--arrow-top::after { display:none; }
 @media (max-width:1024px) {
  .declaration-footer-content { align-items:stretch; flex-direction:column; gap:var(--tr-space-8); }
  .footer-step-navigation { display:flex; align-items:center; gap:var(--tr-space-12); }
- .footer-stepper { margin:0; }
 }
 @media (max-width:760px) {
  .declaration-footer-content { padding:var(--tr-space-12) var(--cadence-page-padding-inline-compact); }
@@ -200,10 +141,6 @@ body { margin: 0; background: var(--cadence-color-surface-alt); color: var(--cad
  .footer-step-navigation .button-trigger { max-width:100%; }
  .footer-actions { justify-content:flex-end; }
  .footer-save-state { text-align:left; }
-}
-.footer-step-navigation .dropdown__menu { top:auto; bottom:calc(100% + var(--tr-space-8)); max-height:min(calc(100dvh - var(--tr-space-32) * 6),calc(var(--tr-space-32) * 10)); overflow-y:auto; }
-@media (max-width:1024px) {
- .declaration-toaster { bottom:calc(var(--tr-space-32) * 6); }
 }
 
 /* The consequence diagram uses the impact surface, without a nested card. */
