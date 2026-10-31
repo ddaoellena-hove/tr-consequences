@@ -323,8 +323,8 @@ export default function App() {
         <div className="footer-action-area">
           <span className="footer-save-state" role="status">{saveState}</span>
           <FormActions className="footer-actions" justify="end">
-            <PrimaryButton outline size="sm" iconStart="save-01" label={narrow?'Brouillon':'Enregistrer le brouillon'} onClick={save}/>
-            <PrimaryButton size="sm" label="Créer la perturbation" iconEnd="check" disabled={!creationReady} onClick={validate}/>
+            <PrimaryButton outline size="md" iconStart="save-01" label={narrow?'Brouillon':'Enregistrer le brouillon'} onClick={save}/>
+            <PrimaryButton size="md" label="Créer la perturbation" iconEnd="check" disabled={!creationReady} onClick={validate}/>
           </FormActions>
         </div>
       </div>
